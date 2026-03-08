@@ -114,50 +114,14 @@ export default function SettingsPage() {
 
     setUploadingAvatar(true);
 
-    const probeUrl = withCacheBuster(normalizedUrl, Date.now());
-    const canLoadImage = await new Promise<boolean>((resolve) => {
-      const image = new Image();
-      const timeout = window.setTimeout(() => resolve(false), 7000);
-      image.onload = () => {
-        window.clearTimeout(timeout);
-        resolve(true);
-      };
-      image.onerror = () => {
-        window.clearTimeout(timeout);
-        resolve(false);
-      };
-      image.referrerPolicy = "no-referrer";
-      image.src = probeUrl;
-    });
-
-    if (!canLoadImage) {
-      toast({ title: "Image not reachable", description: "That URL cannot be loaded as an image.", variant: "destructive" });
-      setUploadingAvatar(false);
-      return;
-    }
-
-    let writeError: Error | null = null;
-
-    const { data: updatedRows, error: updateError } = await supabase
+    // Save URL directly to database
+    const { error: updateError } = await supabase
       .from("profiles")
       .update({ avatar_url: normalizedUrl, updated_at: new Date().toISOString() })
-      .eq("user_id", user.id)
-      .select("id")
-      .limit(1);
+      .eq("user_id", user.id);
 
     if (updateError) {
-      writeError = updateError;
-    } else if (!updatedRows || updatedRows.length === 0) {
-      const { error: insertError } = await supabase.from("profiles").insert({
-        user_id: user.id,
-        display_name: displayName || null,
-        avatar_url: normalizedUrl,
-      });
-      if (insertError) writeError = insertError;
-    }
-
-    if (writeError) {
-      toast({ title: "Error", description: writeError.message, variant: "destructive" });
+      toast({ title: "Error", description: updateError.message, variant: "destructive" });
       setUploadingAvatar(false);
       return;
     }
