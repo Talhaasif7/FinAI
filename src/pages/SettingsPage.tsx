@@ -178,11 +178,12 @@ export default function SettingsPage() {
               <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                 <Avatar className="h-16 w-16 border-2 border-border">
                   {avatarUrl ? (
-                    <AvatarImage src={avatarUrl} alt="Profile" />
-                  ) : null}
-                  <AvatarFallback className="bg-primary/10 text-primary font-semibold text-lg">
-                    {initials}
-                  </AvatarFallback>
+                    <img src={avatarUrl} alt="Profile" className="aspect-square h-full w-full object-cover" referrerPolicy="no-referrer" />
+                  ) : (
+                    <AvatarFallback className="bg-primary/10 text-primary font-semibold text-lg">
+                      {initials}
+                    </AvatarFallback>
+                  )}
                 </Avatar>
                 <div className="absolute inset-0 flex items-center justify-center rounded-full bg-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity">
                   <Camera className="h-5 w-5 text-background" />
