@@ -89,14 +89,15 @@ export default function SettingsPage() {
   const handleAvatarUrl = async () => {
     if (!avatarUrlInput.trim() || !user) return;
     setUploadingAvatar(true);
+    const cleanUrl = avatarUrlInput.trim();
     const { error } = await supabase
       .from("profiles")
-      .update({ avatar_url: avatarUrlInput.trim() })
+      .update({ avatar_url: cleanUrl })
       .eq("user_id", user.id);
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {
-      setAvatarUrl(avatarUrlInput.trim());
+      setAvatarUrl(cleanUrl + (cleanUrl.includes('?') ? '&' : '?') + '_v=' + Date.now());
       setAvatarUrlInput("");
       toast({ title: "Avatar updated!" });
     }
