@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { 
   LayoutDashboard, Target, Receipt, CreditCard, 
-  Bot, TrendingUp, Settings, Flame, LogOut, Wallet, Trophy
+  Bot, TrendingUp, Settings, Flame, LogOut, Wallet, Trophy, Activity
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -10,6 +10,7 @@ import logoImg from "@/assets/logo.png";
 
 const navItems = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+  { to: "/health", icon: Activity, label: "Health Score" },
   { to: "/goals", icon: Target, label: "Goals" },
   { to: "/expenses", icon: Receipt, label: "Expenses" },
   { to: "/cards", icon: CreditCard, label: "My Cards" },
