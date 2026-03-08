@@ -33,7 +33,8 @@ const categoryColors: Record<string, string> = {
 };
 
 export default function Dashboard() {
-  const { user } = useAuth();
+  const { user, subscription } = useAuth();
+  const { toast } = useToast();
   const [goals, setGoals] = useState<any[]>([]);
   const [expenses, setExpenses] = useState<any[]>([]);
   const [allExpenses, setAllExpenses] = useState<any[]>([]);
