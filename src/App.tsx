@@ -13,6 +13,7 @@ import Dashboard from "./pages/Dashboard";
 import Goals from "./pages/Goals";
 import Expenses from "./pages/Expenses";
 import Subscriptions from "./pages/Subscriptions";
+import Cards from "./pages/Cards";
 import Budgets from "./pages/Budgets";
 import Insights from "./pages/Insights";
 import Assistant from "./pages/Assistant";
