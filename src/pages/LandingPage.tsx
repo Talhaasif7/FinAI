@@ -567,9 +567,9 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ FEATURES — REVOLUT-STYLE CARDS ═══════════ */}
-      <section id="features" className="py-32 px-6 relative overflow-hidden">
-        {/* 3D Background */}
-        <div className="absolute inset-0 pointer-events-none opacity-30">
+      <section id="features" className="py-20 sm:py-32 px-4 sm:px-6 relative overflow-hidden">
+        {/* 3D Background - hidden on mobile for performance */}
+        <div className="absolute inset-0 pointer-events-none opacity-30 hidden md:block">
           <Scene3DFeatures />
         </div>
 
@@ -579,22 +579,22 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-20"
+            className="text-center mb-12 sm:mb-20"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-6 bg-primary/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-4 sm:mb-6 bg-primary/5">
               <Layers className="h-3 w-3" /> Features
             </span>
-            <h2 className="font-display text-4xl md:text-6xl font-bold mb-5 text-foreground tracking-tight leading-[0.95] text-echo" data-text="Everything to master your money">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-5 text-foreground tracking-tight leading-[0.95] text-echo" data-text="Everything to master your money">
               Everything to{" "}
               <CurvyHeading variant="green">master your money</CurvyHeading>
             </h2>
-            <p className="text-muted-foreground max-w-lg mx-auto text-lg">
+            <p className="text-muted-foreground max-w-lg mx-auto text-sm sm:text-base lg:text-lg px-2">
               Six powerful tools working together for complete financial clarity.
             </p>
           </motion.div>
 
           {/* Revolut-style bento grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {features.map((f, i) => (
               <motion.div
                 key={f.title}
@@ -603,26 +603,25 @@ export default function LandingPage() {
                 whileInView="show"
                 viewport={{ once: true, margin: "-40px" }}
                 custom={i}
-                className={`revolut-card ${f.cardClass} p-8 min-h-[240px] flex flex-col justify-between group cursor-pointer`}
+                className={`revolut-card ${f.cardClass} p-6 sm:p-8 min-h-[200px] sm:min-h-[240px] flex flex-col justify-between group cursor-pointer`}
               >
-                {/* Shine effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl" />
 
                 <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-sm group-hover:scale-110 transition-transform duration-500 shadow-lg">
-                      <f.icon className="h-6 w-6 text-white" />
+                  <div className="flex items-center justify-between mb-4 sm:mb-6">
+                    <div className="flex h-11 w-11 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-sm group-hover:scale-110 transition-transform duration-500 shadow-lg">
+                      <f.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                     </div>
-                    <span className="text-[9px] uppercase tracking-[0.2em] text-white/50 font-bold px-3 py-1.5 rounded-full border border-white/10 bg-white/5">
+                    <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.2em] text-white/50 font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border border-white/10 bg-white/5">
                       {f.tag}
                     </span>
                   </div>
 
-                  <h3 className="font-display text-xl font-bold text-white mb-3 group-hover:translate-x-1 transition-transform duration-300">{f.title}</h3>
-                  <p className="text-sm text-white/70 leading-relaxed">{f.desc}</p>
+                  <h3 className="font-display text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3 group-hover:translate-x-1 transition-transform duration-300">{f.title}</h3>
+                  <p className="text-xs sm:text-sm text-white/70 leading-relaxed">{f.desc}</p>
                 </div>
 
-                <div className="relative z-10 mt-6 flex items-center gap-1.5 text-xs text-white/80 font-semibold opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                <div className="relative z-10 mt-4 sm:mt-6 flex items-center gap-1.5 text-xs text-white/80 font-semibold opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
                   Explore <ArrowUpRight className="h-3 w-3" />
                 </div>
               </motion.div>
