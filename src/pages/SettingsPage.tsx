@@ -20,6 +20,9 @@ export default function SettingsPage() {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Avatar URL input
+  const [avatarUrlInput, setAvatarUrlInput] = useState("");
+
   // Email change
   const [newEmail, setNewEmail] = useState("");
   const [emailLoading, setEmailLoading] = useState(false);
@@ -78,6 +81,23 @@ export default function SettingsPage() {
       toast({ title: "Error", description: updateError.message, variant: "destructive" });
     } else {
       setAvatarUrl(url);
+      toast({ title: "Avatar updated!" });
+    }
+    setUploadingAvatar(false);
+  };
+
+  const handleAvatarUrl = async () => {
+    if (!avatarUrlInput.trim() || !user) return;
+    setUploadingAvatar(true);
+    const { error } = await supabase
+      .from("profiles")
+      .update({ avatar_url: avatarUrlInput.trim() })
+      .eq("user_id", user.id);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      setAvatarUrl(avatarUrlInput.trim());
+      setAvatarUrlInput("");
       toast({ title: "Avatar updated!" });
     }
     setUploadingAvatar(false);
@@ -153,35 +173,53 @@ export default function SettingsPage() {
         </div>
         <div className="space-y-5">
           {/* Avatar */}
-          <div className="flex items-center gap-4">
-            <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-              <Avatar className="h-16 w-16 border-2 border-border">
-                {avatarUrl ? (
-                  <AvatarImage src={avatarUrl} alt="Profile" />
-                ) : null}
-                <AvatarFallback className="bg-primary/10 text-primary font-semibold text-lg">
-                  {initials}
-                </AvatarFallback>
-              </Avatar>
-              <div className="absolute inset-0 flex items-center justify-center rounded-full bg-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Camera className="h-5 w-5 text-background" />
-              </div>
-              {uploadingAvatar && (
-                <div className="absolute inset-0 flex items-center justify-center rounded-full bg-foreground/60">
-                  <div className="h-5 w-5 border-2 border-background border-t-transparent rounded-full animate-spin" />
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-4">
+              <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+                <Avatar className="h-16 w-16 border-2 border-border">
+                  {avatarUrl ? (
+                    <AvatarImage src={avatarUrl} alt="Profile" />
+                  ) : null}
+                  <AvatarFallback className="bg-primary/10 text-primary font-semibold text-lg">
+                    {initials}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="absolute inset-0 flex items-center justify-center rounded-full bg-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Camera className="h-5 w-5 text-background" />
                 </div>
-              )}
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleAvatarUpload}
-              />
+                {uploadingAvatar && (
+                  <div className="absolute inset-0 flex items-center justify-center rounded-full bg-foreground/60">
+                    <div className="h-5 w-5 border-2 border-background border-t-transparent rounded-full animate-spin" />
+                  </div>
+                )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleAvatarUpload}
+                />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">Profile Picture</p>
+                <p className="text-xs text-muted-foreground">Click avatar to upload from device</p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm font-medium text-foreground">Profile Picture</p>
-              <p className="text-xs text-muted-foreground">Click to upload (max 2MB)</p>
+            <div className="flex gap-2">
+              <Input
+                value={avatarUrlInput}
+                onChange={(e) => setAvatarUrlInput(e.target.value)}
+                placeholder="Or paste an image URL..."
+                className="flex-1"
+              />
+              <Button
+                variant="outline"
+                onClick={handleAvatarUrl}
+                disabled={uploadingAvatar || !avatarUrlInput.trim()}
+                className="shrink-0"
+              >
+                Set URL
+              </Button>
             </div>
           </div>
 
