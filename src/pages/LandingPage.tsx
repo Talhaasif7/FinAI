@@ -420,16 +420,16 @@ export default function LandingPage() {
             className="mt-10 sm:mt-16 flex flex-col items-center gap-3 sm:gap-4"
           >
             <div className="flex -space-x-2 sm:-space-x-3">
-              {["SK", "MT", "AR", "JD", "LW"].map((initials, i) => (
+              {[avatarSarah, avatarMarcus, avatarAisha, avatarJames, avatarLisa].map((src, i) => (
                 <motion.div
-                  key={initials}
+                  key={i}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 1.2 + i * 0.1 }}
-                  className="h-8 w-8 sm:h-10 sm:w-10 rounded-full border-2 sm:border-[3px] border-background bg-gradient-to-br from-primary to-electric-purple flex items-center justify-center text-[8px] sm:text-[10px] font-bold text-primary-foreground shadow-lg"
+                  className="h-8 w-8 sm:h-10 sm:w-10 rounded-full border-2 sm:border-[3px] border-background overflow-hidden shadow-lg"
                   style={{ zIndex: 5 - i }}
                 >
-                  {initials}
+                  <img src={src} alt="" className="h-full w-full object-cover" />
                 </motion.div>
               ))}
             </div>
