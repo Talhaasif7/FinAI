@@ -65,6 +65,8 @@ export function WeeklyReportCard() {
     }
   };
 
+  const isLocked = subscription.tier === "free";
+
   if (!report && !loading) {
     return (
       <div className="glass-card p-5">
@@ -78,9 +80,15 @@ export function WeeklyReportCard() {
               <p className="text-[11px] text-muted-foreground">AI-generated weekly summary</p>
             </div>
           </div>
-          <Button variant="outline" size="sm" onClick={fetchReport} disabled={loading} className="gap-1.5 text-xs">
-            <Sparkles className="h-3 w-3" /> Generate
-          </Button>
+          {isLocked ? (
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Lock className="h-3 w-3" /> Pro plan
+            </div>
+          ) : (
+            <Button variant="outline" size="sm" onClick={fetchReport} disabled={loading} className="gap-1.5 text-xs">
+              <Sparkles className="h-3 w-3" /> Generate
+            </Button>
+          )}
         </div>
       </div>
     );
