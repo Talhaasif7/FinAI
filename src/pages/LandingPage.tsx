@@ -409,17 +409,17 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ TRUSTED BY MARQUEE ═══════════ */}
-      <section className="py-14 px-6 border-y border-border/10 relative overflow-hidden">
+      <section className="py-10 sm:py-14 px-4 sm:px-6 border-y border-border/10 relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
-          <p className="text-center text-[10px] uppercase tracking-[0.25em] text-muted-foreground/50 mb-8 font-semibold">As Featured In</p>
+          <p className="text-center text-[9px] sm:text-[10px] uppercase tracking-[0.25em] text-muted-foreground/50 mb-6 sm:mb-8 font-semibold">As Featured In</p>
           <MarqueeRow items={trustedBy} />
         </div>
       </section>
 
       {/* ═══════════ STATS ═══════════ */}
-      <section className="py-24 px-6 relative">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 relative">
         <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-12">
             {stats.map((stat, i) => (
               <motion.div
                 key={stat.label}
@@ -429,10 +429,10 @@ export default function LandingPage() {
                 transition={{ delay: i * 0.1, duration: 0.6 }}
                 className="text-center group"
               >
-                <p className="font-display text-4xl md:text-6xl font-bold gradient-text-primary mb-2">
+                <p className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold gradient-text-primary mb-1 sm:mb-2">
                   <AnimatedCounter value={stat.value} suffix={stat.suffix} prefix={stat.prefix || ""} />
                 </p>
-                <p className="text-xs text-muted-foreground uppercase tracking-[0.15em] font-medium">{stat.label}</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-[0.15em] font-medium">{stat.label}</p>
               </motion.div>
             ))}
           </div>
@@ -440,25 +440,25 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ PROBLEM / SOLUTION ═══════════ */}
-      <section className="py-28 px-6 relative">
+      <section className="py-16 sm:py-28 px-4 sm:px-6 relative">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-16"
+            className="text-center mb-10 sm:mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-destructive/20 text-[10px] uppercase tracking-[0.2em] text-destructive font-semibold mb-6 bg-destructive/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-destructive/20 text-[10px] uppercase tracking-[0.2em] text-destructive font-semibold mb-4 sm:mb-6 bg-destructive/5">
               <CircleDot className="h-3 w-3" /> The Problem
             </span>
-            <h2 className="font-display text-4xl md:text-6xl font-bold text-foreground tracking-tight leading-[0.95]">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-foreground tracking-tight leading-[0.95]">
               Managing money shouldn't<br className="hidden sm:block" /> be{" "}
               <CurvyHeading variant="purple">this hard</CurvyHeading>
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {painPoints.map((p, i) => (
               <motion.div
                 key={i}
@@ -466,16 +466,16 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.6 }}
-                className="group relative glass-card p-7 hover:border-primary/20 transition-all duration-500"
+                className="group relative glass-card p-5 sm:p-7 hover:border-primary/20 transition-all duration-500"
               >
                 <div className="absolute top-0 left-0 w-0 group-hover:w-full h-[1px] bg-gradient-to-r from-primary/60 to-transparent transition-all duration-700" />
-                <span className="text-4xl mb-4 block">{p.emoji}</span>
-                <p className="text-base font-medium text-muted-foreground/60 line-through decoration-destructive/30 mb-3">{p.problem}</p>
+                <span className="text-3xl sm:text-4xl mb-3 sm:mb-4 block">{p.emoji}</span>
+                <p className="text-sm sm:text-base font-medium text-muted-foreground/60 line-through decoration-destructive/30 mb-2 sm:mb-3">{p.problem}</p>
                 <div className="flex items-start gap-2">
                   <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
                     <Check className="h-3 w-3 text-primary" />
                   </div>
-                  <p className="text-base font-semibold text-foreground">{p.solution}</p>
+                  <p className="text-sm sm:text-base font-semibold text-foreground">{p.solution}</p>
                 </div>
               </motion.div>
             ))}
@@ -484,19 +484,19 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ VIDEO SHOWCASE ═══════════ */}
-      <section className="py-24 px-6 relative">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 relative">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-14"
+            className="text-center mb-10 sm:mb-14"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-6 bg-primary/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-4 sm:mb-6 bg-primary/5">
               <Eye className="h-3 w-3" /> See It In Action
             </span>
-            <h2 className="font-display text-4xl md:text-6xl font-bold text-foreground tracking-tight leading-[0.95]">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-foreground tracking-tight leading-[0.95]">
               Beautiful by{" "}
               <CurvyHeading variant="gold">design</CurvyHeading>
             </h2>
@@ -509,16 +509,16 @@ export default function LandingPage() {
             transition={{ duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
             className="relative group"
           >
-            <div className="rounded-2xl overflow-hidden border border-border/30 shadow-2xl">
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-border/20" style={{ background: "hsl(var(--card))" }}>
-                <div className="flex gap-1.5">
-                  <div className="h-3 w-3 rounded-full bg-destructive/60" />
-                  <div className="h-3 w-3 rounded-full bg-amber/60" />
-                  <div className="h-3 w-3 rounded-full bg-primary/60" />
+            <div className="rounded-xl sm:rounded-2xl overflow-hidden border border-border/30 shadow-2xl">
+              <div className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 border-b border-border/20" style={{ background: "hsl(var(--card))" }}>
+                <div className="flex gap-1 sm:gap-1.5">
+                  <div className="h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-destructive/60" />
+                  <div className="h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-amber/60" />
+                  <div className="h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-primary/60" />
                 </div>
                 <div className="flex-1 flex items-center justify-center">
-                  <div className="flex items-center gap-2 px-4 py-1 rounded-lg bg-muted/30 text-xs text-muted-foreground max-w-[200px]">
-                    <Lock className="h-3 w-3" />
+                  <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1 rounded-lg bg-muted/30 text-[10px] sm:text-xs text-muted-foreground max-w-[160px] sm:max-w-[200px]">
+                    <Lock className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                     <span>app.finai.com</span>
                   </div>
                 </div>
@@ -530,20 +530,20 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Floating accents */}
+            {/* Floating accents - hidden on mobile/tablet */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5, type: "spring" }}
-              className="absolute -left-4 top-1/4 glass-card px-4 py-3 rounded-xl hidden lg:flex items-center gap-3 shadow-xl"
+              className="absolute -left-4 top-1/4 glass-card px-3 sm:px-4 py-2 sm:py-3 rounded-xl hidden xl:flex items-center gap-3 shadow-xl"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-                <TrendingUp className="h-5 w-5 text-primary" />
+              <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-primary/10">
+                <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
               <div>
                 <p className="text-[10px] text-muted-foreground">Monthly Savings</p>
-                <p className="text-base font-bold text-foreground">+$420.00</p>
+                <p className="text-sm sm:text-base font-bold text-foreground">+$420.00</p>
               </div>
             </motion.div>
 
@@ -552,14 +552,14 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.7, type: "spring" }}
-              className="absolute -right-4 bottom-1/3 glass-card px-4 py-3 rounded-xl hidden lg:flex items-center gap-3 shadow-xl"
+              className="absolute -right-4 bottom-1/3 glass-card px-3 sm:px-4 py-2 sm:py-3 rounded-xl hidden xl:flex items-center gap-3 shadow-xl"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-electric-purple/10">
-                <Sparkles className="h-5 w-5 text-electric-purple" />
+              <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-electric-purple/10">
+                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-electric-purple" />
               </div>
               <div>
                 <p className="text-[10px] text-muted-foreground">AI Insight</p>
-                <p className="text-base font-bold text-foreground">Cut 3 subs</p>
+                <p className="text-sm sm:text-base font-bold text-foreground">Cut 3 subs</p>
               </div>
             </motion.div>
           </motion.div>
