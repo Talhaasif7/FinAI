@@ -13,6 +13,19 @@ const item = { hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0 } };
 
 const categories = ["Food", "Shopping", "Transport", "Entertainment", "Bills", "Health", "Other"];
 
+function MerchantLogo({ expense }: { expense: Expense }) {
+  if (expense.logo) {
+    return (
+      <img src={expense.logo} alt={expense.merchant} className="h-10 w-10 rounded-lg object-contain bg-muted/30 p-1" />
+    );
+  }
+  return (
+    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted/30 text-base">
+      {categoryIcons[expense.category] || "📦"}
+    </div>
+  );
+}
+
 export default function Expenses() {
   const [expenses, setExpenses] = useState<Expense[]>(initialExpenses);
   const [open, setOpen] = useState(false);
@@ -113,12 +126,7 @@ export default function Expenses() {
         </div>
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search expenses..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="pl-10"
-          />
+          <Input placeholder="Search expenses..." value={search} onChange={e => setSearch(e.target.value)} className="pl-10" />
         </div>
       </motion.div>
 
@@ -126,9 +134,7 @@ export default function Expenses() {
         {filtered.map((exp) => (
           <div key={exp.id} className="flex items-center justify-between px-5 py-3.5 hover:bg-muted/20 transition-colors">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted/30 text-base">
-                {categoryIcons[exp.category] || "📦"}
-              </div>
+              <MerchantLogo expense={exp} />
               <div>
                 <p className="text-sm font-medium text-foreground">{exp.merchant}</p>
                 <p className="text-[11px] text-muted-foreground">{exp.category} · {exp.paymentMethod}{exp.note ? ` · ${exp.note}` : ""}</p>

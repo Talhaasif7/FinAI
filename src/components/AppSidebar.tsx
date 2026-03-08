@@ -4,6 +4,7 @@ import {
   Bot, TrendingUp, Settings, Flame
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import logoImg from "@/assets/logo.png";
 
 const navItems = [
@@ -21,12 +22,15 @@ export function AppSidebar() {
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-border bg-sidebar flex flex-col">
       {/* Logo */}
-      <div className="flex items-center gap-3 px-6 py-5 border-b border-border">
-        <img src={logoImg} alt="FinAI" className="h-9 w-9 rounded-lg" />
-        <div>
-          <h1 className="font-display text-lg font-bold gradient-text-primary">FinAI</h1>
-          <p className="text-[10px] text-muted-foreground tracking-wider uppercase">Smart Finance</p>
+      <div className="flex items-center justify-between px-6 py-5 border-b border-border">
+        <div className="flex items-center gap-3">
+          <img src={logoImg} alt="FinAI" className="h-9 w-9 rounded-lg" />
+          <div>
+            <h1 className="font-display text-lg font-bold gradient-text-primary">FinAI</h1>
+            <p className="text-[10px] text-muted-foreground tracking-wider uppercase">Smart Finance</p>
+          </div>
         </div>
+        <ThemeToggle />
       </div>
 
       {/* Navigation */}
