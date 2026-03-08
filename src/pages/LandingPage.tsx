@@ -50,11 +50,14 @@ export default function LandingPage() {
             <a href="#how-it-works" className="text-sm text-muted-foreground hover:text-foreground transition-colors">How It Works</a>
             <a href="#testimonials" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Reviews</a>
           </div>
-          <Link to="/dashboard">
-            <Button size="sm" className="gap-2 bg-primary text-primary-foreground hover:bg-teal-light">
-              Get Started <ArrowRight className="h-3.5 w-3.5" />
-            </Button>
-          </Link>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <Link to="/dashboard">
+              <Button size="sm" className="gap-2 bg-primary text-primary-foreground hover:bg-teal-light">
+                Get Started <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </nav>
 
