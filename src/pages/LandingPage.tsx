@@ -778,9 +778,9 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ TESTIMONIALS ═══════════ */}
-      <section id="reviews" className="py-32 px-6 relative overflow-hidden">
+      <section id="reviews" className="py-20 sm:py-32 px-4 sm:px-6 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-electric-purple/[0.02] rounded-full blur-3xl" />
+          <div className="absolute top-1/3 right-0 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-electric-purple/[0.02] rounded-full blur-3xl" />
         </div>
 
         <div className="max-w-6xl mx-auto relative z-10">
@@ -789,18 +789,18 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-16"
+            className="text-center mb-10 sm:mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-electric-purple/20 text-[10px] uppercase tracking-[0.2em] text-electric-purple font-semibold mb-6 bg-electric-purple/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-electric-purple/20 text-[10px] uppercase tracking-[0.2em] text-electric-purple font-semibold mb-4 sm:mb-6 bg-electric-purple/5">
               <Heart className="h-3 w-3" /> Testimonials
             </span>
-            <h2 className="font-display text-4xl md:text-6xl font-bold mb-5 text-foreground tracking-tight leading-[0.95]">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-5 text-foreground tracking-tight leading-[0.95]">
               Loved by{" "}
               <CurvyHeading variant="purple">thousands</CurvyHeading>
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5">
             {testimonials.map((t, i) => (
               <motion.div
                 key={t.name}
@@ -808,29 +808,29 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.12, duration: 0.6 }}
-                className="glass-card p-8 rounded-3xl group hover:border-electric-purple/15 transition-all duration-500"
+                className={`glass-card p-6 sm:p-8 rounded-2xl sm:rounded-3xl group hover:border-electric-purple/15 transition-all duration-500 ${i === 2 ? "sm:col-span-2 md:col-span-1" : ""}`}
               >
-                <div className="flex items-center gap-1 mb-6">
+                <div className="flex items-center gap-1 mb-4 sm:mb-6">
                   {Array.from({ length: 5 }).map((_, j) => (
-                    <Star key={j} className="h-4 w-4 text-amber fill-amber" />
+                    <Star key={j} className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber fill-amber" />
                   ))}
                 </div>
 
-                <p className="text-base text-muted-foreground leading-relaxed mb-8">"{t.text}"</p>
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6 sm:mb-8">"{t.text}"</p>
 
-                <div className="flex items-center justify-between pt-6 border-t border-border/20">
-                  <div className="flex items-center gap-3">
-                    <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-primary to-electric-purple flex items-center justify-center text-xs font-bold text-primary-foreground shadow-md">
+                <div className="flex items-center justify-between pt-4 sm:pt-6 border-t border-border/20">
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary to-electric-purple flex items-center justify-center text-[10px] sm:text-xs font-bold text-primary-foreground shadow-md">
                       {t.avatar}
                     </div>
                     <div>
-                      <p className="text-base font-semibold text-foreground">{t.name}</p>
-                      <p className="text-xs text-muted-foreground">{t.role}</p>
+                      <p className="text-sm sm:text-base font-semibold text-foreground">{t.name}</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">{t.role}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-base font-bold gradient-text-primary">{t.saved}</p>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">saved</p>
+                    <p className="text-sm sm:text-base font-bold gradient-text-primary">{t.saved}</p>
+                    <p className="text-[9px] sm:text-[10px] text-muted-foreground uppercase tracking-wider">saved</p>
                   </div>
                 </div>
               </motion.div>
@@ -840,19 +840,19 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ FAQ ═══════════ */}
-      <section className="py-32 px-6">
+      <section className="py-20 sm:py-32 px-4 sm:px-6">
         <div className="max-w-2xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-16"
+            className="text-center mb-10 sm:mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber/20 text-[10px] uppercase tracking-[0.2em] text-amber font-semibold mb-6 bg-amber/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber/20 text-[10px] uppercase tracking-[0.2em] text-amber font-semibold mb-4 sm:mb-6 bg-amber/5">
               <MousePointer2 className="h-3 w-3" /> FAQ
             </span>
-            <h2 className="font-display text-4xl md:text-6xl font-bold text-foreground tracking-tight leading-[0.95]">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-foreground tracking-tight leading-[0.95]">
               Questions?{" "}
               <CurvyHeading variant="gold">Answers.</CurvyHeading>
             </h2>
@@ -867,7 +867,7 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ FINAL CTA ═══════════ */}
-      <section className="py-32 px-6 relative">
+      <section className="py-20 sm:py-32 px-4 sm:px-6 relative">
         <motion.div
           initial={{ opacity: 0, scale: 0.94 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -875,10 +875,9 @@ export default function LandingPage() {
           transition={{ duration: 0.8 }}
           className="max-w-4xl mx-auto relative"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-electric-purple/5 rounded-[2.5rem] blur-xl" />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-electric-purple/5 rounded-2xl sm:rounded-[2.5rem] blur-xl" />
 
-          <div className="relative revolut-card-green p-14 md:p-20 text-center rounded-[2.5rem] overflow-hidden">
-            {/* Shine overlay */}
+          <div className="relative revolut-card-green p-8 sm:p-14 md:p-20 text-center rounded-2xl sm:rounded-[2.5rem] overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none" />
 
             <motion.div
@@ -886,51 +885,51 @@ export default function LandingPage() {
               whileInView={{ scale: 1 }}
               viewport={{ once: true }}
               transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
-              className="flex h-18 w-18 items-center justify-center rounded-3xl bg-white/15 mx-auto mb-8 backdrop-blur-sm"
+              className="flex h-14 w-14 sm:h-18 sm:w-18 items-center justify-center rounded-2xl sm:rounded-3xl bg-white/15 mx-auto mb-6 sm:mb-8 backdrop-blur-sm"
             >
-              <Sparkles className="h-8 w-8 text-white" />
+              <Sparkles className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
             </motion.div>
 
-            <h2 className="font-display text-4xl md:text-6xl font-bold text-white mb-5 tracking-tight leading-[0.95] text-echo" data-text="Ready to take control of your money?">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-white mb-4 sm:mb-5 tracking-tight leading-[0.95]">
               Ready to take control<br className="hidden sm:block" /> of your money?
             </h2>
-            <p className="text-white/80 max-w-md mx-auto mb-12 text-lg">
+            <p className="text-white/80 max-w-md mx-auto mb-8 sm:mb-12 text-sm sm:text-base lg:text-lg px-2">
               Join 50,000+ users building wealth with AI. Free forever — upgrade anytime.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4 justify-center relative z-10">
+            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 justify-center relative z-10">
               <Link to="/auth">
-                <Button size="lg" className="gap-2.5 px-12 text-base bg-white text-black hover:bg-white/90 rounded-full h-14 font-bold shadow-2xl transition-all duration-300 hover:scale-[1.02]">
+                <Button size="lg" className="gap-2 sm:gap-2.5 px-8 sm:px-12 text-sm sm:text-base bg-white text-black hover:bg-white/90 rounded-full h-12 sm:h-14 font-bold shadow-2xl transition-all duration-300 hover:scale-[1.02] w-full sm:w-auto">
                   Get Started Free <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
             </div>
 
-            <p className="text-sm text-white/60 mt-8 flex items-center justify-center gap-2">
-              <Fingerprint className="h-4 w-4" /> Bank-grade security · No credit card required
+            <p className="text-xs sm:text-sm text-white/60 mt-6 sm:mt-8 flex items-center justify-center gap-2">
+              <Fingerprint className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Bank-grade security · No credit card required
             </p>
           </div>
         </motion.div>
       </section>
 
       {/* ═══════════ FOOTER ═══════════ */}
-      <footer className="border-t border-border/15 py-16 px-6">
+      <footer className="border-t border-border/15 py-10 sm:py-16 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-14">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-8 sm:gap-10 mb-10 sm:mb-14">
             <div className="col-span-2">
-              <div className="flex items-center gap-2.5 mb-5">
-                <img src={logoImg} alt="FinAI" className="h-8 w-8 rounded-xl" />
-                <span className="font-display text-lg font-bold gradient-text-primary">FinAI</span>
+              <div className="flex items-center gap-2.5 mb-4 sm:mb-5">
+                <img src={logoImg} alt="FinAI" className="h-7 w-7 sm:h-8 sm:w-8 rounded-xl" />
+                <span className="font-display text-base sm:text-lg font-bold gradient-text-primary">FinAI</span>
               </div>
-              <p className="text-base text-muted-foreground leading-relaxed max-w-[280px] mb-6">
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-[280px] mb-5 sm:mb-6">
                 The AI-powered financial coach helping you save smarter, spend wiser, and achieve more.
               </p>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5 sm:gap-3">
                 {["X", "In", "GH"].map((social) => (
                   <a
                     key={social}
                     href="#"
-                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-border/30 text-xs font-semibold text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-300"
+                    className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg sm:rounded-xl border border-border/30 text-xs font-semibold text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-300"
                   >
                     {social}
                   </a>
@@ -944,11 +943,11 @@ export default function LandingPage() {
               { title: "Legal", links: ["Privacy", "Terms", "Cookies", "GDPR"] },
             ].map((col) => (
               <div key={col.title}>
-                <p className="text-sm font-semibold text-foreground mb-5">{col.title}</p>
-                <ul className="space-y-3">
+                <p className="text-xs sm:text-sm font-semibold text-foreground mb-3 sm:mb-5">{col.title}</p>
+                <ul className="space-y-2 sm:space-y-3">
                   {col.links.map((link) => (
                     <li key={link}>
-                      <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">
+                      <a href="#" className="text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">
                         {link}
                       </a>
                     </li>
@@ -958,9 +957,9 @@ export default function LandingPage() {
             ))}
           </div>
 
-          <div className="border-t border-border/15 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-muted-foreground">© 2026 FinAI. All rights reserved.</p>
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <div className="border-t border-border/15 pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+            <p className="text-[10px] sm:text-xs text-muted-foreground">© 2026 FinAI. All rights reserved.</p>
+            <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-muted-foreground">
               Made with <Heart className="h-3 w-3 text-destructive fill-destructive mx-0.5" /> by the FinAI team
             </div>
           </div>
