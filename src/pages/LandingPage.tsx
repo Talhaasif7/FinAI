@@ -64,9 +64,9 @@ const painPoints = [
 ];
 
 const pricingPlans = [
-  { name: "Free", price: "$0", period: "forever", features: ["5 goals", "50 expenses/mo", "Basic insights", "Receipt scanner"], cta: "Start Free", popular: false },
-  { name: "Pro", price: "$9", period: "/month", features: ["Unlimited goals", "Unlimited expenses", "AI Coach access", "Advanced analytics", "Weekly AI reports", "Priority support"], cta: "Start Pro Trial", popular: true },
-  { name: "Team", price: "$19", period: "/month", features: ["Everything in Pro", "Shared family goals", "Multi-user access", "Export reports", "API access", "Custom categories"], cta: "Contact Sales", popular: false },
+  { name: "Free", price: "$0", period: "forever", features: ["5 goals", "50 expenses/mo", "Basic insights", "Receipt scanner"], cta: "Start Free", popular: false, priceId: null },
+  { name: "Pro", price: "$7", period: "/month", features: ["Unlimited goals", "Unlimited expenses", "AI Coach access", "Advanced analytics", "Weekly AI reports", "Priority support"], cta: "Start Pro Trial", popular: true, priceId: "price_1T8eCr2N83SQqQkDobIkteJH" },
+  { name: "Team", price: "$11", period: "/month", features: ["Everything in Pro", "Shared family goals", "Multi-user access", "Export reports", "API access", "Custom categories"], cta: "Get Team", popular: false, priceId: "price_1T8eEZ2N83SQqQkDxMu5ul9U" },
 ];
 
 const faqs = [
