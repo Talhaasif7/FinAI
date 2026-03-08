@@ -783,17 +783,17 @@ export default function LandingPage() {
                     ))}
                   </ul>
 
-                  <Link to="/auth">
-                    <Button
-                      className={`w-full rounded-2xl h-11 sm:h-13 text-xs sm:text-sm font-semibold transition-all duration-300 ${
-                        plan.popular
-                          ? "bg-white text-black hover:bg-white/90 shadow-lg hover:shadow-xl"
-                          : "bg-muted/30 text-foreground hover:bg-muted/50 border border-border/30"
-                      }`}
-                    >
-                      {plan.cta}
-                    </Button>
-                  </Link>
+                  <Button
+                    onClick={() => handleCheckout(plan.priceId)}
+                    disabled={checkoutLoading === plan.priceId}
+                    className={`w-full rounded-2xl h-11 sm:h-13 text-xs sm:text-sm font-semibold transition-all duration-300 ${
+                      plan.popular
+                        ? "bg-white text-black hover:bg-white/90 shadow-lg hover:shadow-xl"
+                        : "bg-muted/30 text-foreground hover:bg-muted/50 border border-border/30"
+                    }`}
+                  >
+                    {checkoutLoading === plan.priceId ? "Loading..." : plan.cta}
+                  </Button>
                 </div>
               </motion.div>
             ))}
