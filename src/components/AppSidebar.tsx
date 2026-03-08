@@ -32,12 +32,8 @@ export function AppSidebar({ onNavigate }: Props) {
     <aside className="h-screen w-64 border-r border-border bg-sidebar flex flex-col">
       {/* Logo */}
       <div className="flex items-center justify-between px-5 py-5 border-b border-border">
-        <div className="flex items-center gap-2.5">
-          <img src={logoImg} alt="FinAI" className="h-8 w-8 rounded-xl" />
-          <div>
-            <h1 className="font-display text-base font-bold gradient-text-primary leading-tight">FinAI</h1>
-            <p className="text-[9px] text-muted-foreground tracking-[0.2em] uppercase">Smart Finance</p>
-          </div>
+        <div className="flex items-center">
+          <img src={logoImg} alt="FinAI" className="h-9 w-9 rounded-xl" />
         </div>
         <ThemeToggle />
       </div>
