@@ -39,7 +39,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background overflow-hidden">
       {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b border-border/40" style={{ background: "hsla(220, 20%, 4%, 0.8)" }}>
+      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b border-border/40 bg-background/80">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img src={logoImg} alt="FinAI" className="h-8 w-8 rounded-lg" />
