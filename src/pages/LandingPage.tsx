@@ -843,9 +843,33 @@ export default function LandingPage() {
               Loved by{" "}
               <CurvyHeading variant="purple">thousands</CurvyHeading>
             </h2>
+
+            {/* Trusted-by avatars */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-col items-center gap-3 mt-8"
+            >
+              <div className="flex items-center -space-x-3">
+                {[avatarSarah, avatarMarcus, avatarAisha, avatarJames, avatarLisa].map((src, i) => (
+                  <div
+                    key={i}
+                    className="h-10 w-10 sm:h-12 sm:w-12 rounded-full border-[3px] border-background overflow-hidden shadow-lg"
+                    style={{ zIndex: 5 - i }}
+                  >
+                    <img src={src} alt="" className="h-full w-full object-cover" />
+                  </div>
+                ))}
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Trusted by <span className="font-bold text-foreground">50,000+</span> people worldwide
+              </p>
+            </motion.div>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
             {testimonials.map((t, i) => (
               <motion.div
                 key={t.name}
@@ -853,29 +877,40 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.12, duration: 0.6 }}
-                className={`glass-card p-6 sm:p-8 rounded-2xl sm:rounded-3xl group hover:border-electric-purple/15 transition-all duration-500 ${i === 2 ? "sm:col-span-2 md:col-span-1" : ""}`}
+                className={`relative group rounded-2xl sm:rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-xl ${i === 2 ? "sm:col-span-2 md:col-span-1" : ""}`}
+                style={{ background: "hsl(var(--card) / 0.8)" }}
               >
-                <div className="flex items-center gap-1 mb-4 sm:mb-6">
-                  {Array.from({ length: 5 }).map((_, j) => (
-                    <Star key={j} className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber fill-amber" />
-                  ))}
-                </div>
+                {/* Top gradient border */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6 sm:mb-8">"{t.text}"</p>
-
-                <div className="flex items-center justify-between pt-4 sm:pt-6 border-t border-border/20">
-                  <div className="flex items-center gap-2.5 sm:gap-3">
-                    <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary to-electric-purple flex items-center justify-center text-[10px] sm:text-xs font-bold text-primary-foreground shadow-md">
-                      {t.avatar}
-                    </div>
-                    <div>
-                      <p className="text-sm sm:text-base font-semibold text-foreground">{t.name}</p>
-                      <p className="text-[10px] sm:text-xs text-muted-foreground">{t.role}</p>
-                    </div>
+                <div className="p-6 sm:p-8">
+                  {/* Star rating */}
+                  <div className="flex items-center gap-1 mb-5">
+                    {Array.from({ length: 5 }).map((_, j) => (
+                      <Star key={j} className="h-4 w-4 text-amber fill-amber" />
+                    ))}
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm sm:text-base font-bold gradient-text-primary">{t.saved}</p>
-                    <p className="text-[9px] sm:text-[10px] text-muted-foreground uppercase tracking-wider">saved</p>
+
+                  {/* Quote */}
+                  <p className="text-sm sm:text-[15px] text-foreground/80 leading-relaxed mb-8 min-h-[80px]">
+                    "{t.text}"
+                  </p>
+
+                  {/* Author row */}
+                  <div className="flex items-center justify-between pt-5 border-t border-border/20">
+                    <div className="flex items-center gap-3">
+                      <div className="h-11 w-11 rounded-xl overflow-hidden shadow-md ring-2 ring-primary/10">
+                        <img src={t.avatar} alt={t.name} className="h-full w-full object-cover" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-foreground">{t.name}</p>
+                        <p className="text-[11px] text-muted-foreground">{t.role}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-bold gradient-text-primary">{t.saved}</p>
+                      <p className="text-[9px] text-muted-foreground uppercase tracking-wider font-medium">saved</p>
+                    </div>
                   </div>
                 </div>
               </motion.div>
