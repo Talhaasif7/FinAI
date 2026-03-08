@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Plus, Target, TrendingUp, Sparkles } from "lucide-react";
+import { Plus, Target, TrendingUp, Sparkles, DollarSign } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { GoalProgressCard } from "@/components/GoalProgressCard";
@@ -36,6 +36,9 @@ export default function Goals() {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [addFundsOpen, setAddFundsOpen] = useState(false);
+  const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
+  const [addAmount, setAddAmount] = useState("");
   const [form, setForm] = useState({ name: "", target: "", deadline: "", category: "travel", priority: "medium" });
 
   const fetchGoals = async () => {
@@ -67,6 +70,21 @@ export default function Goals() {
     if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
     setForm({ name: "", target: "", deadline: "", category: "travel", priority: "medium" });
     setOpen(false);
+    fetchGoals();
+  };
+
+  const handleAddFunds = async () => {
+    if (!selectedGoal || !addAmount || !user) return;
+    const newSaved = Math.min(selectedGoal.saved + parseFloat(addAmount), selectedGoal.target);
+    const { error } = await supabase
+      .from("goals")
+      .update({ saved: newSaved })
+      .eq("id", selectedGoal.id);
+    if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Funds added!", description: `$${parseFloat(addAmount).toFixed(2)} added to ${selectedGoal.name}` });
+    setAddAmount("");
+    setAddFundsOpen(false);
+    setSelectedGoal(null);
     fetchGoals();
   };
 
@@ -121,6 +139,28 @@ export default function Goals() {
         </Dialog>
       </motion.div>
 
+      {/* Add Funds Dialog */}
+      <Dialog open={addFundsOpen} onOpenChange={setAddFundsOpen}>
+        <DialogContent className="bg-card border-border">
+          <DialogHeader><DialogTitle className="font-display">Add Funds to {selectedGoal?.name}</DialogTitle></DialogHeader>
+          <div className="space-y-4 pt-2">
+            <div>
+              <Label>Current Progress</Label>
+              <p className="text-sm text-muted-foreground mt-1">
+                ${selectedGoal?.saved.toLocaleString()} / ${selectedGoal?.target.toLocaleString()} ({selectedGoal ? Math.round((selectedGoal.saved / selectedGoal.target) * 100) : 0}%)
+              </p>
+            </div>
+            <div>
+              <Label>Amount to Add ($)</Label>
+              <Input type="number" placeholder="100" value={addAmount} onChange={e => setAddAmount(e.target.value)} className="mt-1" />
+            </div>
+            <Button onClick={handleAddFunds} className="w-full bg-primary text-primary-foreground hover:bg-teal-light gap-2">
+              <DollarSign className="h-4 w-4" /> Add Funds
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="stat-card glow-teal">
           <div className="flex items-center gap-2 mb-2"><Target className="h-4 w-4 text-primary" /><span className="text-[11px] text-muted-foreground uppercase tracking-wider">Active Goals</span></div>
@@ -139,7 +179,16 @@ export default function Goals() {
       {goals.length > 0 ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {goals.map((goal) => <GoalProgressCard key={goal.id} goal={goal} />)}
+            {goals.map((goal) => (
+              <GoalProgressCard
+                key={goal.id}
+                goal={goal}
+                onAddFunds={() => {
+                  setSelectedGoal(goal);
+                  setAddFundsOpen(true);
+                }}
+              />
+            ))}
           </motion.div>
           <motion.div variants={item}><GoalBarChart data={goalBarData} /></motion.div>
         </div>
