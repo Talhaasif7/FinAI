@@ -256,6 +256,60 @@ export type Database = {
         }
         Relationships: []
       }
+      milestones: {
+        Row: {
+          ai_roadmap: string | null
+          category: string
+          created_at: string
+          estimated_cost: number
+          icon: string
+          id: string
+          monthly_target: number
+          notes: string | null
+          priority: number
+          saved_amount: number
+          status: string
+          target_date: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_roadmap?: string | null
+          category?: string
+          created_at?: string
+          estimated_cost?: number
+          icon?: string
+          id?: string
+          monthly_target?: number
+          notes?: string | null
+          priority?: number
+          saved_amount?: number
+          status?: string
+          target_date: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_roadmap?: string | null
+          category?: string
+          created_at?: string
+          estimated_cost?: number
+          icon?: string
+          id?: string
+          monthly_target?: number
+          notes?: string | null
+          priority?: number
+          saved_amount?: number
+          status?: string
+          target_date?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
