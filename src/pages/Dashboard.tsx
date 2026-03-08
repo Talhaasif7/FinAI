@@ -17,18 +17,14 @@ import { WeeklyReportCard } from "@/components/WeeklyReportCard";
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.07 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } };
 
-const accentStyles: Record<string, string> = { teal: "glow-teal", gold: "glow-gold", coral: "", lavender: "glow-lavender" };
-const accentBg: Record<string, string> = { teal: "bg-primary/10", gold: "bg-secondary/10", coral: "bg-coral/10", lavender: "bg-lavender/10" };
-const accentText: Record<string, string> = { teal: "text-primary", gold: "text-secondary", coral: "text-coral", lavender: "text-lavender" };
-
 const categoryColors: Record<string, string> = {
-  Food: "hsl(174, 72%, 46%)",
-  Shopping: "hsl(38, 95%, 55%)",
-  Transport: "hsl(258, 60%, 62%)",
-  Entertainment: "hsl(12, 80%, 58%)",
-  Bills: "hsl(200, 80%, 50%)",
-  Health: "hsl(160, 65%, 38%)",
-  Other: "hsl(215, 15%, 50%)",
+  Food: "hsl(155, 80%, 50%)",
+  Shopping: "hsl(42, 95%, 58%)",
+  Transport: "hsl(270, 65%, 62%)",
+  Entertainment: "hsl(320, 70%, 58%)",
+  Bills: "hsl(195, 90%, 55%)",
+  Health: "hsl(155, 80%, 38%)",
+  Other: "hsl(240, 8%, 48%)",
 };
 
 export default function Dashboard() {
@@ -86,10 +82,10 @@ export default function Dashboard() {
   });
 
   const summaryCards = [
-    { label: "Total Saved", value: `$${totalSaved.toLocaleString()}`, change: "+2.4%", up: true, icon: Wallet, accent: "teal" },
-    { label: "Active Goals", value: `${goals.length}`, change: `${goalPct}%`, up: true, icon: Target, accent: "gold" },
-    { label: "Total Expenses", value: `$${totalExpenses.toLocaleString()}`, change: `${allExpenses.length} txns`, up: false, icon: TrendingDown, accent: "coral" },
-    { label: "Goals Progress", value: `${goalPct}%`, change: `$${totalSaved.toLocaleString()} saved`, up: true, icon: TrendingUp, accent: "lavender" },
+    { label: "Total Saved", value: `$${totalSaved.toLocaleString()}`, change: "+2.4%", up: true, icon: Wallet, glow: "glow-green", gradient: "from-neon-green/10 to-transparent" },
+    { label: "Active Goals", value: `${goals.length}`, change: `${goalPct}%`, up: true, icon: Target, glow: "glow-purple", gradient: "from-electric-purple/10 to-transparent" },
+    { label: "Total Expenses", value: `$${totalExpenses.toLocaleString()}`, change: `${allExpenses.length} txns`, up: false, icon: TrendingDown, glow: "glow-gold", gradient: "from-amber/10 to-transparent" },
+    { label: "Goals Progress", value: `${goalPct}%`, change: `$${totalSaved.toLocaleString()} saved`, up: true, icon: TrendingUp, glow: "glow-purple", gradient: "from-magenta/10 to-transparent" },
   ];
 
   const goalBarData = goals.map(g => ({ name: g.name.split(" ").slice(0, 2).join(" "), saved: g.saved, target: g.target }));
@@ -99,11 +95,13 @@ export default function Dashboard() {
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6 max-w-7xl">
       <motion.div variants={item} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-bold text-foreground">Good morning, {displayName}! 👋</h1>
+          <h1 className="font-display text-2xl font-bold text-foreground">
+            Good morning, <span className="gradient-text-primary">{displayName}</span>! 👋
+          </h1>
           <p className="text-muted-foreground text-sm mt-1">Here's your financial overview for today</p>
         </div>
         {goalPct > 0 && (
-          <div className="glass-card px-4 py-2.5 flex items-center gap-2.5">
+          <div className="neon-card px-4 py-2.5 flex items-center gap-2.5">
             <Sparkles className="h-4 w-4 text-primary animate-pulse-glow" />
             <span className="text-xs text-muted-foreground">AI Insight:</span>
             <span className="text-xs text-foreground font-medium">You're {goalPct}% toward your goals!</span>
@@ -118,17 +116,20 @@ export default function Dashboard() {
 
       <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {summaryCards.map((card) => (
-          <div key={card.label} className={`stat-card transition-all duration-300 hover:translate-y-[-2px] ${accentStyles[card.accent]}`}>
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-[11px] text-muted-foreground font-medium uppercase tracking-wider">{card.label}</span>
-              <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${accentBg[card.accent]}`}>
-                <card.icon className={`h-4 w-4 ${accentText[card.accent]}`} />
+          <div key={card.label} className={`stat-card transition-all duration-300 hover:translate-y-[-2px] ${card.glow}`}>
+            <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} rounded-xl`} />
+            <div className="relative">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-[11px] text-muted-foreground font-medium uppercase tracking-wider">{card.label}</span>
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 backdrop-blur-sm">
+                  <card.icon className="h-4 w-4 text-primary" />
+                </div>
               </div>
-            </div>
-            <p className="font-display text-2xl font-bold text-foreground">{card.value}</p>
-            <div className="flex items-center gap-1 mt-1.5">
-              {card.up ? <ArrowUpRight className="h-3.5 w-3.5 text-primary" /> : <ArrowDownRight className="h-3.5 w-3.5 text-coral" />}
-              <span className={`text-xs font-medium ${card.up ? "text-primary" : "text-coral"}`}>{card.change}</span>
+              <p className="font-display text-2xl font-bold text-foreground">{card.value}</p>
+              <div className="flex items-center gap-1 mt-1.5">
+                {card.up ? <ArrowUpRight className="h-3.5 w-3.5 text-primary" /> : <ArrowDownRight className="h-3.5 w-3.5 text-amber" />}
+                <span className={`text-xs font-medium ${card.up ? "text-primary" : "text-amber"}`}>{card.change}</span>
+              </div>
             </div>
           </div>
         ))}
@@ -165,7 +166,7 @@ export default function Dashboard() {
       )}
 
       {allExpenses.length === 0 && goals.length === 0 && (
-        <motion.div variants={item} className="glass-card p-10 text-center">
+        <motion.div variants={item} className="neon-card p-10 text-center">
           <Sparkles className="h-12 w-12 mx-auto mb-3 text-primary/50" />
           <h2 className="font-display text-lg font-semibold text-foreground mb-2">Welcome to FinAI!</h2>
           <p className="text-sm text-muted-foreground">Start by adding your first expense or creating a financial goal.</p>
