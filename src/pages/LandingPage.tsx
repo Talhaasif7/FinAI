@@ -696,27 +696,27 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ PRICING ═══════════ */}
-      <section id="pricing" className="py-32 px-6 relative">
+      <section id="pricing" className="py-20 sm:py-32 px-4 sm:px-6 relative">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-16"
+            className="text-center mb-10 sm:mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-6 bg-primary/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-4 sm:mb-6 bg-primary/5">
               <Wallet className="h-3 w-3" /> Pricing
             </span>
-            <h2 className="font-display text-4xl md:text-6xl font-bold mb-5 text-foreground tracking-tight leading-[0.95]">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-5 text-foreground tracking-tight leading-[0.95]">
               Simple,{" "}
               <CurvyHeading variant="green">transparent</CurvyHeading>{" "}
               pricing
             </h2>
-            <p className="text-lg text-muted-foreground">Start free. Upgrade when you need more.</p>
+            <p className="text-sm sm:text-base lg:text-lg text-muted-foreground">Start free. Upgrade when you need more.</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5">
             {pricingPlans.map((plan, i) => (
               <motion.div
                 key={plan.name}
@@ -726,7 +726,7 @@ export default function LandingPage() {
                 transition={{ delay: i * 0.12, duration: 0.6 }}
                 className={`relative rounded-3xl overflow-hidden transition-all duration-500 ${
                   plan.popular
-                    ? "revolut-card-green shadow-2xl scale-[1.02] md:scale-105"
+                    ? "revolut-card-green shadow-2xl sm:scale-[1.02] md:scale-105 sm:col-span-2 md:col-span-1"
                     : "glass-card hover:border-border"
                 }`}
               >
@@ -734,25 +734,25 @@ export default function LandingPage() {
                   <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-border to-transparent" />
                 )}
 
-                <div className="p-8">
+                <div className="p-6 sm:p-8">
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className={`font-display text-xl font-bold ${plan.popular ? "text-white" : "text-foreground"}`}>{plan.name}</h3>
+                    <h3 className={`font-display text-lg sm:text-xl font-bold ${plan.popular ? "text-white" : "text-foreground"}`}>{plan.name}</h3>
                     {plan.popular && (
-                      <span className="text-[9px] uppercase tracking-wider font-bold bg-white/20 text-white px-3 py-1.5 rounded-full backdrop-blur-sm">
+                      <span className="text-[8px] sm:text-[9px] uppercase tracking-wider font-bold bg-white/20 text-white px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full backdrop-blur-sm">
                         Most Popular
                       </span>
                     )}
                   </div>
-                  <div className="flex items-baseline gap-1 mt-4 mb-8">
-                    <span className={`font-display text-5xl font-bold ${plan.popular ? "text-white" : "text-foreground"}`}>{plan.price}</span>
-                    <span className={`text-base ${plan.popular ? "text-white/70" : "text-muted-foreground"}`}>{plan.period}</span>
+                  <div className="flex items-baseline gap-1 mt-3 sm:mt-4 mb-6 sm:mb-8">
+                    <span className={`font-display text-4xl sm:text-5xl font-bold ${plan.popular ? "text-white" : "text-foreground"}`}>{plan.price}</span>
+                    <span className={`text-sm sm:text-base ${plan.popular ? "text-white/70" : "text-muted-foreground"}`}>{plan.period}</span>
                   </div>
 
-                  <ul className="space-y-4 mb-8">
+                  <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
                     {plan.features.map((f) => (
-                      <li key={f} className={`flex items-center gap-3 text-sm ${plan.popular ? "text-white/90" : "text-muted-foreground"}`}>
-                        <div className={`flex h-5 w-5 items-center justify-center rounded-full shrink-0 ${plan.popular ? "bg-white/20" : "bg-primary/10"}`}>
-                          <Check className={`h-3 w-3 ${plan.popular ? "text-white" : "text-primary"}`} />
+                      <li key={f} className={`flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm ${plan.popular ? "text-white/90" : "text-muted-foreground"}`}>
+                        <div className={`flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded-full shrink-0 ${plan.popular ? "bg-white/20" : "bg-primary/10"}`}>
+                          <Check className={`h-2.5 w-2.5 sm:h-3 sm:w-3 ${plan.popular ? "text-white" : "text-primary"}`} />
                         </div>
                         {f}
                       </li>
@@ -761,7 +761,7 @@ export default function LandingPage() {
 
                   <Link to="/auth">
                     <Button
-                      className={`w-full rounded-2xl h-13 text-sm font-semibold transition-all duration-300 ${
+                      className={`w-full rounded-2xl h-11 sm:h-13 text-xs sm:text-sm font-semibold transition-all duration-300 ${
                         plan.popular
                           ? "bg-white text-black hover:bg-white/90 shadow-lg hover:shadow-xl"
                           : "bg-muted/30 text-foreground hover:bg-muted/50 border border-border/30"
