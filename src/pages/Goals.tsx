@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Plus, Target, TrendingUp, Sparkles, DollarSign } from "lucide-react";
+import { Plus, Target, TrendingUp, Sparkles, DollarSign, Pencil, Trash2, Share2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { GoalProgressCard } from "@/components/GoalProgressCard";
 import { GoalBarChart } from "@/components/GoalBarChart";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -37,9 +38,12 @@ export default function Goals() {
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [addFundsOpen, setAddFundsOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
   const [addAmount, setAddAmount] = useState("");
   const [form, setForm] = useState({ name: "", target: "", deadline: "", category: "travel", priority: "medium" });
+  const [editForm, setEditForm] = useState({ name: "", target: "", deadline: "", category: "travel", priority: "medium" });
 
   const fetchGoals = async () => {
     if (!user) return;
@@ -58,13 +62,8 @@ export default function Goals() {
   const handleAdd = async () => {
     if (!form.name || !form.target || !form.deadline || !user) return;
     const { error } = await supabase.from("goals").insert({
-      user_id: user.id,
-      name: form.name,
-      target: parseFloat(form.target),
-      saved: 0,
-      deadline: form.deadline,
-      category: form.category,
-      priority: form.priority,
+      user_id: user.id, name: form.name, target: parseFloat(form.target), saved: 0,
+      deadline: form.deadline, category: form.category, priority: form.priority,
       icon: categoryEmojis[form.category] || "🎯",
     });
     if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
@@ -76,16 +75,43 @@ export default function Goals() {
   const handleAddFunds = async () => {
     if (!selectedGoal || !addAmount || !user) return;
     const newSaved = Math.min(selectedGoal.saved + parseFloat(addAmount), selectedGoal.target);
-    const { error } = await supabase
-      .from("goals")
-      .update({ saved: newSaved })
-      .eq("id", selectedGoal.id);
+    const { error } = await supabase.from("goals").update({ saved: newSaved }).eq("id", selectedGoal.id);
     if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
     toast({ title: "Funds added!", description: `$${parseFloat(addAmount).toFixed(2)} added to ${selectedGoal.name}` });
-    setAddAmount("");
-    setAddFundsOpen(false);
-    setSelectedGoal(null);
+    setAddAmount(""); setAddFundsOpen(false); setSelectedGoal(null);
     fetchGoals();
+  };
+
+  const handleEdit = async () => {
+    if (!selectedGoal || !editForm.name || !editForm.target || !editForm.deadline) return;
+    const { error } = await supabase.from("goals").update({
+      name: editForm.name, target: parseFloat(editForm.target), deadline: editForm.deadline,
+      category: editForm.category, priority: editForm.priority, icon: categoryEmojis[editForm.category] || "🎯",
+    }).eq("id", selectedGoal.id);
+    if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Goal updated!" });
+    setEditOpen(false); setSelectedGoal(null);
+    fetchGoals();
+  };
+
+  const handleDelete = async () => {
+    if (!selectedGoal) return;
+    const { error } = await supabase.from("goals").delete().eq("id", selectedGoal.id);
+    if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Goal deleted" });
+    setDeleteOpen(false); setSelectedGoal(null);
+    fetchGoals();
+  };
+
+  const handleShare = (goal: Goal) => {
+    const pct = Math.round((goal.saved / goal.target) * 100);
+    const text = `🎯 I'm ${pct}% toward my "${goal.name}" goal! $${goal.saved.toLocaleString()} / $${goal.target.toLocaleString()} saved. #FinAI #SavingsGoal`;
+    if (navigator.share) {
+      navigator.share({ title: `${goal.name} Progress`, text });
+    } else {
+      navigator.clipboard.writeText(text);
+      toast({ title: "Copied to clipboard!", description: "Share your progress on social media" });
+    }
   };
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin" /></div>;
@@ -161,6 +187,61 @@ export default function Goals() {
         </DialogContent>
       </Dialog>
 
+      {/* Edit Dialog */}
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent className="bg-card border-border">
+          <DialogHeader><DialogTitle className="font-display">Edit Goal</DialogTitle></DialogHeader>
+          <div className="space-y-4 pt-2">
+            <div><Label>Goal Name</Label><Input value={editForm.name} onChange={e => setEditForm({...editForm, name: e.target.value})} className="mt-1" /></div>
+            <div><Label>Target Amount ($)</Label><Input type="number" value={editForm.target} onChange={e => setEditForm({...editForm, target: e.target.value})} className="mt-1" /></div>
+            <div><Label>Deadline</Label><Input type="date" value={editForm.deadline} onChange={e => setEditForm({...editForm, deadline: e.target.value})} className="mt-1" /></div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label>Category</Label>
+                <Select value={editForm.category} onValueChange={v => setEditForm({...editForm, category: v})}>
+                  <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="travel">✈️ Travel</SelectItem>
+                    <SelectItem value="gadget">💻 Gadget</SelectItem>
+                    <SelectItem value="emergency">🛡️ Emergency</SelectItem>
+                    <SelectItem value="investment">📈 Investment</SelectItem>
+                    <SelectItem value="education">🎓 Education</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Priority</Label>
+                <Select value={editForm.priority} onValueChange={v => setEditForm({...editForm, priority: v})}>
+                  <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="high">High</SelectItem>
+                    <SelectItem value="medium">Medium</SelectItem>
+                    <SelectItem value="low">Low</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <Button onClick={handleEdit} className="w-full bg-primary text-primary-foreground hover:bg-teal-light">Save Changes</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation */}
+      <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <AlertDialogContent className="bg-card border-border">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="font-display">Delete "{selectedGoal?.name}"?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete this goal and all its progress. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="stat-card glow-teal">
           <div className="flex items-center gap-2 mb-2"><Target className="h-4 w-4 text-primary" /><span className="text-[11px] text-muted-foreground uppercase tracking-wider">Active Goals</span></div>
@@ -183,10 +264,14 @@ export default function Goals() {
               <GoalProgressCard
                 key={goal.id}
                 goal={goal}
-                onAddFunds={() => {
+                onAddFunds={() => { setSelectedGoal(goal); setAddFundsOpen(true); }}
+                onEdit={() => {
                   setSelectedGoal(goal);
-                  setAddFundsOpen(true);
+                  setEditForm({ name: goal.name, target: goal.target.toString(), deadline: goal.deadline, category: goal.category, priority: goal.priority });
+                  setEditOpen(true);
                 }}
+                onDelete={() => { setSelectedGoal(goal); setDeleteOpen(true); }}
+                onShare={() => handleShare(goal)}
               />
             ))}
           </motion.div>

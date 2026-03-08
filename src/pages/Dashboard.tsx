@@ -11,6 +11,8 @@ import { SpendingChart } from "@/components/SpendingChart";
 import { WeeklySpendingChart } from "@/components/WeeklySpendingChart";
 import { GoalBarChart } from "@/components/GoalBarChart";
 import { RecentTransactions } from "@/components/RecentTransactions";
+import { SmartAlerts } from "@/components/SmartAlerts";
+import { WeeklyReportCard } from "@/components/WeeklyReportCard";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.07 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } };
@@ -56,7 +58,6 @@ export default function Dashboard() {
   const totalTarget = goals.reduce((s, g) => s + g.target, 0);
   const goalPct = totalTarget > 0 ? Math.round((totalSaved / totalTarget) * 100) : 0;
 
-  // Dynamic spending by category from real data
   const spendingByCategory = Object.entries(
     allExpenses.reduce<Record<string, number>>((acc, e) => {
       acc[e.category] = (acc[e.category] || 0) + e.amount;
@@ -68,7 +69,6 @@ export default function Dashboard() {
     color: categoryColors[category] || categoryColors.Other,
   })).sort((a, b) => b.amount - a.amount);
 
-  // Dynamic weekly spending from real data
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const now = new Date();
   const weekStart = new Date(now);
@@ -111,6 +111,11 @@ export default function Dashboard() {
         )}
       </motion.div>
 
+      {/* Smart Alerts */}
+      <motion.div variants={item}>
+        <SmartAlerts />
+      </motion.div>
+
       <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {summaryCards.map((card) => (
           <div key={card.label} className={`stat-card transition-all duration-300 hover:translate-y-[-2px] ${accentStyles[card.accent]}`}>
@@ -127,6 +132,11 @@ export default function Dashboard() {
             </div>
           </div>
         ))}
+      </motion.div>
+
+      {/* Weekly Report */}
+      <motion.div variants={item}>
+        <WeeklyReportCard />
       </motion.div>
 
       {(spendingByCategory.length > 0 || weeklySpending.some(w => w.amount > 0)) && (

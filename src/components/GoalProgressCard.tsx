@@ -1,4 +1,4 @@
-import { DollarSign } from "lucide-react";
+import { DollarSign, Pencil, Trash2, Share2 } from "lucide-react";
 
 interface Goal {
   id: string;
@@ -17,7 +17,15 @@ const priorityColors: Record<string, string> = {
   low: "text-muted-foreground",
 };
 
-export function GoalProgressCard({ goal, onAddFunds }: { goal: Goal; onAddFunds?: () => void }) {
+interface GoalProgressCardProps {
+  goal: Goal;
+  onAddFunds?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
+  onShare?: () => void;
+}
+
+export function GoalProgressCard({ goal, onAddFunds, onEdit, onDelete, onShare }: GoalProgressCardProps) {
   const pct = Math.round((goal.saved / goal.target) * 100);
   const remaining = goal.target - goal.saved;
   const daysLeft = Math.max(0, Math.ceil((new Date(goal.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
@@ -29,19 +37,32 @@ export function GoalProgressCard({ goal, onAddFunds }: { goal: Goal; onAddFunds?
           <span className="text-lg">{goal.icon}</span>
           <span className="text-sm font-semibold text-foreground">{goal.name}</span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <span className={`text-[10px] uppercase font-semibold tracking-wider ${priorityColors[goal.priority] || "text-muted-foreground"}`}>
             {goal.priority}
           </span>
-          {onAddFunds && (
-            <button
-              onClick={onAddFunds}
-              className="opacity-0 group-hover:opacity-100 transition-opacity flex h-6 w-6 items-center justify-center rounded-md bg-primary/10 hover:bg-primary/20 text-primary"
-              title="Add funds"
-            >
-              <DollarSign className="h-3 w-3" />
-            </button>
-          )}
+          <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+            {onAddFunds && (
+              <button onClick={onAddFunds} className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/10 hover:bg-primary/20 text-primary" title="Add funds">
+                <DollarSign className="h-3 w-3" />
+              </button>
+            )}
+            {onEdit && (
+              <button onClick={onEdit} className="flex h-6 w-6 items-center justify-center rounded-md bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground" title="Edit">
+                <Pencil className="h-3 w-3" />
+              </button>
+            )}
+            {onShare && (
+              <button onClick={onShare} className="flex h-6 w-6 items-center justify-center rounded-md bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground" title="Share">
+                <Share2 className="h-3 w-3" />
+              </button>
+            )}
+            {onDelete && (
+              <button onClick={onDelete} className="flex h-6 w-6 items-center justify-center rounded-md bg-destructive/10 hover:bg-destructive/20 text-destructive" title="Delete">
+                <Trash2 className="h-3 w-3" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
       <div className="flex items-baseline gap-1 mb-2.5">
@@ -53,12 +74,12 @@ export function GoalProgressCard({ goal, onAddFunds }: { goal: Goal; onAddFunds?
           className="h-full rounded-full transition-all duration-700"
           style={{
             width: `${Math.min(pct, 100)}%`,
-            background: pct >= 75 ? "var(--gradient-success)" : "var(--gradient-primary)",
+            background: pct >= 100 ? "var(--gradient-success)" : pct >= 75 ? "var(--gradient-success)" : "var(--gradient-primary)",
           }}
         />
       </div>
       <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-        <span>${remaining.toLocaleString()} left</span>
+        <span>{pct >= 100 ? "🎉 Goal reached!" : `$${remaining.toLocaleString()} left`}</span>
         <span>{daysLeft} days remaining</span>
       </div>
     </div>
