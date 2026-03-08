@@ -11,11 +11,21 @@ import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
+const normalizeAvatarUrl = (rawUrl: string) => {
+  const trimmedUrl = rawUrl.trim();
+  if (!trimmedUrl) return "";
+  return /^https?:\/\//i.test(trimmedUrl) ? trimmedUrl : `https://${trimmedUrl}`;
+};
+
+const withCacheBuster = (url: string, cacheKey: number) =>
+  `${url}${url.includes("?") ? "&" : "?"}v=${cacheKey}`;
+
 export default function SettingsPage() {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
   const [displayName, setDisplayName] = useState("");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [avatarCacheKey, setAvatarCacheKey] = useState<number>(Date.now());
   const [loading, setLoading] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -34,12 +44,17 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (!user) return;
-    supabase.from("profiles").select("*").eq("user_id", user.id).single().then(({ data }) => {
-      if (data) {
+    supabase
+      .from("profiles")
+      .select("display_name, avatar_url")
+      .eq("user_id", user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!data) return;
         setDisplayName(data.display_name || "");
         setAvatarUrl(data.avatar_url || null);
-      }
-    });
+        setAvatarCacheKey(Date.now());
+      });
   }, [user]);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,17 +85,17 @@ export default function SettingsPage() {
     }
 
     const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(filePath);
-    const url = `${publicUrl}?t=${Date.now()}`;
 
     const { error: updateError } = await supabase
       .from("profiles")
-      .update({ avatar_url: url })
+      .update({ avatar_url: publicUrl, updated_at: new Date().toISOString() })
       .eq("user_id", user.id);
 
     if (updateError) {
       toast({ title: "Error", description: updateError.message, variant: "destructive" });
     } else {
-      setAvatarUrl(url);
+      setAvatarUrl(publicUrl);
+      setAvatarCacheKey(Date.now());
       toast({ title: "Avatar updated!" });
     }
     setUploadingAvatar(false);
@@ -88,19 +103,69 @@ export default function SettingsPage() {
 
   const handleAvatarUrl = async () => {
     if (!avatarUrlInput.trim() || !user) return;
-    setUploadingAvatar(true);
-    const cleanUrl = avatarUrlInput.trim();
-    const { error } = await supabase
-      .from("profiles")
-      .update({ avatar_url: cleanUrl })
-      .eq("user_id", user.id);
-    if (error) {
-      toast({ title: "Error", description: error.message, variant: "destructive" });
-    } else {
-      setAvatarUrl(cleanUrl + (cleanUrl.includes('?') ? '&' : '?') + '_v=' + Date.now());
-      setAvatarUrlInput("");
-      toast({ title: "Avatar updated!" });
+
+    const normalizedUrl = normalizeAvatarUrl(avatarUrlInput);
+    try {
+      new URL(normalizedUrl);
+    } catch {
+      toast({ title: "Invalid URL", description: "Please enter a valid image URL.", variant: "destructive" });
+      return;
     }
+
+    setUploadingAvatar(true);
+
+    const probeUrl = withCacheBuster(normalizedUrl, Date.now());
+    const canLoadImage = await new Promise<boolean>((resolve) => {
+      const image = new Image();
+      const timeout = window.setTimeout(() => resolve(false), 7000);
+      image.onload = () => {
+        window.clearTimeout(timeout);
+        resolve(true);
+      };
+      image.onerror = () => {
+        window.clearTimeout(timeout);
+        resolve(false);
+      };
+      image.referrerPolicy = "no-referrer";
+      image.src = probeUrl;
+    });
+
+    if (!canLoadImage) {
+      toast({ title: "Image not reachable", description: "That URL cannot be loaded as an image.", variant: "destructive" });
+      setUploadingAvatar(false);
+      return;
+    }
+
+    let writeError: Error | null = null;
+
+    const { data: updatedRows, error: updateError } = await supabase
+      .from("profiles")
+      .update({ avatar_url: normalizedUrl, updated_at: new Date().toISOString() })
+      .eq("user_id", user.id)
+      .select("id")
+      .limit(1);
+
+    if (updateError) {
+      writeError = updateError;
+    } else if (!updatedRows || updatedRows.length === 0) {
+      const { error: insertError } = await supabase.from("profiles").insert({
+        user_id: user.id,
+        display_name: displayName || null,
+        avatar_url: normalizedUrl,
+      });
+      if (insertError) writeError = insertError;
+    }
+
+    if (writeError) {
+      toast({ title: "Error", description: writeError.message, variant: "destructive" });
+      setUploadingAvatar(false);
+      return;
+    }
+
+    setAvatarUrl(normalizedUrl);
+    setAvatarCacheKey(Date.now());
+    setAvatarUrlInput("");
+    toast({ title: "Avatar updated!" });
     setUploadingAvatar(false);
   };
 
@@ -179,7 +244,12 @@ export default function SettingsPage() {
               <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                 <Avatar key={avatarUrl || "no-avatar"} className="h-16 w-16 border-2 border-border">
                   {avatarUrl ? (
-                    <img src={`${avatarUrl}${avatarUrl.includes('?') ? '&' : '?'}t=${Date.now()}`} alt="Profile" className="aspect-square h-full w-full object-cover" referrerPolicy="no-referrer" />
+                    <AvatarImage
+                      src={withCacheBuster(avatarUrl, avatarCacheKey)}
+                      alt="Profile"
+                      className="aspect-square h-full w-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
                   ) : (
                     <AvatarFallback className="bg-primary/10 text-primary font-semibold text-lg">
                       {initials}

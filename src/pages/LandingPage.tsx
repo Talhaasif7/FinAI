@@ -196,12 +196,19 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [profileAvatarUrl, setProfileAvatarUrl] = useState<string | null>(null);
+  const [profileAvatarCacheKey, setProfileAvatarCacheKey] = useState<number>(Date.now());
 
   useEffect(() => {
     if (!user) return;
-    supabase.from("profiles").select("avatar_url").eq("user_id", user.id).single().then(({ data }) => {
-      if (data?.avatar_url) setProfileAvatarUrl(data.avatar_url);
-    });
+    supabase
+      .from("profiles")
+      .select("avatar_url, updated_at")
+      .eq("user_id", user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        setProfileAvatarUrl(data?.avatar_url || null);
+        setProfileAvatarCacheKey(data?.updated_at ? new Date(data.updated_at).getTime() : Date.now());
+      });
   }, [user]);
 
   const handleCheckout = async (priceId: string | null) => {
@@ -267,7 +274,12 @@ export default function LandingPage() {
               <Link to="/dashboard" className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-xs font-bold text-primary overflow-hidden">
                   {profileAvatarUrl ? (
-                    <img src={profileAvatarUrl} alt="Avatar" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                    <img
+                      src={`${profileAvatarUrl}${profileAvatarUrl.includes("?") ? "&" : "?"}v=${profileAvatarCacheKey}`}
+                      alt="Avatar"
+                      className="h-full w-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
                   ) : (
                     (user.email?.charAt(0) ?? "U").toUpperCase()
                   )}
