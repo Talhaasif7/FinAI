@@ -186,6 +186,27 @@ export default function LandingPage() {
   const heroScale = useTransform(scrollYProgress, [0, 0.6], [1, 0.92]);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleCheckout = async (priceId: string | null) => {
+    if (!priceId) { navigate("/auth"); return; }
+    if (!user) { navigate("/auth"); return; }
+    setCheckoutLoading(priceId);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: { priceId },
+      });
+      if (error) throw error;
+      if (data?.url) window.open(data.url, "_blank");
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message || "Failed to start checkout", variant: "destructive" });
+    } finally {
+      setCheckoutLoading(null);
+    }
+  };
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 50);
