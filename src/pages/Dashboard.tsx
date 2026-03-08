@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { 
   TrendingUp, TrendingDown, Wallet, Target, 
-  ArrowUpRight, ArrowDownRight, Sparkles
+  ArrowUpRight, ArrowDownRight, Sparkles, Download, FileText, Lock
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -14,6 +14,10 @@ import { RecentTransactions } from "@/components/RecentTransactions";
 import { SmartAlerts } from "@/components/SmartAlerts";
 import { WeeklyReportCard } from "@/components/WeeklyReportCard";
 import { HealthScoreWidget } from "@/components/HealthScoreWidget";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { exportExpensesToCSV, exportExpensesToPDF, exportDashboardPDF } from "@/lib/export-utils";
+import { useToast } from "@/hooks/use-toast";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.06 } } };
 const item = { hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0, transition: { duration: 0.35 } } };
