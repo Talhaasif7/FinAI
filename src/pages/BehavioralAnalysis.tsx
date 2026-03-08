@@ -68,7 +68,7 @@ export default function BehavioralAnalysis() {
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchAnalysis = async () => {
-    if (!user) return;
+    if (!user || isLocked) return;
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
