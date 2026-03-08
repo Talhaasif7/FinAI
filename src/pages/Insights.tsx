@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from "recharts";
+import { UpgradePrompt } from "@/components/UpgradePrompt";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } };
 const item = { hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0 } };
@@ -33,8 +34,18 @@ interface Analysis {
 }
 
 export default function Insights() {
-  const { user } = useAuth();
+  const { user, subscription } = useAuth();
   const { toast } = useToast();
+
+  if (!subscription.loading && subscription.tier === "free") {
+    return (
+      <UpgradePrompt
+        feature="Advanced Analytics"
+        description="Get AI-powered spending intelligence with financial personality analysis, forecasts, and actionable insights tailored to your habits."
+        requiredTier="pro"
+      />
+    );
+  }
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [loading, setLoading] = useState(false);
   const [hasData, setHasData] = useState(false);
