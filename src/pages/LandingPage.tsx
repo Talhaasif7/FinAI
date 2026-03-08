@@ -318,8 +318,28 @@ export default function LandingPage() {
             className="font-display text-[3.5rem] sm:text-[5rem] md:text-[6.5rem] lg:text-[8rem] font-bold leading-[0.85] mb-8 tracking-[-0.04em]"
           >
             <span className="text-foreground block text-echo" data-text="Your Money,">Your Money,</span>
-            <span className="block text-echo" data-text="Reimagined.">
-              <span className="inline-block gradient-text-hero curvy-underline curvy-underline-loop reimagined-loop">Reimagined.</span>
+            <span className="block relative">
+              <span className="inline-block curvy-underline curvy-underline-loop">
+                {"Reimagined.".split("").map((char, i) => (
+                  <motion.span
+                    key={i}
+                    className="inline-block gradient-text-hero"
+                    animate={{
+                      opacity: [0, 1, 1, 0.7],
+                      y: [20, 0, 0, 2],
+                    }}
+                    transition={{
+                      duration: 3.8,
+                      repeat: Infinity,
+                      delay: i * 0.06,
+                      times: [0, 0.2, 0.8, 1],
+                      ease: "easeInOut",
+                    }}
+                  >
+                    {char}
+                  </motion.span>
+                ))}
+              </span>
             </span>
           </motion.h1>
 
