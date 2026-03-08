@@ -95,6 +95,16 @@ export default function BehavioralAnalysis() {
     fetchAnalysis();
   };
 
+  if (isLocked) {
+    return (
+      <UpgradePrompt
+        feature="Advanced Behavioral Analysis"
+        description="AI-powered insights into your spending personality, time-of-day patterns, impulse buying habits, and personalized nudges to optimize your finances."
+        requiredTier="pro"
+      />
+    );
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">

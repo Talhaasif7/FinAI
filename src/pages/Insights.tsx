@@ -34,9 +34,8 @@ interface Analysis {
 }
 
 export default function Insights() {
-  const { user, subscription } = useAuth();
-  const { toast } = useToast();
-
+  const { subscription } = useAuth();
+  
   if (!subscription.loading && subscription.tier === "free") {
     return (
       <UpgradePrompt
@@ -46,6 +45,12 @@ export default function Insights() {
       />
     );
   }
+  return <InsightsContent />;
+}
+
+function InsightsContent() {
+  const { user } = useAuth();
+  const { toast } = useToast();
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [loading, setLoading] = useState(false);
   const [hasData, setHasData] = useState(false);

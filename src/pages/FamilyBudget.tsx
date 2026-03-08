@@ -40,8 +40,7 @@ interface MemberSpending {
 }
 
 export default function FamilyBudget() {
-  const { user, subscription } = useAuth();
-  const { toast } = useToast();
+  const { subscription } = useAuth();
 
   if (!subscription.loading && subscription.tier !== "team") {
     return (
@@ -52,6 +51,12 @@ export default function FamilyBudget() {
       />
     );
   }
+  return <FamilyBudgetContent />;
+}
+
+function FamilyBudgetContent() {
+  const { user } = useAuth();
+  const { toast } = useToast();
 
   const [groups, setGroups] = useState<FamilyGroup[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<FamilyGroup | null>(null);
