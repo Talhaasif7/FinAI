@@ -233,7 +233,7 @@ export default function LandingPage() {
       >
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center group">
-            <img src={logoImg} alt="FinAI" className="h-9 w-9 rounded-xl group-hover:scale-110 transition-transform duration-300" />
+            <img src={logoImg} alt="FinAI" className="h-11 w-11 rounded-xl group-hover:scale-110 transition-transform duration-300" />
           </Link>
 
           <div className="hidden md:flex items-center gap-1">
@@ -958,7 +958,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-8 sm:gap-10 mb-10 sm:mb-14">
             <div className="col-span-2">
               <div className="flex items-center gap-2.5 mb-4 sm:mb-5">
-                <img src={logoImg} alt="FinAI" className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl" />
+                <img src={logoImg} alt="FinAI" className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl" />
               </div>
               <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-[280px] mb-5 sm:mb-6">
                 The AI-powered financial coach helping you save smarter, spend wiser, and achieve more.
