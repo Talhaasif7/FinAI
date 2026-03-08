@@ -266,8 +266,8 @@ export default function LandingPage() {
             {user ? (
               <Link to="/dashboard" className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-xs font-bold text-primary overflow-hidden">
-                  {user.user_metadata?.avatar_url ? (
-                    <img src={user.user_metadata.avatar_url} alt="Avatar" className="h-full w-full object-cover" />
+                  {profileAvatarUrl ? (
+                    <img src={profileAvatarUrl} alt="Avatar" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                   ) : (
                     (user.email?.charAt(0) ?? "U").toUpperCase()
                   )}
