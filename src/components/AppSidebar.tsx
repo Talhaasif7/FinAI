@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { 
   LayoutDashboard, Target, Receipt, CreditCard, 
-  Bot, TrendingUp, Settings, Flame, LogOut, Wallet, Trophy, Activity, Users, Brain, Crown
+  Bot, TrendingUp, Settings, Flame, LogOut, Wallet, Trophy, Activity, Users, Brain, Crown, Milestone
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -18,6 +18,7 @@ const navItems = [
   { to: "/budgets", icon: Wallet, label: "Budgets", tier: null },
   { to: "/insights", icon: TrendingUp, label: "Insights", tier: "pro" as const },
   { to: "/assistant", icon: Bot, label: "AI Assistant", tier: "pro" as const },
+  { to: "/milestones", icon: Milestone, label: "Life Planner", tier: null },
   { to: "/gamification", icon: Trophy, label: "Achievements", tier: null },
   { to: "/family", icon: Users, label: "Family Budget", tier: "team" as const },
   { to: "/behavior", icon: Brain, label: "Behavior Analysis", tier: "pro" as const },

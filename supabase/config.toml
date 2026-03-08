@@ -14,3 +14,6 @@ verify_jwt = false
 
 [functions.digital-twin]
 verify_jwt = false
+
+[functions.milestone-planner]
+verify_jwt = false
