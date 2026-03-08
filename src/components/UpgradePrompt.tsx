@@ -12,7 +12,7 @@ interface UpgradePromptProps {
   requiredTier: "pro" | "team";
 }
 
-export function UpgradePrompt({ feature, description, requiredTier }: UpgradePromptProps) {
+export const UpgradePrompt = forwardRef<HTMLDivElement, UpgradePromptProps>(function UpgradePrompt({ feature, description, requiredTier }, ref) {
   const { toast } = useToast();
   const tier = STRIPE_TIERS[requiredTier];
 
