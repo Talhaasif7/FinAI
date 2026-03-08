@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Brain, TrendingUp, AlertCircle, Lightbulb, Coffee, ShoppingBag, Utensils } from "lucide-react";
+import { Brain, TrendingUp, Lightbulb, Coffee, ShoppingBag, Utensils } from "lucide-react";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } };
 const item = { hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0 } };
@@ -36,9 +36,9 @@ const insights = [
 ];
 
 const typeStyles = {
-  warning: "border-l-4 border-l-[hsl(38,92%,50%)]",
+  warning: "border-l-4 border-l-secondary",
   info: "border-l-4 border-l-primary",
-  success: "border-l-4 border-l-accent",
+  success: "border-l-4 border-l-primary",
 };
 
 export default function Insights() {
@@ -50,9 +50,9 @@ export default function Insights() {
       </motion.div>
 
       {/* Financial Personality */}
-      <motion.div variants={item} className="glass-card p-6 glow-blue">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15">
+      <motion.div variants={item} className="glass-card p-6 glow-teal">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10">
             <Brain className="h-5 w-5 text-primary" />
           </div>
           <div>
@@ -60,19 +60,19 @@ export default function Insights() {
             <p className="text-xs text-muted-foreground">Based on 3 months of data</p>
           </div>
         </div>
-        <div className="flex items-center gap-4 mt-4">
-          <div className="flex-1 text-center glass-card p-3">
-            <p className="text-2xl mb-1">🎯</p>
+        <div className="flex items-center gap-6 mt-4">
+          <div className="flex-1 text-center glass-card p-4">
+            <p className="text-3xl mb-1">🎯</p>
             <p className="font-display text-sm font-bold gradient-text-primary">Balanced Saver</p>
             <p className="text-[11px] text-muted-foreground mt-1">You save consistently but enjoy occasional treats</p>
           </div>
-          <div className="grid grid-cols-2 gap-3 flex-1">
+          <div className="grid grid-cols-2 gap-4 flex-1">
             <div className="text-center">
-              <p className="font-display text-xl font-bold text-foreground">78%</p>
+              <p className="font-display text-xl font-bold text-primary">78%</p>
               <p className="text-[11px] text-muted-foreground">Goal Probability</p>
             </div>
             <div className="text-center">
-              <p className="font-display text-xl font-bold text-accent">18%</p>
+              <p className="font-display text-xl font-bold text-secondary">18%</p>
               <p className="text-[11px] text-muted-foreground">Savings Rate</p>
             </div>
             <div className="text-center">
@@ -80,7 +80,7 @@ export default function Insights() {
               <p className="text-[11px] text-muted-foreground">Avg Monthly Spend</p>
             </div>
             <div className="text-center">
-              <p className="font-display text-xl font-bold text-secondary">4.2</p>
+              <p className="font-display text-xl font-bold text-lavender">4.2</p>
               <p className="text-[11px] text-muted-foreground">Months to Goal</p>
             </div>
           </div>
@@ -97,10 +97,10 @@ export default function Insights() {
               </div>
               <div className="flex-1">
                 <h3 className="text-sm font-semibold text-foreground">{insight.title}</h3>
-                <p className="text-sm text-muted-foreground mt-1">{insight.description}</p>
+                <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{insight.description}</p>
                 <div className="flex items-center gap-2 mt-2">
-                  <Lightbulb className="h-3 w-3 text-accent" />
-                  <span className="text-xs text-accent font-medium">{insight.action}</span>
+                  <Lightbulb className="h-3 w-3 text-primary" />
+                  <span className="text-xs text-primary font-medium">{insight.action}</span>
                 </div>
               </div>
             </div>
