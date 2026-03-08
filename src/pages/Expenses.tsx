@@ -1,59 +1,90 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Plus, Search } from "lucide-react";
-import { expenses as initialExpenses, categoryIcons, type Expense } from "@/lib/mock-data";
+import { Plus, Search, Trash2 } from "lucide-react";
+import { categoryIcons } from "@/lib/mock-data";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } };
 const item = { hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0 } };
 
 const categories = ["Food", "Shopping", "Transport", "Entertainment", "Bills", "Health", "Other"];
 
-function MerchantLogo({ expense }: { expense: Expense }) {
-  if (expense.logo) {
-    return (
-      <img src={expense.logo} alt={expense.merchant} className="h-10 w-10 rounded-lg object-contain bg-muted/30 p-1" />
-    );
-  }
-  return (
-    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted/30 text-base">
-      {categoryIcons[expense.category] || "📦"}
-    </div>
-  );
+interface Expense {
+  id: string;
+  amount: number;
+  category: string;
+  merchant: string;
+  date: string;
+  payment_method: string;
+  note: string | null;
+  logo: string | null;
 }
 
 export default function Expenses() {
-  const [expenses, setExpenses] = useState<Expense[]>(initialExpenses);
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [form, setForm] = useState({ amount: "", category: "Food", merchant: "", date: new Date().toISOString().split("T")[0], paymentMethod: "Credit Card", note: "" });
+
+  const fetchExpenses = async () => {
+    if (!user) return;
+    const { data, error } = await supabase
+      .from("expenses")
+      .select("*")
+      .order("date", { ascending: false });
+    if (error) {
+      toast({ title: "Error loading expenses", description: error.message, variant: "destructive" });
+    } else {
+      setExpenses(data || []);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => { fetchExpenses(); }, [user]);
 
   const filtered = expenses.filter(e =>
     e.merchant.toLowerCase().includes(search.toLowerCase()) ||
     e.category.toLowerCase().includes(search.toLowerCase())
   );
 
-  const totalThisMonth = expenses.reduce((s, e) => s + e.amount, 0);
+  const totalThisMonth = expenses.reduce((s, e) => s + Number(e.amount), 0);
 
-  const handleAdd = () => {
-    if (!form.amount || !form.merchant) return;
-    const newExp: Expense = {
-      id: Date.now().toString(),
+  const handleAdd = async () => {
+    if (!form.amount || !form.merchant || !user) return;
+    const { error } = await supabase.from("expenses").insert({
+      user_id: user.id,
       amount: parseFloat(form.amount),
       category: form.category,
       merchant: form.merchant,
       date: form.date,
-      paymentMethod: form.paymentMethod,
-      note: form.note || undefined,
-    };
-    setExpenses([newExp, ...expenses]);
+      payment_method: form.paymentMethod,
+      note: form.note || null,
+    });
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+      return;
+    }
     setForm({ amount: "", category: "Food", merchant: "", date: new Date().toISOString().split("T")[0], paymentMethod: "Credit Card", note: "" });
     setOpen(false);
+    fetchExpenses();
   };
+
+  const handleDelete = async (id: string) => {
+    await supabase.from("expenses").delete().eq("id", id);
+    fetchExpenses();
+  };
+
+  if (loading) return <div className="flex items-center justify-center h-64"><div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin" /></div>;
 
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6 max-w-5xl">
@@ -67,9 +98,7 @@ export default function Expenses() {
             <Button className="gap-2 bg-primary text-primary-foreground hover:bg-teal-light"><Plus className="h-4 w-4" /> Add Expense</Button>
           </DialogTrigger>
           <DialogContent className="bg-card border-border">
-            <DialogHeader>
-              <DialogTitle className="font-display">Add Expense</DialogTitle>
-            </DialogHeader>
+            <DialogHeader><DialogTitle className="font-display">Add Expense</DialogTitle></DialogHeader>
             <div className="space-y-4 pt-2">
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -119,7 +148,7 @@ export default function Expenses() {
         </Dialog>
       </motion.div>
 
-      <motion.div variants={item} className="flex items-center gap-4">
+      <motion.div variants={item} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
         <div className="stat-card glow-teal min-w-[160px]">
           <span className="text-[11px] text-muted-foreground uppercase tracking-wider">This Month</span>
           <p className="font-display text-xl font-bold text-foreground mt-1">${totalThisMonth.toFixed(2)}</p>
@@ -132,22 +161,31 @@ export default function Expenses() {
 
       <motion.div variants={item} className="glass-card divide-y divide-border/30">
         {filtered.map((exp) => (
-          <div key={exp.id} className="flex items-center justify-between px-5 py-3.5 hover:bg-muted/20 transition-colors">
-            <div className="flex items-center gap-3">
-              <MerchantLogo expense={exp} />
-              <div>
-                <p className="text-sm font-medium text-foreground">{exp.merchant}</p>
-                <p className="text-[11px] text-muted-foreground">{exp.category} · {exp.paymentMethod}{exp.note ? ` · ${exp.note}` : ""}</p>
+          <div key={exp.id} className="flex items-center justify-between px-4 sm:px-5 py-3.5 hover:bg-muted/20 transition-colors group">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted/30 text-base shrink-0">
+                {categoryIcons[exp.category] || "📦"}
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-foreground truncate">{exp.merchant}</p>
+                <p className="text-[11px] text-muted-foreground truncate">{exp.category} · {exp.payment_method}{exp.note ? ` · ${exp.note}` : ""}</p>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-sm font-semibold text-foreground">-${exp.amount.toFixed(2)}</p>
-              <p className="text-[11px] text-muted-foreground">{exp.date}</p>
+            <div className="flex items-center gap-3">
+              <div className="text-right">
+                <p className="text-sm font-semibold text-foreground">-${Number(exp.amount).toFixed(2)}</p>
+                <p className="text-[11px] text-muted-foreground">{exp.date}</p>
+              </div>
+              <button onClick={() => handleDelete(exp.id)} className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive">
+                <Trash2 className="h-4 w-4" />
+              </button>
             </div>
           </div>
         ))}
         {filtered.length === 0 && (
-          <div className="px-5 py-10 text-center text-muted-foreground text-sm">No expenses found</div>
+          <div className="px-5 py-10 text-center text-muted-foreground text-sm">
+            {expenses.length === 0 ? "No expenses yet. Add your first expense!" : "No expenses found"}
+          </div>
         )}
       </motion.div>
     </motion.div>

@@ -1,4 +1,13 @@
-import type { Goal } from "@/lib/mock-data";
+interface Goal {
+  id: string;
+  name: string;
+  target: number;
+  saved: number;
+  deadline: string;
+  category: string;
+  priority: string;
+  icon: string;
+}
 
 const priorityColors: Record<string, string> = {
   high: "text-coral",
@@ -18,7 +27,7 @@ export function GoalProgressCard({ goal }: { goal: Goal }) {
           <span className="text-lg">{goal.icon}</span>
           <span className="text-sm font-semibold text-foreground">{goal.name}</span>
         </div>
-        <span className={`text-[10px] uppercase font-semibold tracking-wider ${priorityColors[goal.priority]}`}>
+        <span className={`text-[10px] uppercase font-semibold tracking-wider ${priorityColors[goal.priority] || "text-muted-foreground"}`}>
           {goal.priority}
         </span>
       </div>
@@ -30,7 +39,7 @@ export function GoalProgressCard({ goal }: { goal: Goal }) {
         <div
           className="h-full rounded-full transition-all duration-700"
           style={{
-            width: `${pct}%`,
+            width: `${Math.min(pct, 100)}%`,
             background: pct >= 75 ? "var(--gradient-success)" : "var(--gradient-primary)",
           }}
         />
