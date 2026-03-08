@@ -19,6 +19,12 @@
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
     <link rel="canonical" href="https://finai.app" />
+    <script>
+      // Default to dark theme
+      if (!localStorage.getItem('theme')) localStorage.setItem('theme', 'dark');
+      if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+      else document.documentElement.classList.remove('dark');
+    </script>
   </head>
 
   <body>
