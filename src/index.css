@@ -5,6 +5,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @layer base {
+  * {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.15s ease;
+  }
+
   :root {
     --background: 220 14% 96%;
     --foreground: 220 20% 10%;
