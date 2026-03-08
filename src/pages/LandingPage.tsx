@@ -274,27 +274,27 @@ export default function LandingPage() {
       </motion.nav>
 
       {/* ═══════════ HERO ═══════════ */}
-      <section ref={heroRef} className="relative min-h-[100vh] flex items-center justify-center pt-16 overflow-hidden">
+      <section ref={heroRef} className="relative min-h-[100svh] flex items-center justify-center pt-20 pb-10 overflow-hidden">
         <Scene3D />
 
         {/* Gradient overlays */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-transparent to-background" />
-          <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-background to-transparent" />
-          <div className="absolute top-0 left-0 w-1/3 h-full bg-gradient-to-r from-background/40 to-transparent" />
-          <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-background/40 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-40 sm:h-64 bg-gradient-to-t from-background to-transparent" />
+          <div className="absolute top-0 left-0 w-1/4 sm:w-1/3 h-full bg-gradient-to-r from-background/40 to-transparent" />
+          <div className="absolute top-0 right-0 w-1/4 sm:w-1/3 h-full bg-gradient-to-l from-background/40 to-transparent" />
         </div>
 
         <motion.div
           style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
-          className="relative z-10 text-center max-w-6xl mx-auto px-6"
+          className="relative z-10 text-center max-w-6xl mx-auto px-4 sm:px-6"
         >
           {/* Floating badges */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-6 sm:mb-8">
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border/30 backdrop-blur-xl text-xs font-medium"
+              className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-border/30 backdrop-blur-xl text-[10px] sm:text-xs font-medium"
               style={{ background: "hsl(var(--card) / 0.6)" }}
             >
               <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
@@ -312,10 +312,10 @@ export default function LandingPage() {
             </motion.div>
           </div>
 
-          {/* ── DOUBLED HEADLINE with echo effect ── */}
+          {/* ── HEADLINE ── */}
           <motion.h1
             variants={fadeUp} initial="hidden" animate="show" custom={0}
-            className="font-display text-[3.5rem] sm:text-[5rem] md:text-[6.5rem] lg:text-[8rem] font-bold leading-[0.85] mb-8 tracking-[-0.04em]"
+            className="font-display text-[2.5rem] sm:text-[3.5rem] md:text-[5rem] lg:text-[6.5rem] xl:text-[8rem] font-bold leading-[0.85] mb-6 sm:mb-8 tracking-[-0.04em]"
           >
             <span className="text-foreground block text-echo" data-text="Your Money,">Your Money,</span>
             <span className="block relative">
@@ -346,7 +346,7 @@ export default function LandingPage() {
           {/* Subheadline */}
           <motion.p
             variants={fadeUp} initial="hidden" animate="show" custom={2}
-            className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto mb-12 leading-relaxed font-light"
+            className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground max-w-md sm:max-w-xl mx-auto mb-8 sm:mb-12 leading-relaxed font-light px-2"
           >
             Track expenses, crush goals, and build wealth with an AI coach
             that <span className="text-foreground font-semibold">actually gets you</span>.
@@ -355,15 +355,15 @@ export default function LandingPage() {
           {/* CTAs */}
           <motion.div
             variants={fadeUp} initial="hidden" animate="show" custom={3}
-            className="flex flex-col sm:flex-row items-center gap-4 justify-center"
+            className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 justify-center"
           >
             <Link to="/auth">
-              <Button size="lg" className="gap-2.5 px-10 text-base bg-primary text-primary-foreground hover:bg-neon-green-light rounded-full glow-green h-14 font-semibold shadow-2xl hover:shadow-primary/25 transition-all duration-300 hover:scale-[1.02]">
+              <Button size="lg" className="gap-2 sm:gap-2.5 px-6 sm:px-10 text-sm sm:text-base bg-primary text-primary-foreground hover:bg-neon-green-light rounded-full glow-green h-12 sm:h-14 font-semibold shadow-2xl hover:shadow-primary/25 transition-all duration-300 hover:scale-[1.02] w-full sm:w-auto">
                 Start Free — No Card Needed <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
             <a href="#how-it-works">
-              <Button variant="ghost" size="lg" className="gap-2 px-6 text-base text-muted-foreground hover:text-foreground rounded-full h-14 group">
+              <Button variant="ghost" size="lg" className="gap-2 px-6 text-sm sm:text-base text-muted-foreground hover:text-foreground rounded-full h-12 sm:h-14 group">
                 <Play className="h-4 w-4 group-hover:text-primary transition-colors" /> Watch Demo
               </Button>
             </a>
@@ -372,23 +372,23 @@ export default function LandingPage() {
           {/* Social proof */}
           <motion.div
             variants={fadeUp} initial="hidden" animate="show" custom={5}
-            className="mt-16 flex flex-col items-center gap-4"
+            className="mt-10 sm:mt-16 flex flex-col items-center gap-3 sm:gap-4"
           >
-            <div className="flex -space-x-3">
+            <div className="flex -space-x-2 sm:-space-x-3">
               {["SK", "MT", "AR", "JD", "LW"].map((initials, i) => (
                 <motion.div
                   key={initials}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 1.2 + i * 0.1 }}
-                  className="h-10 w-10 rounded-full border-[3px] border-background bg-gradient-to-br from-primary to-electric-purple flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg"
+                  className="h-8 w-8 sm:h-10 sm:w-10 rounded-full border-2 sm:border-[3px] border-background bg-gradient-to-br from-primary to-electric-purple flex items-center justify-center text-[8px] sm:text-[10px] font-bold text-primary-foreground shadow-lg"
                   style={{ zIndex: 5 - i }}
                 >
                   {initials}
                 </motion.div>
               ))}
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground">
               Trusted by <span className="text-foreground font-bold">50,000+</span> people worldwide
             </p>
           </motion.div>
@@ -399,7 +399,7 @@ export default function LandingPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2.5 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+          className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 hidden sm:flex"
         >
           <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50">Scroll</span>
           <motion.div animate={{ y: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
@@ -409,17 +409,17 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ TRUSTED BY MARQUEE ═══════════ */}
-      <section className="py-14 px-6 border-y border-border/10 relative overflow-hidden">
+      <section className="py-10 sm:py-14 px-4 sm:px-6 border-y border-border/10 relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
-          <p className="text-center text-[10px] uppercase tracking-[0.25em] text-muted-foreground/50 mb-8 font-semibold">As Featured In</p>
+          <p className="text-center text-[9px] sm:text-[10px] uppercase tracking-[0.25em] text-muted-foreground/50 mb-6 sm:mb-8 font-semibold">As Featured In</p>
           <MarqueeRow items={trustedBy} />
         </div>
       </section>
 
       {/* ═══════════ STATS ═══════════ */}
-      <section className="py-24 px-6 relative">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 relative">
         <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-12">
             {stats.map((stat, i) => (
               <motion.div
                 key={stat.label}
@@ -429,10 +429,10 @@ export default function LandingPage() {
                 transition={{ delay: i * 0.1, duration: 0.6 }}
                 className="text-center group"
               >
-                <p className="font-display text-4xl md:text-6xl font-bold gradient-text-primary mb-2">
+                <p className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold gradient-text-primary mb-1 sm:mb-2">
                   <AnimatedCounter value={stat.value} suffix={stat.suffix} prefix={stat.prefix || ""} />
                 </p>
-                <p className="text-xs text-muted-foreground uppercase tracking-[0.15em] font-medium">{stat.label}</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-[0.15em] font-medium">{stat.label}</p>
               </motion.div>
             ))}
           </div>
@@ -440,25 +440,25 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ PROBLEM / SOLUTION ═══════════ */}
-      <section className="py-28 px-6 relative">
+      <section className="py-16 sm:py-28 px-4 sm:px-6 relative">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-16"
+            className="text-center mb-10 sm:mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-destructive/20 text-[10px] uppercase tracking-[0.2em] text-destructive font-semibold mb-6 bg-destructive/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-destructive/20 text-[10px] uppercase tracking-[0.2em] text-destructive font-semibold mb-4 sm:mb-6 bg-destructive/5">
               <CircleDot className="h-3 w-3" /> The Problem
             </span>
-            <h2 className="font-display text-4xl md:text-6xl font-bold text-foreground tracking-tight leading-[0.95]">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-foreground tracking-tight leading-[0.95]">
               Managing money shouldn't<br className="hidden sm:block" /> be{" "}
               <CurvyHeading variant="purple">this hard</CurvyHeading>
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {painPoints.map((p, i) => (
               <motion.div
                 key={i}
@@ -466,16 +466,16 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.6 }}
-                className="group relative glass-card p-7 hover:border-primary/20 transition-all duration-500"
+                className="group relative glass-card p-5 sm:p-7 hover:border-primary/20 transition-all duration-500"
               >
                 <div className="absolute top-0 left-0 w-0 group-hover:w-full h-[1px] bg-gradient-to-r from-primary/60 to-transparent transition-all duration-700" />
-                <span className="text-4xl mb-4 block">{p.emoji}</span>
-                <p className="text-base font-medium text-muted-foreground/60 line-through decoration-destructive/30 mb-3">{p.problem}</p>
+                <span className="text-3xl sm:text-4xl mb-3 sm:mb-4 block">{p.emoji}</span>
+                <p className="text-sm sm:text-base font-medium text-muted-foreground/60 line-through decoration-destructive/30 mb-2 sm:mb-3">{p.problem}</p>
                 <div className="flex items-start gap-2">
                   <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
                     <Check className="h-3 w-3 text-primary" />
                   </div>
-                  <p className="text-base font-semibold text-foreground">{p.solution}</p>
+                  <p className="text-sm sm:text-base font-semibold text-foreground">{p.solution}</p>
                 </div>
               </motion.div>
             ))}
@@ -484,19 +484,19 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ VIDEO SHOWCASE ═══════════ */}
-      <section className="py-24 px-6 relative">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 relative">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-14"
+            className="text-center mb-10 sm:mb-14"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-6 bg-primary/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-4 sm:mb-6 bg-primary/5">
               <Eye className="h-3 w-3" /> See It In Action
             </span>
-            <h2 className="font-display text-4xl md:text-6xl font-bold text-foreground tracking-tight leading-[0.95]">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-foreground tracking-tight leading-[0.95]">
               Beautiful by{" "}
               <CurvyHeading variant="gold">design</CurvyHeading>
             </h2>
@@ -509,16 +509,16 @@ export default function LandingPage() {
             transition={{ duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
             className="relative group"
           >
-            <div className="rounded-2xl overflow-hidden border border-border/30 shadow-2xl">
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-border/20" style={{ background: "hsl(var(--card))" }}>
-                <div className="flex gap-1.5">
-                  <div className="h-3 w-3 rounded-full bg-destructive/60" />
-                  <div className="h-3 w-3 rounded-full bg-amber/60" />
-                  <div className="h-3 w-3 rounded-full bg-primary/60" />
+            <div className="rounded-xl sm:rounded-2xl overflow-hidden border border-border/30 shadow-2xl">
+              <div className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 border-b border-border/20" style={{ background: "hsl(var(--card))" }}>
+                <div className="flex gap-1 sm:gap-1.5">
+                  <div className="h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-destructive/60" />
+                  <div className="h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-amber/60" />
+                  <div className="h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-primary/60" />
                 </div>
                 <div className="flex-1 flex items-center justify-center">
-                  <div className="flex items-center gap-2 px-4 py-1 rounded-lg bg-muted/30 text-xs text-muted-foreground max-w-[200px]">
-                    <Lock className="h-3 w-3" />
+                  <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1 rounded-lg bg-muted/30 text-[10px] sm:text-xs text-muted-foreground max-w-[160px] sm:max-w-[200px]">
+                    <Lock className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                     <span>app.finai.com</span>
                   </div>
                 </div>
@@ -530,20 +530,20 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Floating accents */}
+            {/* Floating accents - hidden on mobile/tablet */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5, type: "spring" }}
-              className="absolute -left-4 top-1/4 glass-card px-4 py-3 rounded-xl hidden lg:flex items-center gap-3 shadow-xl"
+              className="absolute -left-4 top-1/4 glass-card px-3 sm:px-4 py-2 sm:py-3 rounded-xl hidden xl:flex items-center gap-3 shadow-xl"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-                <TrendingUp className="h-5 w-5 text-primary" />
+              <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-primary/10">
+                <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
               <div>
                 <p className="text-[10px] text-muted-foreground">Monthly Savings</p>
-                <p className="text-base font-bold text-foreground">+$420.00</p>
+                <p className="text-sm sm:text-base font-bold text-foreground">+$420.00</p>
               </div>
             </motion.div>
 
@@ -552,14 +552,14 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.7, type: "spring" }}
-              className="absolute -right-4 bottom-1/3 glass-card px-4 py-3 rounded-xl hidden lg:flex items-center gap-3 shadow-xl"
+              className="absolute -right-4 bottom-1/3 glass-card px-3 sm:px-4 py-2 sm:py-3 rounded-xl hidden xl:flex items-center gap-3 shadow-xl"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-electric-purple/10">
-                <Sparkles className="h-5 w-5 text-electric-purple" />
+              <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-electric-purple/10">
+                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-electric-purple" />
               </div>
               <div>
                 <p className="text-[10px] text-muted-foreground">AI Insight</p>
-                <p className="text-base font-bold text-foreground">Cut 3 subs</p>
+                <p className="text-sm sm:text-base font-bold text-foreground">Cut 3 subs</p>
               </div>
             </motion.div>
           </motion.div>
@@ -567,9 +567,9 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ FEATURES — REVOLUT-STYLE CARDS ═══════════ */}
-      <section id="features" className="py-32 px-6 relative overflow-hidden">
-        {/* 3D Background */}
-        <div className="absolute inset-0 pointer-events-none opacity-30">
+      <section id="features" className="py-20 sm:py-32 px-4 sm:px-6 relative overflow-hidden">
+        {/* 3D Background - hidden on mobile for performance */}
+        <div className="absolute inset-0 pointer-events-none opacity-30 hidden md:block">
           <Scene3DFeatures />
         </div>
 
@@ -579,22 +579,22 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-20"
+            className="text-center mb-12 sm:mb-20"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-6 bg-primary/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-4 sm:mb-6 bg-primary/5">
               <Layers className="h-3 w-3" /> Features
             </span>
-            <h2 className="font-display text-4xl md:text-6xl font-bold mb-5 text-foreground tracking-tight leading-[0.95] text-echo" data-text="Everything to master your money">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-5 text-foreground tracking-tight leading-[0.95] text-echo" data-text="Everything to master your money">
               Everything to{" "}
               <CurvyHeading variant="green">master your money</CurvyHeading>
             </h2>
-            <p className="text-muted-foreground max-w-lg mx-auto text-lg">
+            <p className="text-muted-foreground max-w-lg mx-auto text-sm sm:text-base lg:text-lg px-2">
               Six powerful tools working together for complete financial clarity.
             </p>
           </motion.div>
 
           {/* Revolut-style bento grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {features.map((f, i) => (
               <motion.div
                 key={f.title}
@@ -603,26 +603,25 @@ export default function LandingPage() {
                 whileInView="show"
                 viewport={{ once: true, margin: "-40px" }}
                 custom={i}
-                className={`revolut-card ${f.cardClass} p-8 min-h-[240px] flex flex-col justify-between group cursor-pointer`}
+                className={`revolut-card ${f.cardClass} p-6 sm:p-8 min-h-[200px] sm:min-h-[240px] flex flex-col justify-between group cursor-pointer`}
               >
-                {/* Shine effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl" />
 
                 <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-sm group-hover:scale-110 transition-transform duration-500 shadow-lg">
-                      <f.icon className="h-6 w-6 text-white" />
+                  <div className="flex items-center justify-between mb-4 sm:mb-6">
+                    <div className="flex h-11 w-11 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-sm group-hover:scale-110 transition-transform duration-500 shadow-lg">
+                      <f.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                     </div>
-                    <span className="text-[9px] uppercase tracking-[0.2em] text-white/50 font-bold px-3 py-1.5 rounded-full border border-white/10 bg-white/5">
+                    <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.2em] text-white/50 font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border border-white/10 bg-white/5">
                       {f.tag}
                     </span>
                   </div>
 
-                  <h3 className="font-display text-xl font-bold text-white mb-3 group-hover:translate-x-1 transition-transform duration-300">{f.title}</h3>
-                  <p className="text-sm text-white/70 leading-relaxed">{f.desc}</p>
+                  <h3 className="font-display text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3 group-hover:translate-x-1 transition-transform duration-300">{f.title}</h3>
+                  <p className="text-xs sm:text-sm text-white/70 leading-relaxed">{f.desc}</p>
                 </div>
 
-                <div className="relative z-10 mt-6 flex items-center gap-1.5 text-xs text-white/80 font-semibold opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                <div className="relative z-10 mt-4 sm:mt-6 flex items-center gap-1.5 text-xs text-white/80 font-semibold opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
                   Explore <ArrowUpRight className="h-3 w-3" />
                 </div>
               </motion.div>
@@ -632,29 +631,28 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ HOW IT WORKS ═══════════ */}
-      <section id="how-it-works" className="py-32 px-6 relative">
+      <section id="how-it-works" className="py-20 sm:py-32 px-4 sm:px-6 relative">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-20"
+            className="text-center mb-12 sm:mb-20"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber/20 text-[10px] uppercase tracking-[0.2em] text-amber font-semibold mb-6 bg-amber/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber/20 text-[10px] uppercase tracking-[0.2em] text-amber font-semibold mb-4 sm:mb-6 bg-amber/5">
               <Zap className="h-3 w-3" /> How It Works
             </span>
-            <h2 className="font-display text-4xl md:text-6xl font-bold mb-5 text-foreground tracking-tight leading-[0.95]">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-5 text-foreground tracking-tight leading-[0.95]">
               Three steps to{" "}
               <CurvyHeading variant="green">financial freedom</CurvyHeading>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-md mx-auto">
+            <p className="text-sm sm:text-base lg:text-lg text-muted-foreground max-w-md mx-auto px-2">
               No complicated setup. No bank linking required. Just sign up and start.
             </p>
           </motion.div>
 
           <div className="relative">
-            {/* Connection line */}
             <div className="hidden md:block absolute top-28 left-[16%] right-[16%] h-px">
               <div className="w-full h-full bg-gradient-to-r from-transparent via-border to-transparent" />
               <motion.div
@@ -666,7 +664,7 @@ export default function LandingPage() {
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-6 md:gap-8">
               {[
                 { step: "01", icon: Smartphone, title: "Set Your Goals", desc: "Tell us your dreams — travel, gadgets, retirement. AI creates a personalized savings plan instantly.", gradient: "revolut-card-green" },
                 { step: "02", icon: Zap, title: "AI Tracks Everything", desc: "Add expenses manually or scan receipts. AI categorizes, detects patterns, and finds savings automatically.", gradient: "revolut-card-amber" },
@@ -680,16 +678,16 @@ export default function LandingPage() {
                   transition={{ delay: i * 0.2, duration: 0.7 }}
                   className="text-center relative group"
                 >
-                  <div className="relative inline-block mb-8">
-                    <div className={`revolut-card ${s.gradient} flex h-24 w-24 items-center justify-center rounded-3xl mx-auto shadow-xl group-hover:shadow-2xl`}>
-                      <s.icon className="h-10 w-10 text-white" />
+                  <div className="relative inline-block mb-6 sm:mb-8">
+                    <div className={`revolut-card ${s.gradient} flex h-18 w-18 sm:h-24 sm:w-24 items-center justify-center rounded-2xl sm:rounded-3xl mx-auto shadow-xl group-hover:shadow-2xl`}>
+                      <s.icon className="h-8 w-8 sm:h-10 sm:w-10 text-white" />
                     </div>
-                    <span className="absolute -top-2 -right-2 font-display text-xs font-bold bg-background text-foreground border-2 border-border rounded-full h-8 w-8 flex items-center justify-center shadow-sm">
+                    <span className="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 font-display text-[10px] sm:text-xs font-bold bg-background text-foreground border-2 border-border rounded-full h-6 w-6 sm:h-8 sm:w-8 flex items-center justify-center shadow-sm">
                       {s.step}
                     </span>
                   </div>
-                  <h3 className="font-display text-2xl font-bold text-foreground mb-3">{s.title}</h3>
-                  <p className="text-base text-muted-foreground leading-relaxed max-w-[280px] mx-auto">{s.desc}</p>
+                  <h3 className="font-display text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-2 sm:mb-3">{s.title}</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-[280px] mx-auto">{s.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -698,27 +696,27 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ PRICING ═══════════ */}
-      <section id="pricing" className="py-32 px-6 relative">
+      <section id="pricing" className="py-20 sm:py-32 px-4 sm:px-6 relative">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-16"
+            className="text-center mb-10 sm:mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-6 bg-primary/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-4 sm:mb-6 bg-primary/5">
               <Wallet className="h-3 w-3" /> Pricing
             </span>
-            <h2 className="font-display text-4xl md:text-6xl font-bold mb-5 text-foreground tracking-tight leading-[0.95]">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-5 text-foreground tracking-tight leading-[0.95]">
               Simple,{" "}
               <CurvyHeading variant="green">transparent</CurvyHeading>{" "}
               pricing
             </h2>
-            <p className="text-lg text-muted-foreground">Start free. Upgrade when you need more.</p>
+            <p className="text-sm sm:text-base lg:text-lg text-muted-foreground">Start free. Upgrade when you need more.</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5">
             {pricingPlans.map((plan, i) => (
               <motion.div
                 key={plan.name}
@@ -728,7 +726,7 @@ export default function LandingPage() {
                 transition={{ delay: i * 0.12, duration: 0.6 }}
                 className={`relative rounded-3xl overflow-hidden transition-all duration-500 ${
                   plan.popular
-                    ? "revolut-card-green shadow-2xl scale-[1.02] md:scale-105"
+                    ? "revolut-card-green shadow-2xl sm:scale-[1.02] md:scale-105 sm:col-span-2 md:col-span-1"
                     : "glass-card hover:border-border"
                 }`}
               >
@@ -736,25 +734,25 @@ export default function LandingPage() {
                   <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-border to-transparent" />
                 )}
 
-                <div className="p-8">
+                <div className="p-6 sm:p-8">
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className={`font-display text-xl font-bold ${plan.popular ? "text-white" : "text-foreground"}`}>{plan.name}</h3>
+                    <h3 className={`font-display text-lg sm:text-xl font-bold ${plan.popular ? "text-white" : "text-foreground"}`}>{plan.name}</h3>
                     {plan.popular && (
-                      <span className="text-[9px] uppercase tracking-wider font-bold bg-white/20 text-white px-3 py-1.5 rounded-full backdrop-blur-sm">
+                      <span className="text-[8px] sm:text-[9px] uppercase tracking-wider font-bold bg-white/20 text-white px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full backdrop-blur-sm">
                         Most Popular
                       </span>
                     )}
                   </div>
-                  <div className="flex items-baseline gap-1 mt-4 mb-8">
-                    <span className={`font-display text-5xl font-bold ${plan.popular ? "text-white" : "text-foreground"}`}>{plan.price}</span>
-                    <span className={`text-base ${plan.popular ? "text-white/70" : "text-muted-foreground"}`}>{plan.period}</span>
+                  <div className="flex items-baseline gap-1 mt-3 sm:mt-4 mb-6 sm:mb-8">
+                    <span className={`font-display text-4xl sm:text-5xl font-bold ${plan.popular ? "text-white" : "text-foreground"}`}>{plan.price}</span>
+                    <span className={`text-sm sm:text-base ${plan.popular ? "text-white/70" : "text-muted-foreground"}`}>{plan.period}</span>
                   </div>
 
-                  <ul className="space-y-4 mb-8">
+                  <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
                     {plan.features.map((f) => (
-                      <li key={f} className={`flex items-center gap-3 text-sm ${plan.popular ? "text-white/90" : "text-muted-foreground"}`}>
-                        <div className={`flex h-5 w-5 items-center justify-center rounded-full shrink-0 ${plan.popular ? "bg-white/20" : "bg-primary/10"}`}>
-                          <Check className={`h-3 w-3 ${plan.popular ? "text-white" : "text-primary"}`} />
+                      <li key={f} className={`flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm ${plan.popular ? "text-white/90" : "text-muted-foreground"}`}>
+                        <div className={`flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded-full shrink-0 ${plan.popular ? "bg-white/20" : "bg-primary/10"}`}>
+                          <Check className={`h-2.5 w-2.5 sm:h-3 sm:w-3 ${plan.popular ? "text-white" : "text-primary"}`} />
                         </div>
                         {f}
                       </li>
@@ -763,7 +761,7 @@ export default function LandingPage() {
 
                   <Link to="/auth">
                     <Button
-                      className={`w-full rounded-2xl h-13 text-sm font-semibold transition-all duration-300 ${
+                      className={`w-full rounded-2xl h-11 sm:h-13 text-xs sm:text-sm font-semibold transition-all duration-300 ${
                         plan.popular
                           ? "bg-white text-black hover:bg-white/90 shadow-lg hover:shadow-xl"
                           : "bg-muted/30 text-foreground hover:bg-muted/50 border border-border/30"
@@ -780,9 +778,9 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ TESTIMONIALS ═══════════ */}
-      <section id="reviews" className="py-32 px-6 relative overflow-hidden">
+      <section id="reviews" className="py-20 sm:py-32 px-4 sm:px-6 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-electric-purple/[0.02] rounded-full blur-3xl" />
+          <div className="absolute top-1/3 right-0 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-electric-purple/[0.02] rounded-full blur-3xl" />
         </div>
 
         <div className="max-w-6xl mx-auto relative z-10">
@@ -791,18 +789,18 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-16"
+            className="text-center mb-10 sm:mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-electric-purple/20 text-[10px] uppercase tracking-[0.2em] text-electric-purple font-semibold mb-6 bg-electric-purple/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-electric-purple/20 text-[10px] uppercase tracking-[0.2em] text-electric-purple font-semibold mb-4 sm:mb-6 bg-electric-purple/5">
               <Heart className="h-3 w-3" /> Testimonials
             </span>
-            <h2 className="font-display text-4xl md:text-6xl font-bold mb-5 text-foreground tracking-tight leading-[0.95]">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-5 text-foreground tracking-tight leading-[0.95]">
               Loved by{" "}
               <CurvyHeading variant="purple">thousands</CurvyHeading>
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5">
             {testimonials.map((t, i) => (
               <motion.div
                 key={t.name}
@@ -810,29 +808,29 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.12, duration: 0.6 }}
-                className="glass-card p-8 rounded-3xl group hover:border-electric-purple/15 transition-all duration-500"
+                className={`glass-card p-6 sm:p-8 rounded-2xl sm:rounded-3xl group hover:border-electric-purple/15 transition-all duration-500 ${i === 2 ? "sm:col-span-2 md:col-span-1" : ""}`}
               >
-                <div className="flex items-center gap-1 mb-6">
+                <div className="flex items-center gap-1 mb-4 sm:mb-6">
                   {Array.from({ length: 5 }).map((_, j) => (
-                    <Star key={j} className="h-4 w-4 text-amber fill-amber" />
+                    <Star key={j} className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber fill-amber" />
                   ))}
                 </div>
 
-                <p className="text-base text-muted-foreground leading-relaxed mb-8">"{t.text}"</p>
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6 sm:mb-8">"{t.text}"</p>
 
-                <div className="flex items-center justify-between pt-6 border-t border-border/20">
-                  <div className="flex items-center gap-3">
-                    <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-primary to-electric-purple flex items-center justify-center text-xs font-bold text-primary-foreground shadow-md">
+                <div className="flex items-center justify-between pt-4 sm:pt-6 border-t border-border/20">
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary to-electric-purple flex items-center justify-center text-[10px] sm:text-xs font-bold text-primary-foreground shadow-md">
                       {t.avatar}
                     </div>
                     <div>
-                      <p className="text-base font-semibold text-foreground">{t.name}</p>
-                      <p className="text-xs text-muted-foreground">{t.role}</p>
+                      <p className="text-sm sm:text-base font-semibold text-foreground">{t.name}</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">{t.role}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-base font-bold gradient-text-primary">{t.saved}</p>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">saved</p>
+                    <p className="text-sm sm:text-base font-bold gradient-text-primary">{t.saved}</p>
+                    <p className="text-[9px] sm:text-[10px] text-muted-foreground uppercase tracking-wider">saved</p>
                   </div>
                 </div>
               </motion.div>
@@ -842,19 +840,19 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ FAQ ═══════════ */}
-      <section className="py-32 px-6">
+      <section className="py-20 sm:py-32 px-4 sm:px-6">
         <div className="max-w-2xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-16"
+            className="text-center mb-10 sm:mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber/20 text-[10px] uppercase tracking-[0.2em] text-amber font-semibold mb-6 bg-amber/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber/20 text-[10px] uppercase tracking-[0.2em] text-amber font-semibold mb-4 sm:mb-6 bg-amber/5">
               <MousePointer2 className="h-3 w-3" /> FAQ
             </span>
-            <h2 className="font-display text-4xl md:text-6xl font-bold text-foreground tracking-tight leading-[0.95]">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-foreground tracking-tight leading-[0.95]">
               Questions?{" "}
               <CurvyHeading variant="gold">Answers.</CurvyHeading>
             </h2>
@@ -869,7 +867,7 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ FINAL CTA ═══════════ */}
-      <section className="py-32 px-6 relative">
+      <section className="py-20 sm:py-32 px-4 sm:px-6 relative">
         <motion.div
           initial={{ opacity: 0, scale: 0.94 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -877,10 +875,9 @@ export default function LandingPage() {
           transition={{ duration: 0.8 }}
           className="max-w-4xl mx-auto relative"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-electric-purple/5 rounded-[2.5rem] blur-xl" />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-electric-purple/5 rounded-2xl sm:rounded-[2.5rem] blur-xl" />
 
-          <div className="relative revolut-card-green p-14 md:p-20 text-center rounded-[2.5rem] overflow-hidden">
-            {/* Shine overlay */}
+          <div className="relative revolut-card-green p-8 sm:p-14 md:p-20 text-center rounded-2xl sm:rounded-[2.5rem] overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none" />
 
             <motion.div
@@ -888,51 +885,51 @@ export default function LandingPage() {
               whileInView={{ scale: 1 }}
               viewport={{ once: true }}
               transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
-              className="flex h-18 w-18 items-center justify-center rounded-3xl bg-white/15 mx-auto mb-8 backdrop-blur-sm"
+              className="flex h-14 w-14 sm:h-18 sm:w-18 items-center justify-center rounded-2xl sm:rounded-3xl bg-white/15 mx-auto mb-6 sm:mb-8 backdrop-blur-sm"
             >
-              <Sparkles className="h-8 w-8 text-white" />
+              <Sparkles className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
             </motion.div>
 
-            <h2 className="font-display text-4xl md:text-6xl font-bold text-white mb-5 tracking-tight leading-[0.95] text-echo" data-text="Ready to take control of your money?">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-white mb-4 sm:mb-5 tracking-tight leading-[0.95]">
               Ready to take control<br className="hidden sm:block" /> of your money?
             </h2>
-            <p className="text-white/80 max-w-md mx-auto mb-12 text-lg">
+            <p className="text-white/80 max-w-md mx-auto mb-8 sm:mb-12 text-sm sm:text-base lg:text-lg px-2">
               Join 50,000+ users building wealth with AI. Free forever — upgrade anytime.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4 justify-center relative z-10">
+            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 justify-center relative z-10">
               <Link to="/auth">
-                <Button size="lg" className="gap-2.5 px-12 text-base bg-white text-black hover:bg-white/90 rounded-full h-14 font-bold shadow-2xl transition-all duration-300 hover:scale-[1.02]">
+                <Button size="lg" className="gap-2 sm:gap-2.5 px-8 sm:px-12 text-sm sm:text-base bg-white text-black hover:bg-white/90 rounded-full h-12 sm:h-14 font-bold shadow-2xl transition-all duration-300 hover:scale-[1.02] w-full sm:w-auto">
                   Get Started Free <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
             </div>
 
-            <p className="text-sm text-white/60 mt-8 flex items-center justify-center gap-2">
-              <Fingerprint className="h-4 w-4" /> Bank-grade security · No credit card required
+            <p className="text-xs sm:text-sm text-white/60 mt-6 sm:mt-8 flex items-center justify-center gap-2">
+              <Fingerprint className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Bank-grade security · No credit card required
             </p>
           </div>
         </motion.div>
       </section>
 
       {/* ═══════════ FOOTER ═══════════ */}
-      <footer className="border-t border-border/15 py-16 px-6">
+      <footer className="border-t border-border/15 py-10 sm:py-16 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-14">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-8 sm:gap-10 mb-10 sm:mb-14">
             <div className="col-span-2">
-              <div className="flex items-center gap-2.5 mb-5">
-                <img src={logoImg} alt="FinAI" className="h-8 w-8 rounded-xl" />
-                <span className="font-display text-lg font-bold gradient-text-primary">FinAI</span>
+              <div className="flex items-center gap-2.5 mb-4 sm:mb-5">
+                <img src={logoImg} alt="FinAI" className="h-7 w-7 sm:h-8 sm:w-8 rounded-xl" />
+                <span className="font-display text-base sm:text-lg font-bold gradient-text-primary">FinAI</span>
               </div>
-              <p className="text-base text-muted-foreground leading-relaxed max-w-[280px] mb-6">
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-[280px] mb-5 sm:mb-6">
                 The AI-powered financial coach helping you save smarter, spend wiser, and achieve more.
               </p>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5 sm:gap-3">
                 {["X", "In", "GH"].map((social) => (
                   <a
                     key={social}
                     href="#"
-                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-border/30 text-xs font-semibold text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-300"
+                    className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg sm:rounded-xl border border-border/30 text-xs font-semibold text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-300"
                   >
                     {social}
                   </a>
@@ -946,11 +943,11 @@ export default function LandingPage() {
               { title: "Legal", links: ["Privacy", "Terms", "Cookies", "GDPR"] },
             ].map((col) => (
               <div key={col.title}>
-                <p className="text-sm font-semibold text-foreground mb-5">{col.title}</p>
-                <ul className="space-y-3">
+                <p className="text-xs sm:text-sm font-semibold text-foreground mb-3 sm:mb-5">{col.title}</p>
+                <ul className="space-y-2 sm:space-y-3">
                   {col.links.map((link) => (
                     <li key={link}>
-                      <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">
+                      <a href="#" className="text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">
                         {link}
                       </a>
                     </li>
@@ -960,9 +957,9 @@ export default function LandingPage() {
             ))}
           </div>
 
-          <div className="border-t border-border/15 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-muted-foreground">© 2026 FinAI. All rights reserved.</p>
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <div className="border-t border-border/15 pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+            <p className="text-[10px] sm:text-xs text-muted-foreground">© 2026 FinAI. All rights reserved.</p>
+            <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-muted-foreground">
               Made with <Heart className="h-3 w-3 text-destructive fill-destructive mx-0.5" /> by the FinAI team
             </div>
           </div>
