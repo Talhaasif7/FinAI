@@ -13,6 +13,7 @@ import { GoalBarChart } from "@/components/GoalBarChart";
 import { RecentTransactions } from "@/components/RecentTransactions";
 import { SmartAlerts } from "@/components/SmartAlerts";
 import { WeeklyReportCard } from "@/components/WeeklyReportCard";
+import { HealthScoreWidget } from "@/components/HealthScoreWidget";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.06 } } };
 const item = { hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0, transition: { duration: 0.35 } } };
@@ -132,6 +133,11 @@ export default function Dashboard() {
 
       <motion.div variants={item}>
         <WeeklyReportCard />
+      </motion.div>
+
+      {/* Health Score Widget */}
+      <motion.div variants={item}>
+        <HealthScoreWidget />
       </motion.div>
 
       {(spendingByCategory.length > 0 || weeklySpending.some(w => w.amount > 0)) && (
