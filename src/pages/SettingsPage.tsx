@@ -86,6 +86,23 @@ export default function SettingsPage() {
     setUploadingAvatar(false);
   };
 
+  const handleAvatarUrl = async () => {
+    if (!avatarUrlInput.trim() || !user) return;
+    setUploadingAvatar(true);
+    const { error } = await supabase
+      .from("profiles")
+      .update({ avatar_url: avatarUrlInput.trim() })
+      .eq("user_id", user.id);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      setAvatarUrl(avatarUrlInput.trim());
+      setAvatarUrlInput("");
+      toast({ title: "Avatar updated!" });
+    }
+    setUploadingAvatar(false);
+  };
+
   const handleSaveProfile = async () => {
     if (!user) return;
     setLoading(true);
