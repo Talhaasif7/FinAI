@@ -149,6 +149,48 @@ export type Database = {
         }
         Relationships: []
       }
+      linked_cards: {
+        Row: {
+          bank_name: string
+          card_network: string
+          card_type: string
+          cardholder_name: string
+          color: string
+          created_at: string
+          id: string
+          last_four: string
+          region: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bank_name: string
+          card_network?: string
+          card_type?: string
+          cardholder_name: string
+          color?: string
+          created_at?: string
+          id?: string
+          last_four: string
+          region?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bank_name?: string
+          card_network?: string
+          card_type?: string
+          cardholder_name?: string
+          color?: string
+          created_at?: string
+          id?: string
+          last_four?: string
+          region?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
