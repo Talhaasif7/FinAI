@@ -101,6 +101,7 @@ export default function Expenses() {
         return;
       }
     }
+    const { error } = await supabase.from("expenses").insert({
       user_id: user.id,
       amount: parseFloat(form.amount),
       category: form.category,
