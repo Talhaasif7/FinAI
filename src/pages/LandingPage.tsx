@@ -18,6 +18,11 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import logoImg from "@/assets/logo.png";
+import avatarSarah from "@/assets/avatar-sarah.jpg";
+import avatarMarcus from "@/assets/avatar-marcus.jpg";
+import avatarAisha from "@/assets/avatar-aisha.jpg";
+import avatarJames from "@/assets/avatar-james.jpg";
+import avatarLisa from "@/assets/avatar-lisa.jpg";
 
 /* ── Animations ─────────────────────────────────────────── */
 const fadeUp = {
@@ -54,9 +59,9 @@ const stats = [
 ];
 
 const testimonials = [
-  { name: "Sarah K.", role: "Freelancer", text: "FinAI helped me save $3,200 in 3 months for my Japan trip. The AI insights are incredibly accurate.", avatar: "SK", saved: "$3,200" },
-  { name: "Marcus T.", role: "Software Engineer", text: "I never realized how much I was spending on subscriptions. FinAI identified 6 unused ones — saving me $80/month.", avatar: "MT", saved: "$960/yr" },
-  { name: "Aisha R.", role: "Graduate Student", text: "The receipt scanner is a game-changer. I just snap a photo and everything is tracked automatically.", avatar: "AR", saved: "$1,800" },
+  { name: "Sarah K.", role: "Freelancer", text: "FinAI helped me save $3,200 in 3 months for my Japan trip. The AI insights are incredibly accurate.", avatar: avatarSarah, saved: "$3,200" },
+  { name: "Marcus T.", role: "Software Engineer", text: "I never realized how much I was spending on subscriptions. FinAI identified 6 unused ones — saving me $80/month.", avatar: avatarMarcus, saved: "$960/yr" },
+  { name: "Aisha R.", role: "Graduate Student", text: "The receipt scanner is a game-changer. I just snap a photo and everything is tracked automatically.", avatar: avatarAisha, saved: "$1,800" },
 ];
 
 const painPoints = [
