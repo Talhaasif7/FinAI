@@ -286,7 +286,7 @@ export default function FinancialHealth() {
           <Card className="glass-card h-full border-primary/20">
             <CardHeader className="pb-3">
               <CardTitle className="text-base flex items-center gap-2">
-                <Lightbulb className="h-5 w-5 text-amber-500" />
+                <Lightbulb className="h-5 w-5 text-accent" />
                 AI-Powered Tips
               </CardTitle>
             </CardHeader>
@@ -294,9 +294,9 @@ export default function FinancialHealth() {
               {data.tips.map((tip, i) => (
                 <div 
                   key={i}
-                  className="flex items-start gap-3 p-3 rounded-lg bg-amber-500/10 hover:bg-amber-500/15 transition-colors group cursor-pointer"
+                  className="flex items-start gap-3 p-3 rounded-lg bg-accent/10 hover:bg-accent/15 transition-colors group cursor-pointer"
                 >
-                  <ArrowRight className="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="h-4 w-4 text-accent flex-shrink-0 mt-0.5 group-hover:translate-x-1 transition-transform" />
                   <span className="text-sm text-foreground">{tip}</span>
                 </div>
               ))}
