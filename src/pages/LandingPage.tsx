@@ -195,6 +195,14 @@ export default function LandingPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [profileAvatarUrl, setProfileAvatarUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("profiles").select("avatar_url").eq("user_id", user.id).single().then(({ data }) => {
+      if (data?.avatar_url) setProfileAvatarUrl(data.avatar_url);
+    });
+  }, [user]);
 
   const handleCheckout = async (priceId: string | null) => {
     if (!priceId) { navigate("/auth"); return; }
