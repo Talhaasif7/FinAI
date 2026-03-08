@@ -631,29 +631,28 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ HOW IT WORKS ═══════════ */}
-      <section id="how-it-works" className="py-32 px-6 relative">
+      <section id="how-it-works" className="py-20 sm:py-32 px-4 sm:px-6 relative">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-20"
+            className="text-center mb-12 sm:mb-20"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber/20 text-[10px] uppercase tracking-[0.2em] text-amber font-semibold mb-6 bg-amber/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber/20 text-[10px] uppercase tracking-[0.2em] text-amber font-semibold mb-4 sm:mb-6 bg-amber/5">
               <Zap className="h-3 w-3" /> How It Works
             </span>
-            <h2 className="font-display text-4xl md:text-6xl font-bold mb-5 text-foreground tracking-tight leading-[0.95]">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-5 text-foreground tracking-tight leading-[0.95]">
               Three steps to{" "}
               <CurvyHeading variant="green">financial freedom</CurvyHeading>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-md mx-auto">
+            <p className="text-sm sm:text-base lg:text-lg text-muted-foreground max-w-md mx-auto px-2">
               No complicated setup. No bank linking required. Just sign up and start.
             </p>
           </motion.div>
 
           <div className="relative">
-            {/* Connection line */}
             <div className="hidden md:block absolute top-28 left-[16%] right-[16%] h-px">
               <div className="w-full h-full bg-gradient-to-r from-transparent via-border to-transparent" />
               <motion.div
@@ -665,7 +664,7 @@ export default function LandingPage() {
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-6 md:gap-8">
               {[
                 { step: "01", icon: Smartphone, title: "Set Your Goals", desc: "Tell us your dreams — travel, gadgets, retirement. AI creates a personalized savings plan instantly.", gradient: "revolut-card-green" },
                 { step: "02", icon: Zap, title: "AI Tracks Everything", desc: "Add expenses manually or scan receipts. AI categorizes, detects patterns, and finds savings automatically.", gradient: "revolut-card-amber" },
@@ -679,16 +678,16 @@ export default function LandingPage() {
                   transition={{ delay: i * 0.2, duration: 0.7 }}
                   className="text-center relative group"
                 >
-                  <div className="relative inline-block mb-8">
-                    <div className={`revolut-card ${s.gradient} flex h-24 w-24 items-center justify-center rounded-3xl mx-auto shadow-xl group-hover:shadow-2xl`}>
-                      <s.icon className="h-10 w-10 text-white" />
+                  <div className="relative inline-block mb-6 sm:mb-8">
+                    <div className={`revolut-card ${s.gradient} flex h-18 w-18 sm:h-24 sm:w-24 items-center justify-center rounded-2xl sm:rounded-3xl mx-auto shadow-xl group-hover:shadow-2xl`}>
+                      <s.icon className="h-8 w-8 sm:h-10 sm:w-10 text-white" />
                     </div>
-                    <span className="absolute -top-2 -right-2 font-display text-xs font-bold bg-background text-foreground border-2 border-border rounded-full h-8 w-8 flex items-center justify-center shadow-sm">
+                    <span className="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 font-display text-[10px] sm:text-xs font-bold bg-background text-foreground border-2 border-border rounded-full h-6 w-6 sm:h-8 sm:w-8 flex items-center justify-center shadow-sm">
                       {s.step}
                     </span>
                   </div>
-                  <h3 className="font-display text-2xl font-bold text-foreground mb-3">{s.title}</h3>
-                  <p className="text-base text-muted-foreground leading-relaxed max-w-[280px] mx-auto">{s.desc}</p>
+                  <h3 className="font-display text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-2 sm:mb-3">{s.title}</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-[280px] mx-auto">{s.desc}</p>
                 </motion.div>
               ))}
             </div>
