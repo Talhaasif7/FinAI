@@ -25,7 +25,7 @@ export function SpendingChart({ data }: { data: SpendingData[] }) {
 
   return (
     <div className="glass-card p-5 h-full flex flex-col">
-      <h2 className="font-display text-lg font-semibold text-foreground mb-4">Spending Breakdown</h2>
+      <h2 className="font-display text-base font-semibold text-foreground mb-4">Spending Breakdown</h2>
       
       <div className="flex-1 flex items-center justify-center relative">
         <ResponsiveContainer width="100%" height={200}>
@@ -35,7 +35,7 @@ export function SpendingChart({ data }: { data: SpendingData[] }) {
               cx="50%"
               cy="50%"
               innerRadius={55}
-              outerRadius={80}
+              outerRadius={78}
               paddingAngle={3}
               dataKey="amount"
               stroke="none"
@@ -49,19 +49,19 @@ export function SpendingChart({ data }: { data: SpendingData[] }) {
         </ResponsiveContainer>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="text-center">
-            <p className="font-display text-xl font-bold text-foreground">${total.toLocaleString()}</p>
+            <p className="font-display text-lg font-bold text-foreground">${total.toLocaleString()}</p>
             <p className="text-[10px] text-muted-foreground">Total</p>
           </div>
         </div>
       </div>
 
-      <div className="space-y-2 mt-2">
+      <div className="space-y-1.5 mt-2">
         {data.map((item) => {
           const pct = Math.round((item.amount / total) * 100);
           return (
             <div key={item.category} className="flex items-center justify-between text-xs">
               <div className="flex items-center gap-2">
-                <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: item.color }} />
+                <div className="h-2 w-2 rounded-full" style={{ backgroundColor: item.color }} />
                 <span className="text-muted-foreground">{categoryIcons[item.category] || "📦"} {item.category}</span>
               </div>
               <span className="text-foreground font-medium">{pct}%</span>
