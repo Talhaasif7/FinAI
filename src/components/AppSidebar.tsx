@@ -1,10 +1,11 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { 
   LayoutDashboard, Target, Receipt, CreditCard, 
-  Bot, TrendingUp, Settings, Flame
+  Bot, TrendingUp, Settings, Flame, LogOut
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useAuth } from "@/hooks/useAuth";
 import logoImg from "@/assets/logo.png";
 
 const navItems = [
@@ -16,11 +17,16 @@ const navItems = [
   { to: "/assistant", icon: Bot, label: "AI Assistant" },
 ];
 
-export function AppSidebar() {
+interface Props {
+  onNavigate?: () => void;
+}
+
+export function AppSidebar({ onNavigate }: Props) {
   const location = useLocation();
+  const { user, signOut } = useAuth();
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-border bg-sidebar flex flex-col">
+    <aside className="h-screen w-64 border-r border-border bg-sidebar flex flex-col">
       {/* Logo */}
       <div className="flex items-center justify-between px-6 py-5 border-b border-border">
         <div className="flex items-center gap-3">
@@ -41,6 +47,7 @@ export function AppSidebar() {
             <NavLink
               key={item.to}
               to={item.to}
+              onClick={onNavigate}
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
                 isActive
@@ -67,10 +74,11 @@ export function AppSidebar() {
         </div>
       </div>
 
-      {/* Settings */}
-      <div className="px-3 pb-4">
+      {/* User + Settings */}
+      <div className="px-3 pb-4 space-y-1">
         <NavLink
           to="/settings"
+          onClick={onNavigate}
           className={cn(
             "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-sidebar-foreground hover:text-foreground hover:bg-muted/40 transition-colors",
             location.pathname === "/settings" && "bg-primary/10 text-primary border border-primary/15"
@@ -79,6 +87,15 @@ export function AppSidebar() {
           <Settings className="h-[18px] w-[18px]" />
           Settings
         </NavLink>
+        {user && (
+          <button
+            onClick={signOut}
+            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-sidebar-foreground hover:text-destructive hover:bg-destructive/10 transition-colors w-full"
+          >
+            <LogOut className="h-[18px] w-[18px]" />
+            Sign Out
+          </button>
+        )}
       </div>
     </aside>
   );
