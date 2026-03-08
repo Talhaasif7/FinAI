@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { Scene3D } from "@/components/Scene3D";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import logoImg from "@/assets/logo.png";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.12 } } };
