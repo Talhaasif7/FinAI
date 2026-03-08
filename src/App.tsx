@@ -13,8 +13,10 @@ import Dashboard from "./pages/Dashboard";
 import Goals from "./pages/Goals";
 import Expenses from "./pages/Expenses";
 import Subscriptions from "./pages/Subscriptions";
+import Budgets from "./pages/Budgets";
 import Insights from "./pages/Insights";
 import Assistant from "./pages/Assistant";
+import Gamification from "./pages/Gamification";
 import SettingsPage from "./pages/SettingsPage";
 import NotFound from "./pages/NotFound";
 
@@ -36,8 +38,10 @@ const App = () => (
               <Route path="/goals" element={<Goals />} />
               <Route path="/expenses" element={<Expenses />} />
               <Route path="/subscriptions" element={<Subscriptions />} />
+              <Route path="/budgets" element={<Budgets />} />
               <Route path="/insights" element={<Insights />} />
               <Route path="/assistant" element={<Assistant />} />
+              <Route path="/gamification" element={<Gamification />} />
               <Route path="/settings" element={<SettingsPage />} />
             </Route>
             <Route path="*" element={<NotFound />} />
