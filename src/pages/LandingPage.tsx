@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { Scene3D } from "@/components/Scene3D";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import logoImg from "@/assets/logo.png";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.12 } } };
@@ -38,7 +39,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background overflow-hidden">
       {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b border-border/40" style={{ background: "hsla(220, 20%, 4%, 0.8)" }}>
+      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b border-border/40 bg-background/80">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img src={logoImg} alt="FinAI" className="h-8 w-8 rounded-lg" />
@@ -49,11 +50,14 @@ export default function LandingPage() {
             <a href="#how-it-works" className="text-sm text-muted-foreground hover:text-foreground transition-colors">How It Works</a>
             <a href="#testimonials" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Reviews</a>
           </div>
-          <Link to="/dashboard">
-            <Button size="sm" className="gap-2 bg-primary text-primary-foreground hover:bg-teal-light">
-              Get Started <ArrowRight className="h-3.5 w-3.5" />
-            </Button>
-          </Link>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <Link to="/dashboard">
+              <Button size="sm" className="gap-2 bg-primary text-primary-foreground hover:bg-teal-light">
+                Get Started <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </nav>
 

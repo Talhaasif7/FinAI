@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { CreditCard, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { subscriptions } from "@/lib/mock-data";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } };
@@ -35,9 +35,15 @@ export default function Subscriptions() {
         {subscriptions.map((sub) => (
           <div key={sub.id} className="flex items-center justify-between px-5 py-4 hover:bg-muted/20 transition-colors">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-                <CreditCard className="h-4 w-4 text-primary" />
-              </div>
+              <img
+                src={sub.logo}
+                alt={sub.name}
+                className="h-10 w-10 rounded-xl object-contain bg-muted/30 p-1.5"
+                onError={(e) => {
+                  const el = e.target as HTMLImageElement;
+                  el.style.display = 'none';
+                }}
+              />
               <div>
                 <p className="text-sm font-semibold text-foreground">{sub.name}</p>
                 <p className="text-[11px] text-muted-foreground">{sub.category} · Next: {sub.nextBilling}</p>

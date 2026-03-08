@@ -1,4 +1,25 @@
-import { categoryIcons, type Expense } from "@/lib/mock-data";
+import { type Expense } from "@/lib/mock-data";
+
+function MerchantLogo({ expense }: { expense: Expense }) {
+  if (expense.logo) {
+    return (
+      <img
+        src={expense.logo}
+        alt={expense.merchant}
+        className="h-9 w-9 rounded-lg object-contain bg-muted/30 p-1"
+        onError={(e) => {
+          (e.target as HTMLImageElement).style.display = 'none';
+          (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+        }}
+      />
+    );
+  }
+  return (
+    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-muted/30 text-xs font-bold text-muted-foreground">
+      {expense.merchant.charAt(0)}
+    </div>
+  );
+}
 
 export function RecentTransactions({ expenses }: { expenses: Expense[] }) {
   return (
@@ -11,9 +32,7 @@ export function RecentTransactions({ expenses }: { expenses: Expense[] }) {
         {expenses.map((exp) => (
           <div key={exp.id} className="flex items-center justify-between py-2 border-b border-border/30 last:border-0">
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-muted/50 text-sm">
-                {categoryIcons[exp.category] || "📦"}
-              </div>
+              <MerchantLogo expense={exp} />
               <div>
                 <p className="text-sm font-medium text-foreground">{exp.merchant}</p>
                 <p className="text-[11px] text-muted-foreground">{exp.category} · {exp.date}</p>
