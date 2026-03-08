@@ -33,7 +33,7 @@ export function AppSidebar({ onNavigate }: Props) {
       {/* Logo */}
       <div className="flex items-center justify-between px-5 py-5 border-b border-border">
         <div className="flex items-center">
-          <img src={logoImg} alt="FinAI" className="h-14 w-14 rounded-xl dark:invert dark:brightness-200 dark:hue-rotate-180" />
+          <img src={logoImg} alt="FinAI" className="h-14 w-14 rounded-xl dark:brightness-0 dark:invert" />
         </div>
         <ThemeToggle />
       </div>
