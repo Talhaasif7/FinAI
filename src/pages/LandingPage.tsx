@@ -9,9 +9,9 @@ import {
   Bot, Trophy, Camera, ChevronDown, Users,
   LineChart, Sparkles, Lock, Eye, Heart,
   Play, Menu, X, MousePointer2, Fingerprint,
-  Layers, CircleDot
+  Layers, CircleDot, DollarSign, Coins, BadgePercent
 } from "lucide-react";
-import { Scene3D } from "@/components/Scene3D";
+import { Scene3D, Scene3DFeatures } from "@/components/Scene3D";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import logoImg from "@/assets/logo.png";
@@ -25,26 +25,29 @@ const fadeUp = {
   }),
 };
 
-const stagger = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.08 } },
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.85 },
+  show: (i: number = 0) => ({
+    opacity: 1, scale: 1,
+    transition: { duration: 0.8, delay: i * 0.12, ease: [0.25, 0.4, 0.25, 1] as [number, number, number, number] },
+  }),
 };
 
 /* ── Data ───────────────────────────────────────────────── */
 const features = [
-  { icon: Target, title: "Smart Goals", desc: "AI-powered savings plans with dynamic adjustments based on your real spending behavior.", color: "from-neon-green to-cyan", tag: "Goals" },
-  { icon: Brain, title: "AI Financial Coach", desc: "Conversational AI that answers questions, gives advice, and finds savings opportunities.", color: "from-electric-purple to-magenta", tag: "AI" },
-  { icon: BarChart3, title: "Deep Analytics", desc: "Spending personality analysis, forecasts, and financial health scores updated in real-time.", color: "from-amber to-coral", tag: "Insights" },
-  { icon: CreditCard, title: "Subscription Manager", desc: "Auto-detect recurring charges. Get alerts before renewals and find subscriptions to cut.", color: "from-cyan to-neon-green", tag: "Subs" },
-  { icon: Camera, title: "Receipt Scanner", desc: "Snap a photo of any receipt. AI extracts merchant, amount, items, and categorizes instantly.", color: "from-magenta to-electric-purple", tag: "OCR" },
-  { icon: Trophy, title: "Gamification", desc: "Earn achievements, maintain streaks, and compete in weekly savings challenges.", color: "from-neon-green to-electric-purple", tag: "Fun" },
+  { icon: Target, title: "Smart Goals", desc: "AI-powered savings plans with dynamic adjustments based on your real spending behavior.", cardClass: "revolut-card-green", tag: "Goals" },
+  { icon: Brain, title: "AI Financial Coach", desc: "Conversational AI that answers questions, gives advice, and finds savings opportunities.", cardClass: "revolut-card-purple", tag: "AI" },
+  { icon: BarChart3, title: "Deep Analytics", desc: "Spending personality analysis, forecasts, and financial health scores updated in real-time.", cardClass: "revolut-card-amber", tag: "Insights" },
+  { icon: CreditCard, title: "Subscription Manager", desc: "Auto-detect recurring charges. Get alerts before renewals and find subscriptions to cut.", cardClass: "revolut-card-teal", tag: "Subs" },
+  { icon: Camera, title: "Receipt Scanner", desc: "Snap a photo of any receipt. AI extracts merchant, amount, items, and categorizes instantly.", cardClass: "revolut-card-pink", tag: "OCR" },
+  { icon: Trophy, title: "Gamification", desc: "Earn achievements, maintain streaks, and compete in weekly savings challenges.", cardClass: "revolut-card-dark", tag: "Fun" },
 ];
 
 const stats = [
-  { value: "50K+", label: "Active Users" },
-  { value: "$2.4M", label: "Goals Achieved" },
-  { value: "94%", label: "Success Rate" },
-  { value: "4.9★", label: "App Rating" },
+  { value: 50, suffix: "K+", label: "Active Users" },
+  { value: 2.4, suffix: "M", label: "Goals Achieved", prefix: "$" },
+  { value: 94, suffix: "%", label: "Success Rate" },
+  { value: 4.9, suffix: "★", label: "App Rating" },
 ];
 
 const testimonials = [
@@ -77,7 +80,7 @@ const trustedBy = ["Forbes", "TechCrunch", "Product Hunt", "Y Combinator", "Bloo
 
 /* ── Reusable Components ────────────────────────────────── */
 
-function AnimatedCounter({ value, suffix = "" }: { value: number; suffix?: string }) {
+function AnimatedCounter({ value, suffix = "", prefix = "" }: { value: number; suffix?: string; prefix?: string }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   const [count, setCount] = useState(0);
@@ -86,17 +89,19 @@ function AnimatedCounter({ value, suffix = "" }: { value: number; suffix?: strin
     if (!isInView) return;
     let start = 0;
     const duration = 2000;
+    const isFloat = value % 1 !== 0;
     const step = (timestamp: number) => {
       if (!start) start = timestamp;
       const progress = Math.min((timestamp - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(eased * value));
+      const current = eased * value;
+      setCount(isFloat ? parseFloat(current.toFixed(1)) : Math.floor(current));
       if (progress < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
   }, [isInView, value]);
 
-  return <span ref={ref}>{count.toLocaleString()}{suffix}</span>;
+  return <span ref={ref}>{prefix}{count}{suffix}</span>;
 }
 
 function MarqueeRow({ items, reverse = false }: { items: string[]; reverse?: boolean }) {
@@ -104,12 +109,12 @@ function MarqueeRow({ items, reverse = false }: { items: string[]; reverse?: boo
   return (
     <div className="flex overflow-hidden relative">
       <motion.div
-        className="flex gap-12 items-center whitespace-nowrap"
+        className="flex gap-16 items-center whitespace-nowrap"
         animate={{ x: reverse ? ["0%", "-50%"] : ["-50%", "0%"] }}
         transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
       >
         {doubled.map((item, i) => (
-          <span key={i} className="text-sm font-display font-semibold text-muted-foreground/30 uppercase tracking-[0.2em] select-none">
+          <span key={i} className="text-base font-display font-bold text-muted-foreground/20 uppercase tracking-[0.25em] select-none">
             {item}
           </span>
         ))}
@@ -130,11 +135,11 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
     >
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between py-6 text-left group"
+        className="w-full flex items-center justify-between py-7 text-left group"
       >
-        <span className="text-base font-medium text-foreground pr-4 group-hover:text-primary transition-colors">{q}</span>
-        <div className={`flex h-7 w-7 items-center justify-center rounded-full border border-border/50 shrink-0 transition-all duration-300 ${open ? "bg-primary border-primary rotate-180" : "group-hover:border-primary/50"}`}>
-          <ChevronDown className={`h-3.5 w-3.5 transition-colors ${open ? "text-primary-foreground" : "text-muted-foreground"}`} />
+        <span className="text-lg font-display font-semibold text-foreground pr-4 group-hover:text-primary transition-colors">{q}</span>
+        <div className={`flex h-8 w-8 items-center justify-center rounded-full border border-border/50 shrink-0 transition-all duration-300 ${open ? "bg-primary border-primary rotate-180" : "group-hover:border-primary/50"}`}>
+          <ChevronDown className={`h-4 w-4 transition-colors ${open ? "text-primary-foreground" : "text-muted-foreground"}`} />
         </div>
       </button>
       <AnimatePresence>
@@ -146,7 +151,7 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <p className="pb-6 text-sm text-muted-foreground leading-relaxed max-w-2xl">{a}</p>
+            <p className="pb-7 text-base text-muted-foreground leading-relaxed max-w-2xl">{a}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -154,16 +159,18 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
   );
 }
 
-function FloatingBadge({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+/* ── Curvy Underline Heading ── */
+function CurvyHeading({ children, className = "", variant = "green" }: {
+  children: React.ReactNode; className?: string; variant?: "green" | "purple" | "gold";
+}) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const variantClass = variant === "purple" ? "curvy-underline curvy-underline-purple" : variant === "gold" ? "curvy-underline curvy-underline-gold" : "curvy-underline";
+
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border/30 backdrop-blur-xl text-xs font-medium ${className}`}
-      style={{ background: "hsl(var(--card) / 0.6)" }}
-    >
+    <span ref={ref} className={`${isInView ? variantClass : ""} ${className}`}>
       {children}
-    </motion.div>
+    </span>
   );
 }
 
@@ -206,7 +213,6 @@ export default function LandingPage() {
             <span className="font-display text-lg font-bold gradient-text-primary">FinAI</span>
           </Link>
 
-          {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((item) => (
               <a
@@ -232,7 +238,6 @@ export default function LandingPage() {
               </Button>
             </Link>
 
-            {/* Mobile menu toggle */}
             <button
               onClick={() => setMobileMenu(!mobileMenu)}
               className="md:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-border/30"
@@ -242,7 +247,6 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Mobile menu */}
         <AnimatePresence>
           {mobileMenu && (
             <motion.div
@@ -283,36 +287,49 @@ export default function LandingPage() {
 
         <motion.div
           style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
-          className="relative z-10 text-center max-w-5xl mx-auto px-6"
+          className="relative z-10 text-center max-w-6xl mx-auto px-6"
         >
           {/* Floating badges */}
           <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
-            <FloatingBadge>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border/30 backdrop-blur-xl text-xs font-medium"
+              style={{ background: "hsl(var(--card) / 0.6)" }}
+            >
               <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
               <span className="text-muted-foreground">AI-Powered Finance</span>
-            </FloatingBadge>
-            <FloatingBadge className="hidden sm:inline-flex">
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.15 }}
+              className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border/30 backdrop-blur-xl text-xs font-medium"
+              style={{ background: "hsl(var(--card) / 0.6)" }}
+            >
               <Star className="h-3 w-3 text-amber fill-amber" />
               <span className="text-muted-foreground">Rated 4.9/5</span>
-            </FloatingBadge>
+            </motion.div>
           </div>
 
-          {/* Headline */}
+          {/* ── DOUBLED HEADLINE with echo effect ── */}
           <motion.h1
             variants={fadeUp} initial="hidden" animate="show" custom={0}
-            className="font-display text-[3.2rem] sm:text-[4.5rem] md:text-[6rem] lg:text-[7rem] font-bold leading-[0.88] mb-7 tracking-[-0.04em]"
+            className="font-display text-[3.5rem] sm:text-[5rem] md:text-[6.5rem] lg:text-[8rem] font-bold leading-[0.85] mb-8 tracking-[-0.04em]"
           >
-            <span className="text-foreground block">Your Money,</span>
-            <span className="gradient-text-hero block">Reimagined.</span>
+            <span className="text-foreground block text-echo" data-text="Your Money,">Your Money,</span>
+            <span className="gradient-text-hero block text-echo" data-text="Reimagined.">
+              <CurvyHeading variant="green">Reimagined.</CurvyHeading>
+            </span>
           </motion.h1>
 
           {/* Subheadline */}
           <motion.p
             variants={fadeUp} initial="hidden" animate="show" custom={2}
-            className="text-base md:text-xl text-muted-foreground max-w-xl mx-auto mb-10 leading-relaxed font-light"
+            className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto mb-12 leading-relaxed font-light"
           >
             Track expenses, crush goals, and build wealth with an AI coach
-            that <span className="text-foreground font-medium">actually gets you</span>.
+            that <span className="text-foreground font-semibold">actually gets you</span>.
           </motion.p>
 
           {/* CTAs */}
@@ -321,7 +338,7 @@ export default function LandingPage() {
             className="flex flex-col sm:flex-row items-center gap-4 justify-center"
           >
             <Link to="/auth">
-              <Button size="lg" className="gap-2.5 px-8 text-base bg-primary text-primary-foreground hover:bg-neon-green-light rounded-full glow-green h-14 font-semibold shadow-2xl hover:shadow-primary/25 transition-all duration-300 hover:scale-[1.02]">
+              <Button size="lg" className="gap-2.5 px-10 text-base bg-primary text-primary-foreground hover:bg-neon-green-light rounded-full glow-green h-14 font-semibold shadow-2xl hover:shadow-primary/25 transition-all duration-300 hover:scale-[1.02]">
                 Start Free — No Card Needed <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -372,7 +389,7 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ TRUSTED BY MARQUEE ═══════════ */}
-      <section className="py-12 px-6 border-y border-border/10 relative overflow-hidden">
+      <section className="py-14 px-6 border-y border-border/10 relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <p className="text-center text-[10px] uppercase tracking-[0.25em] text-muted-foreground/50 mb-8 font-semibold">As Featured In</p>
           <MarqueeRow items={trustedBy} />
@@ -380,9 +397,9 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ STATS ═══════════ */}
-      <section className="py-20 px-6 relative">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
+      <section className="py-24 px-6 relative">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
             {stats.map((stat, i) => (
               <motion.div
                 key={stat.label}
@@ -392,7 +409,9 @@ export default function LandingPage() {
                 transition={{ delay: i * 0.1, duration: 0.6 }}
                 className="text-center group"
               >
-                <p className="font-display text-3xl md:text-5xl font-bold gradient-text-primary mb-1">{stat.value}</p>
+                <p className="font-display text-4xl md:text-6xl font-bold gradient-text-primary mb-2">
+                  <AnimatedCounter value={stat.value} suffix={stat.suffix} prefix={stat.prefix || ""} />
+                </p>
                 <p className="text-xs text-muted-foreground uppercase tracking-[0.15em] font-medium">{stat.label}</p>
               </motion.div>
             ))}
@@ -401,7 +420,7 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ PROBLEM / SOLUTION ═══════════ */}
-      <section className="py-24 px-6 relative">
+      <section className="py-28 px-6 relative">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -410,11 +429,12 @@ export default function LandingPage() {
             transition={{ duration: 0.7 }}
             className="text-center mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-destructive/20 text-[10px] uppercase tracking-[0.2em] text-destructive font-semibold mb-4 bg-destructive/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-destructive/20 text-[10px] uppercase tracking-[0.2em] text-destructive font-semibold mb-6 bg-destructive/5">
               <CircleDot className="h-3 w-3" /> The Problem
             </span>
-            <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground tracking-tight">
-              Managing money shouldn't<br className="hidden sm:block" /> be <span className="gradient-text-purple">this hard</span>
+            <h2 className="font-display text-4xl md:text-6xl font-bold text-foreground tracking-tight leading-[0.95]">
+              Managing money shouldn't<br className="hidden sm:block" /> be{" "}
+              <CurvyHeading variant="purple">this hard</CurvyHeading>
             </h2>
           </motion.div>
 
@@ -426,16 +446,16 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.6 }}
-                className="group relative glass-card p-6 hover:border-primary/20 transition-all duration-500"
+                className="group relative glass-card p-7 hover:border-primary/20 transition-all duration-500"
               >
                 <div className="absolute top-0 left-0 w-0 group-hover:w-full h-[1px] bg-gradient-to-r from-primary/60 to-transparent transition-all duration-700" />
-                <span className="text-3xl mb-3 block">{p.emoji}</span>
-                <p className="text-sm font-medium text-muted-foreground/60 line-through decoration-destructive/30 mb-2">{p.problem}</p>
+                <span className="text-4xl mb-4 block">{p.emoji}</span>
+                <p className="text-base font-medium text-muted-foreground/60 line-through decoration-destructive/30 mb-3">{p.problem}</p>
                 <div className="flex items-start gap-2">
                   <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
                     <Check className="h-3 w-3 text-primary" />
                   </div>
-                  <p className="text-sm font-semibold text-foreground">{p.solution}</p>
+                  <p className="text-base font-semibold text-foreground">{p.solution}</p>
                 </div>
               </motion.div>
             ))}
@@ -444,20 +464,21 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ VIDEO SHOWCASE ═══════════ */}
-      <section className="py-20 px-6 relative">
+      <section className="py-24 px-6 relative">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-12"
+            className="text-center mb-14"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-4 bg-primary/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-6 bg-primary/5">
               <Eye className="h-3 w-3" /> See It In Action
             </span>
-            <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground tracking-tight">
-              Beautiful by <span className="gradient-text-gold">design</span>
+            <h2 className="font-display text-4xl md:text-6xl font-bold text-foreground tracking-tight leading-[0.95]">
+              Beautiful by{" "}
+              <CurvyHeading variant="gold">design</CurvyHeading>
             </h2>
           </motion.div>
 
@@ -468,9 +489,7 @@ export default function LandingPage() {
             transition={{ duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
             className="relative group"
           >
-            {/* Browser frame */}
             <div className="rounded-2xl overflow-hidden border border-border/30 shadow-2xl">
-              {/* Browser bar */}
               <div className="flex items-center gap-2 px-4 py-3 border-b border-border/20" style={{ background: "hsl(var(--card))" }}>
                 <div className="flex gap-1.5">
                   <div className="h-3 w-3 rounded-full bg-destructive/60" />
@@ -485,54 +504,53 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Video */}
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent z-10 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <video autoPlay loop muted playsInline className="w-full h-auto" src="/videos/Design-2.mp4" />
               </div>
             </div>
 
-            {/* Floating accent elements */}
+            {/* Floating accents */}
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.5, type: "spring" }}
               className="absolute -left-4 top-1/4 glass-card px-4 py-3 rounded-xl hidden lg:flex items-center gap-3 shadow-xl"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
-                <TrendingUp className="h-4 w-4 text-primary" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                <TrendingUp className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <p className="text-[10px] text-muted-foreground">Monthly Savings</p>
-                <p className="text-sm font-bold text-foreground">+$420.00</p>
+                <p className="text-base font-bold text-foreground">+$420.00</p>
               </div>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.7 }}
+              transition={{ delay: 0.7, type: "spring" }}
               className="absolute -right-4 bottom-1/3 glass-card px-4 py-3 rounded-xl hidden lg:flex items-center gap-3 shadow-xl"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-electric-purple/10">
-                <Sparkles className="h-4 w-4 text-electric-purple" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-electric-purple/10">
+                <Sparkles className="h-5 w-5 text-electric-purple" />
               </div>
               <div>
                 <p className="text-[10px] text-muted-foreground">AI Insight</p>
-                <p className="text-sm font-bold text-foreground">Cut 3 subs</p>
+                <p className="text-base font-bold text-foreground">Cut 3 subs</p>
               </div>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* ═══════════ FEATURES BENTO ═══════════ */}
-      <section id="features" className="py-28 px-6 relative overflow-hidden">
-        {/* Background accent */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/[0.02] rounded-full blur-3xl" />
+      {/* ═══════════ FEATURES — REVOLUT-STYLE CARDS ═══════════ */}
+      <section id="features" className="py-32 px-6 relative overflow-hidden">
+        {/* 3D Background */}
+        <div className="absolute inset-0 pointer-events-none opacity-30">
+          <Scene3DFeatures />
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
@@ -541,52 +559,51 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-16"
+            className="text-center mb-20"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-4 bg-primary/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-6 bg-primary/5">
               <Layers className="h-3 w-3" /> Features
             </span>
-            <h2 className="font-display text-3xl md:text-5xl font-bold mb-4 text-foreground tracking-tight">
-              Everything to <span className="gradient-text-hero">master your money</span>
+            <h2 className="font-display text-4xl md:text-6xl font-bold mb-5 text-foreground tracking-tight leading-[0.95] text-echo" data-text="Everything to master your money">
+              Everything to{" "}
+              <CurvyHeading variant="green">master your money</CurvyHeading>
             </h2>
-            <p className="text-muted-foreground max-w-lg mx-auto text-base">
+            <p className="text-muted-foreground max-w-lg mx-auto text-lg">
               Six powerful tools working together for complete financial clarity.
             </p>
           </motion.div>
 
-          {/* Bento grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Revolut-style bento grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {features.map((f, i) => (
               <motion.div
                 key={f.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                variants={scaleIn}
+                initial="hidden"
+                whileInView="show"
                 viewport={{ once: true, margin: "-40px" }}
-                transition={{ delay: i * 0.08, duration: 0.6 }}
-                className={`group relative glass-card p-7 overflow-hidden hover:border-primary/15 transition-all duration-500 ${
-                  i === 0 ? "md:col-span-2 lg:col-span-1" : ""
-                }`}
+                custom={i}
+                className={`revolut-card ${f.cardClass} p-8 min-h-[240px] flex flex-col justify-between group cursor-pointer`}
               >
-                {/* Top gradient line */}
-                <div className={`absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r ${f.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-
-                {/* Glow background on hover */}
-                <div className={`absolute -top-20 -right-20 w-40 h-40 rounded-full bg-gradient-to-br ${f.color} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-700 blur-3xl`} />
+                {/* Shine effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl" />
 
                 <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-5">
-                    <div className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${f.color} opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 shadow-lg`}>
-                      <f.icon className="h-5 w-5 text-primary-foreground" />
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-sm group-hover:scale-110 transition-transform duration-500 shadow-lg">
+                      <f.icon className="h-6 w-6 text-white" />
                     </div>
-                    <span className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground/60 font-semibold px-2.5 py-1 rounded-full border border-border/30">{f.tag}</span>
+                    <span className="text-[9px] uppercase tracking-[0.2em] text-white/50 font-bold px-3 py-1.5 rounded-full border border-white/10 bg-white/5">
+                      {f.tag}
+                    </span>
                   </div>
 
-                  <h3 className="font-display text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">{f.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+                  <h3 className="font-display text-xl font-bold text-white mb-3 group-hover:translate-x-1 transition-transform duration-300">{f.title}</h3>
+                  <p className="text-sm text-white/70 leading-relaxed">{f.desc}</p>
+                </div>
 
-                  <div className="mt-5 flex items-center gap-1.5 text-xs text-primary font-medium opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                    Learn more <ArrowUpRight className="h-3 w-3" />
-                  </div>
+                <div className="relative z-10 mt-6 flex items-center gap-1.5 text-xs text-white/80 font-semibold opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                  Explore <ArrowUpRight className="h-3 w-3" />
                 </div>
               </motion.div>
             ))}
@@ -595,7 +612,7 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ HOW IT WORKS ═══════════ */}
-      <section id="how-it-works" className="py-28 px-6 relative">
+      <section id="how-it-works" className="py-32 px-6 relative">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -604,20 +621,21 @@ export default function LandingPage() {
             transition={{ duration: 0.7 }}
             className="text-center mb-20"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber/20 text-[10px] uppercase tracking-[0.2em] text-amber font-semibold mb-4 bg-amber/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber/20 text-[10px] uppercase tracking-[0.2em] text-amber font-semibold mb-6 bg-amber/5">
               <Zap className="h-3 w-3" /> How It Works
             </span>
-            <h2 className="font-display text-3xl md:text-5xl font-bold mb-4 text-foreground tracking-tight">
-              Three steps to <span className="gradient-text-primary">financial freedom</span>
+            <h2 className="font-display text-4xl md:text-6xl font-bold mb-5 text-foreground tracking-tight leading-[0.95]">
+              Three steps to{" "}
+              <CurvyHeading variant="green">financial freedom</CurvyHeading>
             </h2>
-            <p className="text-base text-muted-foreground max-w-md mx-auto">
+            <p className="text-lg text-muted-foreground max-w-md mx-auto">
               No complicated setup. No bank linking required. Just sign up and start.
             </p>
           </motion.div>
 
           <div className="relative">
             {/* Connection line */}
-            <div className="hidden md:block absolute top-24 left-[16%] right-[16%] h-px">
+            <div className="hidden md:block absolute top-28 left-[16%] right-[16%] h-px">
               <div className="w-full h-full bg-gradient-to-r from-transparent via-border to-transparent" />
               <motion.div
                 className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary/60 to-primary/0"
@@ -630,9 +648,9 @@ export default function LandingPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
               {[
-                { step: "01", icon: Smartphone, title: "Set Your Goals", desc: "Tell us your dreams — travel, gadgets, retirement. AI creates a personalized savings plan instantly.", gradient: "from-neon-green to-cyan" },
-                { step: "02", icon: Zap, title: "AI Tracks Everything", desc: "Add expenses manually or scan receipts. AI categorizes, detects patterns, and finds savings automatically.", gradient: "from-amber to-coral" },
-                { step: "03", icon: Globe, title: "Achieve & Celebrate", desc: "Watch real-time progress with predictive forecasts. Earn achievements and share milestones.", gradient: "from-electric-purple to-magenta" },
+                { step: "01", icon: Smartphone, title: "Set Your Goals", desc: "Tell us your dreams — travel, gadgets, retirement. AI creates a personalized savings plan instantly.", gradient: "revolut-card-green" },
+                { step: "02", icon: Zap, title: "AI Tracks Everything", desc: "Add expenses manually or scan receipts. AI categorizes, detects patterns, and finds savings automatically.", gradient: "revolut-card-amber" },
+                { step: "03", icon: Globe, title: "Achieve & Celebrate", desc: "Watch real-time progress with predictive forecasts. Earn achievements and share milestones.", gradient: "revolut-card-purple" },
               ].map((s, i) => (
                 <motion.div
                   key={s.step}
@@ -642,16 +660,16 @@ export default function LandingPage() {
                   transition={{ delay: i * 0.2, duration: 0.7 }}
                   className="text-center relative group"
                 >
-                  <div className="relative inline-block mb-6">
-                    <div className={`flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br ${s.gradient} mx-auto shadow-xl group-hover:scale-110 group-hover:shadow-2xl transition-all duration-500`}>
-                      <s.icon className="h-8 w-8 text-primary-foreground" />
+                  <div className="relative inline-block mb-8">
+                    <div className={`revolut-card ${s.gradient} flex h-24 w-24 items-center justify-center rounded-3xl mx-auto shadow-xl group-hover:shadow-2xl`}>
+                      <s.icon className="h-10 w-10 text-white" />
                     </div>
-                    <span className="absolute -top-2 -right-2 font-display text-xs font-bold bg-background text-foreground border-2 border-border rounded-full h-7 w-7 flex items-center justify-center shadow-sm">
+                    <span className="absolute -top-2 -right-2 font-display text-xs font-bold bg-background text-foreground border-2 border-border rounded-full h-8 w-8 flex items-center justify-center shadow-sm">
                       {s.step}
                     </span>
                   </div>
-                  <h3 className="font-display text-xl font-bold text-foreground mb-3">{s.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed max-w-[260px] mx-auto">{s.desc}</p>
+                  <h3 className="font-display text-2xl font-bold text-foreground mb-3">{s.title}</h3>
+                  <p className="text-base text-muted-foreground leading-relaxed max-w-[280px] mx-auto">{s.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -660,7 +678,7 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ PRICING ═══════════ */}
-      <section id="pricing" className="py-28 px-6 relative">
+      <section id="pricing" className="py-32 px-6 relative">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -669,13 +687,15 @@ export default function LandingPage() {
             transition={{ duration: 0.7 }}
             className="text-center mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-4 bg-primary/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 text-[10px] uppercase tracking-[0.2em] text-primary font-semibold mb-6 bg-primary/5">
               <Wallet className="h-3 w-3" /> Pricing
             </span>
-            <h2 className="font-display text-3xl md:text-5xl font-bold mb-4 text-foreground tracking-tight">
-              Simple, <span className="gradient-text-primary">transparent</span> pricing
+            <h2 className="font-display text-4xl md:text-6xl font-bold mb-5 text-foreground tracking-tight leading-[0.95]">
+              Simple,{" "}
+              <CurvyHeading variant="green">transparent</CurvyHeading>{" "}
+              pricing
             </h2>
-            <p className="text-base text-muted-foreground">Start free. Upgrade when you need more.</p>
+            <p className="text-lg text-muted-foreground">Start free. Upgrade when you need more.</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -686,35 +706,35 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.12, duration: 0.6 }}
-                className={`relative rounded-2xl overflow-hidden transition-all duration-500 ${
+                className={`relative rounded-3xl overflow-hidden transition-all duration-500 ${
                   plan.popular
-                    ? "glass-card border-primary/30 glow-green scale-[1.02] md:scale-105"
+                    ? "revolut-card-green shadow-2xl scale-[1.02] md:scale-105"
                     : "glass-card hover:border-border"
                 }`}
               >
-                {plan.popular && (
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-neon-green via-cyan to-neon-green" />
+                {!plan.popular && (
+                  <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-border to-transparent" />
                 )}
 
-                <div className="p-7">
-                  <div className="flex items-center justify-between mb-1">
-                    <h3 className="font-display text-lg font-semibold text-foreground">{plan.name}</h3>
+                <div className="p-8">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className={`font-display text-xl font-bold ${plan.popular ? "text-white" : "text-foreground"}`}>{plan.name}</h3>
                     {plan.popular && (
-                      <span className="text-[9px] uppercase tracking-wider font-bold bg-primary/10 text-primary px-2.5 py-1 rounded-full">
+                      <span className="text-[9px] uppercase tracking-wider font-bold bg-white/20 text-white px-3 py-1.5 rounded-full backdrop-blur-sm">
                         Most Popular
                       </span>
                     )}
                   </div>
-                  <div className="flex items-baseline gap-1 mt-3 mb-7">
-                    <span className="font-display text-4xl font-bold text-foreground">{plan.price}</span>
-                    <span className="text-sm text-muted-foreground">{plan.period}</span>
+                  <div className="flex items-baseline gap-1 mt-4 mb-8">
+                    <span className={`font-display text-5xl font-bold ${plan.popular ? "text-white" : "text-foreground"}`}>{plan.price}</span>
+                    <span className={`text-base ${plan.popular ? "text-white/70" : "text-muted-foreground"}`}>{plan.period}</span>
                   </div>
 
-                  <ul className="space-y-3 mb-8">
+                  <ul className="space-y-4 mb-8">
                     {plan.features.map((f) => (
-                      <li key={f} className="flex items-center gap-2.5 text-sm text-muted-foreground">
-                        <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 shrink-0">
-                          <Check className="h-3 w-3 text-primary" />
+                      <li key={f} className={`flex items-center gap-3 text-sm ${plan.popular ? "text-white/90" : "text-muted-foreground"}`}>
+                        <div className={`flex h-5 w-5 items-center justify-center rounded-full shrink-0 ${plan.popular ? "bg-white/20" : "bg-primary/10"}`}>
+                          <Check className={`h-3 w-3 ${plan.popular ? "text-white" : "text-primary"}`} />
                         </div>
                         {f}
                       </li>
@@ -723,9 +743,9 @@ export default function LandingPage() {
 
                   <Link to="/auth">
                     <Button
-                      className={`w-full rounded-xl h-12 text-sm font-semibold transition-all duration-300 ${
+                      className={`w-full rounded-2xl h-13 text-sm font-semibold transition-all duration-300 ${
                         plan.popular
-                          ? "bg-primary text-primary-foreground hover:bg-neon-green-light shadow-lg hover:shadow-xl"
+                          ? "bg-white text-black hover:bg-white/90 shadow-lg hover:shadow-xl"
                           : "bg-muted/30 text-foreground hover:bg-muted/50 border border-border/30"
                       }`}
                     >
@@ -740,8 +760,7 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ TESTIMONIALS ═══════════ */}
-      <section id="reviews" className="py-28 px-6 relative overflow-hidden">
-        {/* Background accent */}
+      <section id="reviews" className="py-32 px-6 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-electric-purple/[0.02] rounded-full blur-3xl" />
         </div>
@@ -754,11 +773,12 @@ export default function LandingPage() {
             transition={{ duration: 0.7 }}
             className="text-center mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-electric-purple/20 text-[10px] uppercase tracking-[0.2em] text-electric-purple font-semibold mb-4 bg-electric-purple/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-electric-purple/20 text-[10px] uppercase tracking-[0.2em] text-electric-purple font-semibold mb-6 bg-electric-purple/5">
               <Heart className="h-3 w-3" /> Testimonials
             </span>
-            <h2 className="font-display text-3xl md:text-5xl font-bold mb-4 text-foreground tracking-tight">
-              Loved by <span className="gradient-text-hero">thousands</span>
+            <h2 className="font-display text-4xl md:text-6xl font-bold mb-5 text-foreground tracking-tight leading-[0.95]">
+              Loved by{" "}
+              <CurvyHeading variant="purple">thousands</CurvyHeading>
             </h2>
           </motion.div>
 
@@ -770,29 +790,28 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.12, duration: 0.6 }}
-                className="glass-card p-7 rounded-2xl group hover:border-electric-purple/15 transition-all duration-500"
+                className="glass-card p-8 rounded-3xl group hover:border-electric-purple/15 transition-all duration-500"
               >
-                {/* Stars */}
-                <div className="flex items-center gap-1 mb-5">
+                <div className="flex items-center gap-1 mb-6">
                   {Array.from({ length: 5 }).map((_, j) => (
                     <Star key={j} className="h-4 w-4 text-amber fill-amber" />
                   ))}
                 </div>
 
-                <p className="text-sm text-muted-foreground leading-relaxed mb-6">"{t.text}"</p>
+                <p className="text-base text-muted-foreground leading-relaxed mb-8">"{t.text}"</p>
 
-                <div className="flex items-center justify-between pt-5 border-t border-border/20">
+                <div className="flex items-center justify-between pt-6 border-t border-border/20">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-electric-purple flex items-center justify-center text-xs font-bold text-primary-foreground shadow-md">
+                    <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-primary to-electric-purple flex items-center justify-center text-xs font-bold text-primary-foreground shadow-md">
                       {t.avatar}
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-foreground">{t.name}</p>
+                      <p className="text-base font-semibold text-foreground">{t.name}</p>
                       <p className="text-xs text-muted-foreground">{t.role}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-bold gradient-text-primary">{t.saved}</p>
+                    <p className="text-base font-bold gradient-text-primary">{t.saved}</p>
                     <p className="text-[10px] text-muted-foreground uppercase tracking-wider">saved</p>
                   </div>
                 </div>
@@ -803,20 +822,21 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ FAQ ═══════════ */}
-      <section className="py-28 px-6">
+      <section className="py-32 px-6">
         <div className="max-w-2xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-14"
+            className="text-center mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber/20 text-[10px] uppercase tracking-[0.2em] text-amber font-semibold mb-4 bg-amber/5">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber/20 text-[10px] uppercase tracking-[0.2em] text-amber font-semibold mb-6 bg-amber/5">
               <MousePointer2 className="h-3 w-3" /> FAQ
             </span>
-            <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground tracking-tight">
-              Questions? <span className="gradient-text-gold">Answers.</span>
+            <h2 className="font-display text-4xl md:text-6xl font-bold text-foreground tracking-tight leading-[0.95]">
+              Questions?{" "}
+              <CurvyHeading variant="gold">Answers.</CurvyHeading>
             </h2>
           </motion.div>
 
@@ -829,7 +849,7 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════ FINAL CTA ═══════════ */}
-      <section className="py-28 px-6 relative">
+      <section className="py-32 px-6 relative">
         <motion.div
           initial={{ opacity: 0, scale: 0.94 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -837,47 +857,39 @@ export default function LandingPage() {
           transition={{ duration: 0.8 }}
           className="max-w-4xl mx-auto relative"
         >
-          {/* Background glow */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-electric-purple/5 rounded-[2rem] blur-xl" />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-electric-purple/5 rounded-[2.5rem] blur-xl" />
 
-          <div className="relative glass-card p-12 md:p-20 text-center rounded-[2rem] overflow-hidden border-border/20">
-            {/* Top accent line */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-[2px] bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
-
-            {/* Ambient dots */}
-            <div className="absolute top-8 right-8 flex gap-1.5 opacity-20">
-              <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-              <div className="h-1.5 w-1.5 rounded-full bg-electric-purple" />
-              <div className="h-1.5 w-1.5 rounded-full bg-amber" />
-            </div>
+          <div className="relative revolut-card-green p-14 md:p-20 text-center rounded-[2.5rem] overflow-hidden">
+            {/* Shine overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none" />
 
             <motion.div
               initial={{ scale: 0 }}
               whileInView={{ scale: 1 }}
               viewport={{ once: true }}
               transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
-              className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mx-auto mb-6"
+              className="flex h-18 w-18 items-center justify-center rounded-3xl bg-white/15 mx-auto mb-8 backdrop-blur-sm"
             >
-              <Sparkles className="h-7 w-7 text-primary" />
+              <Sparkles className="h-8 w-8 text-white" />
             </motion.div>
 
-            <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mb-4 tracking-tight leading-tight">
+            <h2 className="font-display text-4xl md:text-6xl font-bold text-white mb-5 tracking-tight leading-[0.95] text-echo" data-text="Ready to take control of your money?">
               Ready to take control<br className="hidden sm:block" /> of your money?
             </h2>
-            <p className="text-muted-foreground max-w-md mx-auto mb-10 text-base">
+            <p className="text-white/80 max-w-md mx-auto mb-12 text-lg">
               Join 50,000+ users building wealth with AI. Free forever — upgrade anytime.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row items-center gap-4 justify-center relative z-10">
               <Link to="/auth">
-                <Button size="lg" className="gap-2.5 px-10 text-base bg-primary text-primary-foreground hover:bg-neon-green-light glow-green rounded-full h-14 font-semibold shadow-2xl hover:shadow-primary/25 transition-all duration-300 hover:scale-[1.02]">
+                <Button size="lg" className="gap-2.5 px-12 text-base bg-white text-black hover:bg-white/90 rounded-full h-14 font-bold shadow-2xl transition-all duration-300 hover:scale-[1.02]">
                   Get Started Free <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
             </div>
 
-            <p className="text-xs text-muted-foreground mt-6 flex items-center justify-center gap-2">
-              <Fingerprint className="h-3.5 w-3.5" /> Bank-grade security · No credit card required
+            <p className="text-sm text-white/60 mt-8 flex items-center justify-center gap-2">
+              <Fingerprint className="h-4 w-4" /> Bank-grade security · No credit card required
             </p>
           </div>
         </motion.div>
@@ -888,11 +900,11 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-14">
             <div className="col-span-2">
-              <div className="flex items-center gap-2.5 mb-4">
+              <div className="flex items-center gap-2.5 mb-5">
                 <img src={logoImg} alt="FinAI" className="h-8 w-8 rounded-xl" />
                 <span className="font-display text-lg font-bold gradient-text-primary">FinAI</span>
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed max-w-[260px] mb-6">
+              <p className="text-base text-muted-foreground leading-relaxed max-w-[280px] mb-6">
                 The AI-powered financial coach helping you save smarter, spend wiser, and achieve more.
               </p>
               <div className="flex items-center gap-3">
@@ -900,7 +912,7 @@ export default function LandingPage() {
                   <a
                     key={social}
                     href="#"
-                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/30 text-xs font-semibold text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-300"
+                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-border/30 text-xs font-semibold text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-300"
                   >
                     {social}
                   </a>
@@ -914,7 +926,7 @@ export default function LandingPage() {
               { title: "Legal", links: ["Privacy", "Terms", "Cookies", "GDPR"] },
             ].map((col) => (
               <div key={col.title}>
-                <p className="text-sm font-semibold text-foreground mb-4">{col.title}</p>
+                <p className="text-sm font-semibold text-foreground mb-5">{col.title}</p>
                 <ul className="space-y-3">
                   {col.links.map((link) => (
                     <li key={link}>
