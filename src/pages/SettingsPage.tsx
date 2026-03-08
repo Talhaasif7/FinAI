@@ -176,9 +176,9 @@ export default function SettingsPage() {
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-4">
               <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-                <Avatar className="h-16 w-16 border-2 border-border">
+                <Avatar key={avatarUrl || "no-avatar"} className="h-16 w-16 border-2 border-border">
                   {avatarUrl ? (
-                    <img src={avatarUrl} alt="Profile" className="aspect-square h-full w-full object-cover" referrerPolicy="no-referrer" />
+                    <img src={`${avatarUrl}${avatarUrl.includes('?') ? '&' : '?'}t=${Date.now()}`} alt="Profile" className="aspect-square h-full w-full object-cover" referrerPolicy="no-referrer" />
                   ) : (
                     <AvatarFallback className="bg-primary/10 text-primary font-semibold text-lg">
                       {initials}
