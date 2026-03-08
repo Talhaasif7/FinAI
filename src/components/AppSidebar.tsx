@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { 
   LayoutDashboard, Target, Receipt, CreditCard, 
-  Bot, TrendingUp, Settings, Flame, LogOut
+  Bot, TrendingUp, Settings, Flame, LogOut, Wallet, Trophy
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -13,8 +13,10 @@ const navItems = [
   { to: "/goals", icon: Target, label: "Goals" },
   { to: "/expenses", icon: Receipt, label: "Expenses" },
   { to: "/subscriptions", icon: CreditCard, label: "Subscriptions" },
+  { to: "/budgets", icon: Wallet, label: "Budgets" },
   { to: "/insights", icon: TrendingUp, label: "Insights" },
   { to: "/assistant", icon: Bot, label: "AI Assistant" },
+  { to: "/gamification", icon: Trophy, label: "Achievements" },
 ];
 
 interface Props {
@@ -40,7 +42,7 @@ export function AppSidebar({ onNavigate }: Props) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5">
+      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = location.pathname === item.to;
           return (
@@ -66,12 +68,9 @@ export function AppSidebar({ onNavigate }: Props) {
       <div className="mx-3 mb-3 glass-card p-4">
         <div className="flex items-center gap-2 mb-2">
           <Flame className="h-4 w-4 text-gold" />
-          <span className="text-xs font-semibold text-foreground">7 Day Streak! 🔥</span>
+          <span className="text-xs font-semibold text-foreground">Track expenses daily! 🔥</span>
         </div>
-        <p className="text-[11px] text-muted-foreground leading-relaxed">Tracked expenses for 7 days straight.</p>
-        <div className="mt-2.5 h-1.5 rounded-full bg-muted overflow-hidden">
-          <div className="h-full w-[70%] rounded-full bg-gold animate-pulse-glow" />
-        </div>
+        <p className="text-[11px] text-muted-foreground leading-relaxed">Add an expense to build your streak.</p>
       </div>
 
       {/* User + Settings */}

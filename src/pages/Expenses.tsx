@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Plus, Search, Trash2 } from "lucide-react";
+import { Plus, Search, Trash2, Camera, Loader2 } from "lucide-react";
 import { categoryIcons } from "@/lib/mock-data";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -33,6 +33,8 @@ export default function Expenses() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [scanOpen, setScanOpen] = useState(false);
+  const [scanning, setScanning] = useState(false);
   const [search, setSearch] = useState("");
   const [form, setForm] = useState({ amount: "", category: "Food", merchant: "", date: new Date().toISOString().split("T")[0], paymentMethod: "Credit Card", note: "" });
 
@@ -51,6 +53,33 @@ export default function Expenses() {
   };
 
   useEffect(() => { fetchExpenses(); }, [user]);
+
+  // Update streak when adding an expense
+  const updateStreak = async () => {
+    if (!user) return;
+    const today = new Date().toISOString().split("T")[0];
+    const { data: streak } = await supabase.from("user_streaks").select("*").eq("user_id", user.id).single();
+    
+    if (!streak) {
+      await supabase.from("user_streaks").insert({ user_id: user.id, current_streak: 1, longest_streak: 1, last_tracked_date: today });
+      return;
+    }
+
+    if (streak.last_tracked_date === today) return; // Already tracked today
+
+    const lastDate = new Date(streak.last_tracked_date);
+    const todayDate = new Date(today);
+    const diffDays = Math.floor((todayDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+
+    let newStreak = diffDays === 1 ? streak.current_streak + 1 : 1;
+    let longestStreak = Math.max(streak.longest_streak, newStreak);
+
+    await supabase.from("user_streaks").update({
+      current_streak: newStreak,
+      longest_streak: longestStreak,
+      last_tracked_date: today,
+    }).eq("user_id", user.id);
+  };
 
   const filtered = expenses.filter(e =>
     e.merchant.toLowerCase().includes(search.toLowerCase()) ||
@@ -74,9 +103,51 @@ export default function Expenses() {
       toast({ title: "Error", description: error.message, variant: "destructive" });
       return;
     }
+    await updateStreak();
     setForm({ amount: "", category: "Food", merchant: "", date: new Date().toISOString().split("T")[0], paymentMethod: "Credit Card", note: "" });
     setOpen(false);
     fetchExpenses();
+    toast({ title: "Expense added!" });
+  };
+
+  const handleScanReceipt = async (file: File) => {
+    if (!user) return;
+    setScanning(true);
+    try {
+      const reader = new FileReader();
+      const base64 = await new Promise<string>((resolve, reject) => {
+        reader.onload = () => {
+          const result = reader.result as string;
+          resolve(result.split(",")[1]);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+
+      const { data, error } = await supabase.functions.invoke("scan-receipt", {
+        body: { imageBase64: base64 },
+      });
+
+      if (error) throw error;
+      if (data.error) throw new Error(data.error);
+
+      // Pre-fill the form with scanned data
+      setForm({
+        amount: data.amount?.toString() || "",
+        category: data.category || "Other",
+        merchant: data.merchant || "",
+        date: data.date || new Date().toISOString().split("T")[0],
+        paymentMethod: "Credit Card",
+        note: data.items ? data.items.map((i: any) => `${i.name}: $${i.price}`).join(", ") : "",
+      });
+      setScanOpen(false);
+      setOpen(true);
+      toast({ title: "Receipt scanned!", description: `Found: ${data.merchant} - $${data.amount}` });
+    } catch (e: any) {
+      toast({ title: "Scan failed", description: e.message || "Could not read receipt", variant: "destructive" });
+    } finally {
+      setScanning(false);
+    }
   };
 
   const handleDelete = async (id: string) => {
@@ -93,59 +164,103 @@ export default function Expenses() {
           <h1 className="font-display text-2xl font-bold text-foreground">Expenses</h1>
           <p className="text-muted-foreground text-sm mt-1">Track every dollar you spend</p>
         </div>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button className="gap-2 bg-primary text-primary-foreground hover:bg-teal-light"><Plus className="h-4 w-4" /> Add Expense</Button>
-          </DialogTrigger>
-          <DialogContent className="bg-card border-border">
-            <DialogHeader><DialogTitle className="font-display">Add Expense</DialogTitle></DialogHeader>
-            <div className="space-y-4 pt-2">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label>Amount ($)</Label>
-                  <Input type="number" placeholder="0.00" value={form.amount} onChange={e => setForm({...form, amount: e.target.value})} className="mt-1" />
-                </div>
-                <div>
-                  <Label>Category</Label>
-                  <Select value={form.category} onValueChange={v => setForm({...form, category: v})}>
-                    <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      {categories.map(c => <SelectItem key={c} value={c}>{categoryIcons[c] || "📦"} {c}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div>
-                <Label>Merchant</Label>
-                <Input placeholder="e.g. Starbucks" value={form.merchant} onChange={e => setForm({...form, merchant: e.target.value})} className="mt-1" />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label>Date</Label>
-                  <Input type="date" value={form.date} onChange={e => setForm({...form, date: e.target.value})} className="mt-1" />
-                </div>
-                <div>
-                  <Label>Payment Method</Label>
-                  <Select value={form.paymentMethod} onValueChange={v => setForm({...form, paymentMethod: v})}>
-                    <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Credit Card">Credit Card</SelectItem>
-                      <SelectItem value="Debit Card">Debit Card</SelectItem>
-                      <SelectItem value="Cash">Cash</SelectItem>
-                      <SelectItem value="Apple Pay">Apple Pay</SelectItem>
-                      <SelectItem value="Bank Transfer">Bank Transfer</SelectItem>
-                    </SelectContent>
-                  </Select>
+        <div className="flex gap-2">
+          {/* Scan Receipt */}
+          <Dialog open={scanOpen} onOpenChange={setScanOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="gap-2 border-primary/30 text-primary hover:bg-primary/10">
+                <Camera className="h-4 w-4" /> Scan Bill
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-card border-border">
+              <DialogHeader><DialogTitle className="font-display">📸 Scan Receipt</DialogTitle></DialogHeader>
+              <div className="space-y-4 pt-2">
+                <p className="text-sm text-muted-foreground">Upload a photo of your receipt and AI will extract the details automatically.</p>
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleScanReceipt(file);
+                    }}
+                    className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                    disabled={scanning}
+                  />
+                  <div className="border-2 border-dashed border-border rounded-xl p-10 text-center hover:border-primary/40 transition-colors">
+                    {scanning ? (
+                      <div className="flex flex-col items-center gap-3">
+                        <Loader2 className="h-8 w-8 text-primary animate-spin" />
+                        <p className="text-sm text-muted-foreground">AI is reading your receipt...</p>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center gap-3">
+                        <Camera className="h-8 w-8 text-muted-foreground" />
+                        <p className="text-sm text-muted-foreground">Tap to take a photo or upload an image</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-              <div>
-                <Label>Note (optional)</Label>
-                <Input placeholder="Add a note..." value={form.note} onChange={e => setForm({...form, note: e.target.value})} className="mt-1" />
+            </DialogContent>
+          </Dialog>
+
+          {/* Manual Add */}
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button className="gap-2 bg-primary text-primary-foreground hover:bg-teal-light"><Plus className="h-4 w-4" /> Add Expense</Button>
+            </DialogTrigger>
+            <DialogContent className="bg-card border-border">
+              <DialogHeader><DialogTitle className="font-display">Add Expense</DialogTitle></DialogHeader>
+              <div className="space-y-4 pt-2">
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label>Amount ($)</Label>
+                    <Input type="number" placeholder="0.00" value={form.amount} onChange={e => setForm({...form, amount: e.target.value})} className="mt-1" />
+                  </div>
+                  <div>
+                    <Label>Category</Label>
+                    <Select value={form.category} onValueChange={v => setForm({...form, category: v})}>
+                      <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        {categories.map(c => <SelectItem key={c} value={c}>{categoryIcons[c] || "📦"} {c}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div>
+                  <Label>Merchant</Label>
+                  <Input placeholder="e.g. Starbucks" value={form.merchant} onChange={e => setForm({...form, merchant: e.target.value})} className="mt-1" />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label>Date</Label>
+                    <Input type="date" value={form.date} onChange={e => setForm({...form, date: e.target.value})} className="mt-1" />
+                  </div>
+                  <div>
+                    <Label>Payment Method</Label>
+                    <Select value={form.paymentMethod} onValueChange={v => setForm({...form, paymentMethod: v})}>
+                      <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Credit Card">Credit Card</SelectItem>
+                        <SelectItem value="Debit Card">Debit Card</SelectItem>
+                        <SelectItem value="Cash">Cash</SelectItem>
+                        <SelectItem value="Apple Pay">Apple Pay</SelectItem>
+                        <SelectItem value="Bank Transfer">Bank Transfer</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div>
+                  <Label>Note (optional)</Label>
+                  <Input placeholder="Add a note..." value={form.note} onChange={e => setForm({...form, note: e.target.value})} className="mt-1" />
+                </div>
+                <Button onClick={handleAdd} className="w-full bg-primary text-primary-foreground hover:bg-teal-light">Add Expense</Button>
               </div>
-              <Button onClick={handleAdd} className="w-full bg-primary text-primary-foreground hover:bg-teal-light">Add Expense</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </DialogContent>
+          </Dialog>
+        </div>
       </motion.div>
 
       <motion.div variants={item} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">

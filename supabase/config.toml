@@ -2,3 +2,9 @@ project_id = "qfvfsberokadhcvdvotv"
 
 [functions.chat]
 verify_jwt = false
+
+[functions.scan-receipt]
+verify_jwt = false
+
+[functions.analyze-spending]
+verify_jwt = false
