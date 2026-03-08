@@ -53,19 +53,11 @@ const trendConfig = {
 export default function BehavioralAnalysis() {
   const { user, subscription } = useAuth();
   const { toast } = useToast();
-
-  if (!subscription.loading && subscription.tier === "free") {
-    return (
-      <UpgradePrompt
-        feature="Advanced Behavioral Analysis"
-        description="AI-powered insights into your spending personality, time-of-day patterns, impulse buying habits, and personalized nudges to optimize your finances."
-        requiredTier="pro"
-      />
-    );
-  }
   const [data, setData] = useState<BehavioralData | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+
+  const isLocked = !subscription.loading && subscription.tier === "free";
 
   const fetchAnalysis = async () => {
     if (!user || isLocked) return;
