@@ -318,8 +318,8 @@ export default function LandingPage() {
             className="font-display text-[3.5rem] sm:text-[5rem] md:text-[6.5rem] lg:text-[8rem] font-bold leading-[0.85] mb-8 tracking-[-0.04em]"
           >
             <span className="text-foreground block text-echo" data-text="Your Money,">Your Money,</span>
-            <span className="gradient-text-hero block text-echo" data-text="Reimagined.">
-              <span className="curvy-underline">Reimagined.</span>
+            <span className="block text-echo" data-text="Reimagined.">
+              <span className="inline-block gradient-text-hero curvy-underline curvy-underline-loop reimagined-loop">Reimagined.</span>
             </span>
           </motion.h1>
 
