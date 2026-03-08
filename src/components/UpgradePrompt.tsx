@@ -55,7 +55,7 @@ export const UpgradePrompt = forwardRef<HTMLDivElement, UpgradePromptProps>(func
       </div>
     </motion.div>
   );
-}
+});
 
 // Small inline badge for features that are partially locked
 export function UpgradeBadge({ requiredTier, onClick }: { requiredTier: "pro" | "team"; onClick?: () => void }) {
