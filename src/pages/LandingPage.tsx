@@ -274,27 +274,27 @@ export default function LandingPage() {
       </motion.nav>
 
       {/* ═══════════ HERO ═══════════ */}
-      <section ref={heroRef} className="relative min-h-[100vh] flex items-center justify-center pt-16 overflow-hidden">
+      <section ref={heroRef} className="relative min-h-[100svh] flex items-center justify-center pt-20 pb-10 overflow-hidden">
         <Scene3D />
 
         {/* Gradient overlays */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-transparent to-background" />
-          <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-background to-transparent" />
-          <div className="absolute top-0 left-0 w-1/3 h-full bg-gradient-to-r from-background/40 to-transparent" />
-          <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-background/40 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-40 sm:h-64 bg-gradient-to-t from-background to-transparent" />
+          <div className="absolute top-0 left-0 w-1/4 sm:w-1/3 h-full bg-gradient-to-r from-background/40 to-transparent" />
+          <div className="absolute top-0 right-0 w-1/4 sm:w-1/3 h-full bg-gradient-to-l from-background/40 to-transparent" />
         </div>
 
         <motion.div
           style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
-          className="relative z-10 text-center max-w-6xl mx-auto px-6"
+          className="relative z-10 text-center max-w-6xl mx-auto px-4 sm:px-6"
         >
           {/* Floating badges */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-6 sm:mb-8">
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border/30 backdrop-blur-xl text-xs font-medium"
+              className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-border/30 backdrop-blur-xl text-[10px] sm:text-xs font-medium"
               style={{ background: "hsl(var(--card) / 0.6)" }}
             >
               <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
@@ -312,10 +312,10 @@ export default function LandingPage() {
             </motion.div>
           </div>
 
-          {/* ── DOUBLED HEADLINE with echo effect ── */}
+          {/* ── HEADLINE ── */}
           <motion.h1
             variants={fadeUp} initial="hidden" animate="show" custom={0}
-            className="font-display text-[3.5rem] sm:text-[5rem] md:text-[6.5rem] lg:text-[8rem] font-bold leading-[0.85] mb-8 tracking-[-0.04em]"
+            className="font-display text-[2.5rem] sm:text-[3.5rem] md:text-[5rem] lg:text-[6.5rem] xl:text-[8rem] font-bold leading-[0.85] mb-6 sm:mb-8 tracking-[-0.04em]"
           >
             <span className="text-foreground block text-echo" data-text="Your Money,">Your Money,</span>
             <span className="block relative">
@@ -346,7 +346,7 @@ export default function LandingPage() {
           {/* Subheadline */}
           <motion.p
             variants={fadeUp} initial="hidden" animate="show" custom={2}
-            className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto mb-12 leading-relaxed font-light"
+            className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground max-w-md sm:max-w-xl mx-auto mb-8 sm:mb-12 leading-relaxed font-light px-2"
           >
             Track expenses, crush goals, and build wealth with an AI coach
             that <span className="text-foreground font-semibold">actually gets you</span>.
@@ -355,15 +355,15 @@ export default function LandingPage() {
           {/* CTAs */}
           <motion.div
             variants={fadeUp} initial="hidden" animate="show" custom={3}
-            className="flex flex-col sm:flex-row items-center gap-4 justify-center"
+            className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 justify-center"
           >
             <Link to="/auth">
-              <Button size="lg" className="gap-2.5 px-10 text-base bg-primary text-primary-foreground hover:bg-neon-green-light rounded-full glow-green h-14 font-semibold shadow-2xl hover:shadow-primary/25 transition-all duration-300 hover:scale-[1.02]">
+              <Button size="lg" className="gap-2 sm:gap-2.5 px-6 sm:px-10 text-sm sm:text-base bg-primary text-primary-foreground hover:bg-neon-green-light rounded-full glow-green h-12 sm:h-14 font-semibold shadow-2xl hover:shadow-primary/25 transition-all duration-300 hover:scale-[1.02] w-full sm:w-auto">
                 Start Free — No Card Needed <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
             <a href="#how-it-works">
-              <Button variant="ghost" size="lg" className="gap-2 px-6 text-base text-muted-foreground hover:text-foreground rounded-full h-14 group">
+              <Button variant="ghost" size="lg" className="gap-2 px-6 text-sm sm:text-base text-muted-foreground hover:text-foreground rounded-full h-12 sm:h-14 group">
                 <Play className="h-4 w-4 group-hover:text-primary transition-colors" /> Watch Demo
               </Button>
             </a>
@@ -372,23 +372,23 @@ export default function LandingPage() {
           {/* Social proof */}
           <motion.div
             variants={fadeUp} initial="hidden" animate="show" custom={5}
-            className="mt-16 flex flex-col items-center gap-4"
+            className="mt-10 sm:mt-16 flex flex-col items-center gap-3 sm:gap-4"
           >
-            <div className="flex -space-x-3">
+            <div className="flex -space-x-2 sm:-space-x-3">
               {["SK", "MT", "AR", "JD", "LW"].map((initials, i) => (
                 <motion.div
                   key={initials}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 1.2 + i * 0.1 }}
-                  className="h-10 w-10 rounded-full border-[3px] border-background bg-gradient-to-br from-primary to-electric-purple flex items-center justify-center text-[10px] font-bold text-primary-foreground shadow-lg"
+                  className="h-8 w-8 sm:h-10 sm:w-10 rounded-full border-2 sm:border-[3px] border-background bg-gradient-to-br from-primary to-electric-purple flex items-center justify-center text-[8px] sm:text-[10px] font-bold text-primary-foreground shadow-lg"
                   style={{ zIndex: 5 - i }}
                 >
                   {initials}
                 </motion.div>
               ))}
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground">
               Trusted by <span className="text-foreground font-bold">50,000+</span> people worldwide
             </p>
           </motion.div>
@@ -399,7 +399,7 @@ export default function LandingPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2.5 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+          className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 hidden sm:flex"
         >
           <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50">Scroll</span>
           <motion.div animate={{ y: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
