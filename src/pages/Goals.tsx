@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Plus, Target, TrendingUp, Sparkles } from "lucide-react";
 import { goals as initialGoals, type Goal } from "@/lib/mock-data";
 import { GoalProgressCard } from "@/components/GoalProgressCard";
+import { GoalBarChart } from "@/components/GoalBarChart";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -23,6 +24,7 @@ export default function Goals() {
 
   const totalSaved = goals.reduce((s, g) => s + g.saved, 0);
   const totalTarget = goals.reduce((s, g) => s + g.target, 0);
+  const goalBarData = goals.map(g => ({ name: g.name.split(" ").slice(0, 2).join(" "), saved: g.saved, target: g.target }));
 
   const handleAdd = () => {
     if (!form.name || !form.target || !form.deadline) return;
@@ -50,7 +52,7 @@ export default function Goals() {
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button className="gap-2">
+            <Button className="gap-2 bg-primary text-primary-foreground hover:bg-teal-light">
               <Plus className="h-4 w-4" /> New Goal
             </Button>
           </DialogTrigger>
@@ -97,7 +99,7 @@ export default function Goals() {
                   </Select>
                 </div>
               </div>
-              <Button onClick={handleAdd} className="w-full">Create Goal</Button>
+              <Button onClick={handleAdd} className="w-full bg-primary text-primary-foreground hover:bg-teal-light">Create Goal</Button>
             </div>
           </DialogContent>
         </Dialog>
@@ -105,46 +107,51 @@ export default function Goals() {
 
       {/* Summary */}
       <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="glass-card-hover p-5 glow-blue">
+        <div className="stat-card glow-teal">
           <div className="flex items-center gap-2 mb-2">
             <Target className="h-4 w-4 text-primary" />
-            <span className="text-xs text-muted-foreground uppercase tracking-wider">Active Goals</span>
+            <span className="text-[11px] text-muted-foreground uppercase tracking-wider">Active Goals</span>
           </div>
           <p className="font-display text-2xl font-bold text-foreground">{goals.length}</p>
         </div>
-        <div className="glass-card-hover p-5 glow-green">
+        <div className="stat-card glow-gold">
           <div className="flex items-center gap-2 mb-2">
-            <TrendingUp className="h-4 w-4 text-accent" />
-            <span className="text-xs text-muted-foreground uppercase tracking-wider">Total Saved</span>
+            <TrendingUp className="h-4 w-4 text-secondary" />
+            <span className="text-[11px] text-muted-foreground uppercase tracking-wider">Total Saved</span>
           </div>
           <p className="font-display text-2xl font-bold text-foreground">${totalSaved.toLocaleString()}</p>
         </div>
-        <div className="glass-card-hover p-5 glow-purple">
+        <div className="stat-card glow-lavender">
           <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="h-4 w-4 text-secondary" />
-            <span className="text-xs text-muted-foreground uppercase tracking-wider">Overall Progress</span>
+            <Sparkles className="h-4 w-4 text-lavender" />
+            <span className="text-[11px] text-muted-foreground uppercase tracking-wider">Overall Progress</span>
           </div>
           <p className="font-display text-2xl font-bold text-foreground">{Math.round((totalSaved / totalTarget) * 100)}%</p>
         </div>
       </motion.div>
 
-      {/* Goals Grid */}
-      <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {goals.map((goal) => (
-          <GoalProgressCard key={goal.id} goal={goal} />
-        ))}
-      </motion.div>
+      {/* Goals Grid + Chart */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {goals.map((goal) => (
+            <GoalProgressCard key={goal.id} goal={goal} />
+          ))}
+        </motion.div>
+        <motion.div variants={item}>
+          <GoalBarChart data={goalBarData} />
+        </motion.div>
+      </div>
 
       {/* AI Tip */}
-      <motion.div variants={item} className="glass-card p-5 border-primary/20 glow-blue">
+      <motion.div variants={item} className="glass-card p-5 border-primary/20 glow-teal">
         <div className="flex items-start gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/15 shrink-0 mt-0.5">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 shrink-0 mt-0.5">
             <Sparkles className="h-4 w-4 text-primary" />
           </div>
           <div>
             <h3 className="text-sm font-semibold text-foreground mb-1">AI Recommendation</h3>
-            <p className="text-sm text-muted-foreground">
-              If you reduce food delivery spending by <span className="text-foreground font-medium">$45/week</span>, you'll reach your Singapore trip goal <span className="text-accent font-medium">2 weeks earlier</span>. Your current goal probability is <span className="text-primary font-medium">78%</span>.
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              If you reduce food delivery spending by <span className="text-foreground font-medium">$45/week</span>, you'll reach your Singapore trip goal <span className="text-primary font-medium">2 weeks earlier</span>. Your current goal probability is <span className="text-secondary font-medium">78%</span>.
             </p>
           </div>
         </div>

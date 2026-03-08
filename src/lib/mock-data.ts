@@ -57,11 +57,11 @@ export const subscriptions: Subscription[] = [
 ];
 
 export const spendingByCategory = [
-  { category: "Food", amount: 580, color: "hsl(217, 91%, 60%)" },
-  { category: "Shopping", amount: 420, color: "hsl(263, 70%, 50%)" },
-  { category: "Transport", amount: 210, color: "hsl(142, 71%, 45%)" },
-  { category: "Entertainment", amount: 180, color: "hsl(38, 92%, 50%)" },
-  { category: "Bills", amount: 340, color: "hsl(0, 84%, 60%)" },
+  { category: "Food", amount: 580, color: "hsl(174, 72%, 46%)" },
+  { category: "Shopping", amount: 420, color: "hsl(38, 95%, 55%)" },
+  { category: "Transport", amount: 210, color: "hsl(258, 60%, 62%)" },
+  { category: "Entertainment", amount: 180, color: "hsl(12, 80%, 58%)" },
+  { category: "Bills", amount: 340, color: "hsl(200, 80%, 50%)" },
 ];
 
 export const weeklySpending = [

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { CreditCard, AlertTriangle, Sparkles } from "lucide-react";
+import { CreditCard, Sparkles } from "lucide-react";
 import { subscriptions } from "@/lib/mock-data";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } };
@@ -17,16 +17,16 @@ export default function Subscriptions() {
       </motion.div>
 
       <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="glass-card-hover p-5 glow-blue">
-          <span className="text-xs text-muted-foreground uppercase tracking-wider">Monthly Cost</span>
+        <div className="stat-card glow-teal">
+          <span className="text-[11px] text-muted-foreground uppercase tracking-wider">Monthly Cost</span>
           <p className="font-display text-2xl font-bold text-foreground mt-1">${monthly.toFixed(2)}</p>
         </div>
-        <div className="glass-card-hover p-5 glow-purple">
-          <span className="text-xs text-muted-foreground uppercase tracking-wider">Yearly Cost</span>
+        <div className="stat-card glow-gold">
+          <span className="text-[11px] text-muted-foreground uppercase tracking-wider">Yearly Cost</span>
           <p className="font-display text-2xl font-bold text-foreground mt-1">${yearly.toFixed(2)}</p>
         </div>
-        <div className="glass-card-hover p-5 glow-green">
-          <span className="text-xs text-muted-foreground uppercase tracking-wider">Active Subs</span>
+        <div className="stat-card glow-lavender">
+          <span className="text-[11px] text-muted-foreground uppercase tracking-wider">Active Subs</span>
           <p className="font-display text-2xl font-bold text-foreground mt-1">{subscriptions.length}</p>
         </div>
       </motion.div>
@@ -48,16 +48,15 @@ export default function Subscriptions() {
         ))}
       </motion.div>
 
-      {/* AI Suggestion */}
-      <motion.div variants={item} className="glass-card p-5 border-secondary/20 glow-purple">
+      <motion.div variants={item} className="glass-card p-5 border-secondary/20 glow-gold">
         <div className="flex items-start gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary/15 shrink-0">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-secondary/10 shrink-0">
             <Sparkles className="h-4 w-4 text-secondary" />
           </div>
           <div>
             <h3 className="text-sm font-semibold text-foreground mb-1">Optimization Tip</h3>
-            <p className="text-sm text-muted-foreground">
-              You're paying for <span className="text-foreground font-medium">2 streaming services</span>. Cancelling one could save <span className="text-accent font-medium">$15.99/month ($191.88/year)</span>.
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              You're paying for <span className="text-foreground font-medium">2 streaming services</span>. Cancelling one could save <span className="text-primary font-medium">$15.99/month ($191.88/year)</span>.
             </p>
           </div>
         </div>
