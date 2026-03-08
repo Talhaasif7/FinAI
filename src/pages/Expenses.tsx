@@ -30,7 +30,7 @@ interface Expense {
 }
 
 export default function Expenses() {
-  const { user } = useAuth();
+  const { user, subscription } = useAuth();
   const { toast } = useToast();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
