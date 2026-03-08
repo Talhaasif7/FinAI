@@ -19,6 +19,7 @@ import Insights from "./pages/Insights";
 import Assistant from "./pages/Assistant";
 import Gamification from "./pages/Gamification";
 import FinancialHealth from "./pages/FinancialHealth";
+import FamilyBudget from "./pages/FamilyBudget";
 import SettingsPage from "./pages/SettingsPage";
 import NotFound from "./pages/NotFound";
 
@@ -46,6 +47,7 @@ const App = () => (
               <Route path="/assistant" element={<Assistant />} />
               <Route path="/gamification" element={<Gamification />} />
               <Route path="/health" element={<FinancialHealth />} />
+              <Route path="/family" element={<FamilyBudget />} />
               <Route path="/settings" element={<SettingsPage />} />
             </Route>
             <Route path="*" element={<NotFound />} />
