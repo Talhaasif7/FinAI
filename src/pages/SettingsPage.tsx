@@ -244,7 +244,12 @@ export default function SettingsPage() {
               <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                 <Avatar key={avatarUrl || "no-avatar"} className="h-16 w-16 border-2 border-border">
                   {avatarUrl ? (
-                    <img src={`${avatarUrl}${avatarUrl.includes('?') ? '&' : '?'}t=${Date.now()}`} alt="Profile" className="aspect-square h-full w-full object-cover" referrerPolicy="no-referrer" />
+                    <AvatarImage
+                      src={withCacheBuster(avatarUrl, avatarCacheKey)}
+                      alt="Profile"
+                      className="aspect-square h-full w-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
                   ) : (
                     <AvatarFallback className="bg-primary/10 text-primary font-semibold text-lg">
                       {initials}
