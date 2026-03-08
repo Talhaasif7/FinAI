@@ -20,6 +20,9 @@ export default function SettingsPage() {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Avatar URL input
+  const [avatarUrlInput, setAvatarUrlInput] = useState("");
+
   // Email change
   const [newEmail, setNewEmail] = useState("");
   const [emailLoading, setEmailLoading] = useState(false);
