@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Newspaper, Loader2, Sparkles } from "lucide-react";
+import { Newspaper, Loader2, Sparkles, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ const moodEmojis: Record<string, string> = {
 };
 
 export function WeeklyReportCard() {
-  const { user } = useAuth();
+  const { user, subscription } = useAuth();
   const [report, setReport] = useState<WeeklyReport | null>(null);
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(false);
