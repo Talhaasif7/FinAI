@@ -106,12 +106,45 @@ export default function Dashboard() {
           </h1>
           <p className="text-muted-foreground text-sm mt-0.5">Here's your financial overview</p>
         </div>
-        {goalPct > 0 && (
-          <div className="neon-card px-3.5 py-2 flex items-center gap-2">
-            <Sparkles className="h-3.5 w-3.5 text-primary" />
-            <span className="text-[11px] text-foreground font-medium">You're {goalPct}% toward your goals!</span>
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          {/* Export Report — Pro/Team only */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="gap-2 border-primary/30 text-primary hover:bg-primary/10">
+                <Download className="h-4 w-4" /> Export
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-card border-border">
+              {subscription.tier === "free" ? (
+                <DropdownMenuItem className="gap-2 text-muted-foreground cursor-not-allowed" disabled>
+                  <Lock className="h-4 w-4" /> Upgrade to Pro to export
+                </DropdownMenuItem>
+              ) : (
+                <>
+                  <DropdownMenuItem onClick={() => { exportExpensesToCSV(allExpenses); toast({ title: "CSV downloaded!" }); }} className="gap-2 cursor-pointer">
+                    <Download className="h-4 w-4" /> Expenses CSV
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => exportExpensesToPDF(allExpenses)} className="gap-2 cursor-pointer">
+                    <FileText className="h-4 w-4" /> Expenses PDF
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => exportDashboardPDF({
+                    totalSaved, totalExpenses, goalCount: goals.length, goalPct,
+                    spendingByCategory, topGoals: goals.slice(0, 6).map(g => ({ name: g.name, saved: g.saved, target: g.target })),
+                  })} className="gap-2 cursor-pointer">
+                    <FileText className="h-4 w-4" /> Full Summary PDF
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {goalPct > 0 && (
+            <div className="neon-card px-3.5 py-2 flex items-center gap-2">
+              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              <span className="text-[11px] text-foreground font-medium">You're {goalPct}% toward your goals!</span>
+            </div>
+          )}
+        </div>
       </motion.div>
 
       <motion.div variants={item}>
