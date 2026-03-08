@@ -18,12 +18,12 @@ const fadeUp = {
 };
 
 const features = [
-  { icon: Target, title: "Smart Goals", desc: "AI calculates weekly savings, spending limits, and goal probability in real-time.", color: "from-teal to-teal-light" },
-  { icon: Brain, title: "AI Financial Coach", desc: "Personal assistant that analyzes spending patterns and recommends optimizations.", color: "from-lavender to-lavender" },
-  { icon: BarChart3, title: "Deep Insights", desc: "Understand your habits with AI-powered analytics, predictions, and spending scores.", color: "from-gold to-gold-light" },
-  { icon: CreditCard, title: "Subscription Tracker", desc: "Detect and manage recurring payments. AI suggests which subscriptions to cancel.", color: "from-coral to-coral" },
-  { icon: TrendingUp, title: "Predictive Forecasts", desc: "Cash flow predictions and goal success probability based on your actual habits.", color: "from-teal to-teal-light" },
-  { icon: Shield, title: "Bank-Grade Security", desc: "End-to-end encryption, 2FA, and full compliance with financial regulations.", color: "from-lavender to-lavender" },
+  { icon: Target, title: "Smart Goals", desc: "AI calculates weekly savings, spending limits, and goal probability in real-time.", color: "from-neon-green to-neon-green-light" },
+  { icon: Brain, title: "AI Financial Coach", desc: "Personal assistant that analyzes spending patterns and recommends optimizations.", color: "from-electric-purple to-electric-purple-light" },
+  { icon: BarChart3, title: "Deep Insights", desc: "Understand your habits with AI-powered analytics, predictions, and spending scores.", color: "from-amber to-amber-light" },
+  { icon: CreditCard, title: "Subscription Tracker", desc: "Detect and manage recurring payments. AI suggests which subscriptions to cancel.", color: "from-magenta to-magenta" },
+  { icon: TrendingUp, title: "Predictive Forecasts", desc: "Cash flow predictions and goal success probability based on your actual habits.", color: "from-cyan to-cyan" },
+  { icon: Shield, title: "Bank-Grade Security", desc: "End-to-end encryption, 2FA, and full compliance with financial regulations.", color: "from-neon-green to-electric-purple" },
 ];
 
 const stats = [
@@ -71,7 +71,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <Link to="/dashboard">
-              <Button size="sm" className="gap-2 bg-primary text-primary-foreground hover:bg-teal-light rounded-full px-5">
+              <Button size="sm" className="gap-2 bg-primary text-primary-foreground hover:bg-neon-green-light rounded-full px-5">
                 Get Started <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             </Link>
@@ -134,7 +134,7 @@ export default function LandingPage() {
             className="flex flex-col sm:flex-row items-center gap-4 justify-center"
           >
             <Link to="/dashboard">
-              <Button size="lg" className="gap-2 px-10 text-base bg-primary text-primary-foreground hover:bg-teal-light rounded-full shadow-lg glow-teal h-13">
+              <Button size="lg" className="gap-2 px-10 text-base bg-primary text-primary-foreground hover:bg-neon-green-light rounded-full shadow-lg glow-green h-13">
                 Start Free Today <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -154,7 +154,7 @@ export default function LandingPage() {
             className="mt-20 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto"
           >
             {stats.map((stat) => (
-              <div key={stat.label} className="glass-card p-4 rounded-2xl text-center group hover:glow-teal transition-all duration-300">
+              <div key={stat.label} className="glass-card p-4 rounded-2xl text-center group hover:glow-green transition-all duration-300">
                 <stat.icon className="h-4 w-4 mx-auto mb-2 text-primary opacity-60 group-hover:opacity-100 transition-opacity" />
                 <p className="font-display text-xl md:text-2xl font-bold gradient-text-primary">{stat.value}</p>
                 <p className="text-[10px] uppercase tracking-widest text-muted-foreground mt-1">{stat.label}</p>
@@ -185,7 +185,7 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
-            className="relative rounded-3xl overflow-hidden border border-border/40 glow-teal"
+            className="relative rounded-3xl overflow-hidden border border-border/40 glow-green"
           >
             <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent z-10 pointer-events-none" />
             <video
@@ -194,7 +194,7 @@ export default function LandingPage() {
               muted
               playsInline
               className="w-full h-auto"
-              src="/videos/Design.mp4"
+              src="/videos/Design-2.mp4"
             />
           </motion.div>
         </div>
@@ -275,9 +275,9 @@ export default function LandingPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
               {[
-                { step: "01", icon: Smartphone, title: "Set Your Goals", desc: "Tell us your dreams — travel, gadgets, investments. We create a personalized savings plan.", gradient: "from-teal to-teal-light" },
-                { step: "02", icon: Zap, title: "AI Tracks & Optimizes", desc: "Our AI categorizes spending, detects patterns, and finds savings opportunities automatically.", gradient: "from-gold to-gold-light" },
-                { step: "03", icon: Globe, title: "Achieve Dreams", desc: "Watch real-time progress with predictive forecasts. Celebrate milestones along the way.", gradient: "from-lavender to-lavender" },
+                { step: "01", icon: Smartphone, title: "Set Your Goals", desc: "Tell us your dreams — travel, gadgets, investments. We create a personalized savings plan.", gradient: "from-neon-green to-neon-green-light" },
+                { step: "02", icon: Zap, title: "AI Tracks & Optimizes", desc: "Our AI categorizes spending, detects patterns, and finds savings opportunities automatically.", gradient: "from-amber to-amber-light" },
+                { step: "03", icon: Globe, title: "Achieve Dreams", desc: "Watch real-time progress with predictive forecasts. Celebrate milestones along the way.", gradient: "from-electric-purple to-electric-purple-light" },
               ].map((s, i) => (
                 <motion.div
                   key={s.step}
@@ -314,7 +314,7 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <span className="text-xs uppercase tracking-[0.3em] text-lavender font-semibold">Reviews</span>
+            <span className="text-xs uppercase tracking-[0.3em] text-electric-purple font-semibold">Reviews</span>
             <h2 className="font-display text-3xl md:text-6xl font-bold mt-3 mb-4 text-foreground">
               Loved by <span className="gradient-text-hero">thousands</span>
             </h2>
@@ -328,16 +328,16 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.7 }}
-                className="glass-card p-7 rounded-2xl group hover:glow-lavender transition-all duration-300"
+                className="glass-card p-7 rounded-2xl group hover:glow-purple transition-all duration-300"
               >
                 <div className="flex items-center gap-1 mb-4">
                   {Array.from({ length: 5 }).map((_, j) => (
-                    <Star key={j} className="h-4 w-4 text-gold fill-gold" />
+                    <Star key={j} className="h-4 w-4 text-amber fill-amber" />
                   ))}
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-6">"{t.text}"</p>
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-lavender flex items-center justify-center text-xs font-bold text-primary-foreground">
+                  <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-electric-purple flex items-center justify-center text-xs font-bold text-primary-foreground">
                     {t.avatar}
                   </div>
                   <div>
@@ -361,7 +361,7 @@ export default function LandingPage() {
           className="max-w-4xl mx-auto relative overflow-hidden rounded-3xl"
         >
           {/* Background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-lavender/10" />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-electric-purple/10" />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-60 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent" />
 
           <div className="relative z-10 glass-surface p-12 md:p-20 text-center rounded-3xl border-border/30">
@@ -379,7 +379,7 @@ export default function LandingPage() {
                 Join 50,000+ users saving smarter with AI. Start free — no credit card required.
               </p>
               <Link to="/dashboard">
-                <Button size="lg" className="gap-2 px-12 text-base bg-primary text-primary-foreground hover:bg-teal-light glow-teal rounded-full h-13">
+                <Button size="lg" className="gap-2 px-12 text-base bg-primary text-primary-foreground hover:bg-neon-green-light glow-green rounded-full h-13">
                   Get Started Free <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
@@ -392,7 +392,7 @@ export default function LandingPage() {
       <footer className="border-t border-border/40 py-12 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <img src={logoImg} alt="FinAI" className="h-7 w-7 rounded-md" />
+            <img src={logoImg} alt="FinAI" className="h-7 w-7 rounded-lg" />
             <span className="font-display text-sm font-bold gradient-text-primary">FinAI</span>
           </div>
           <div className="flex items-center gap-8">
