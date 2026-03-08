@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { motion } from "framer-motion";
 import { Lock, Crown, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,7 +12,7 @@ interface UpgradePromptProps {
   requiredTier: "pro" | "team";
 }
 
-export function UpgradePrompt({ feature, description, requiredTier }: UpgradePromptProps) {
+export const UpgradePrompt = forwardRef<HTMLDivElement, UpgradePromptProps>(function UpgradePrompt({ feature, description, requiredTier }, ref) {
   const { toast } = useToast();
   const tier = STRIPE_TIERS[requiredTier];
 
@@ -29,6 +30,7 @@ export function UpgradePrompt({ feature, description, requiredTier }: UpgradePro
 
   return (
     <motion.div
+      ref={ref}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4"
@@ -54,7 +56,7 @@ export function UpgradePrompt({ feature, description, requiredTier }: UpgradePro
       </div>
     </motion.div>
   );
-}
+});
 
 // Small inline badge for features that are partially locked
 export function UpgradeBadge({ requiredTier, onClick }: { requiredTier: "pro" | "team"; onClick?: () => void }) {

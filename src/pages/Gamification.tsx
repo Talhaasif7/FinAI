@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, forwardRef } from "react";
 import { motion } from "framer-motion";
 import { Flame, Trophy, Target, Zap, Medal, Star, Crown, Shield, Award } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,7 +28,7 @@ const CHALLENGES = [
   { id: "savings_100", title: "$100 Savings Sprint", description: "Save $100 in one week", reward: "Boost goals", emoji: "💰", days: 7 },
 ];
 
-export default function Gamification() {
+const Gamification = forwardRef<HTMLDivElement>(function Gamification(_props, ref) {
   const { user } = useAuth();
   const { toast } = useToast();
   const [streak, setStreak] = useState({ current_streak: 0, longest_streak: 0 });
@@ -94,7 +94,7 @@ export default function Gamification() {
   if (loading) return <div className="flex items-center justify-center h-64"><div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin" /></div>;
 
   return (
-    <motion.div variants={container} initial="hidden" animate="show" className="space-y-6 max-w-5xl">
+    <motion.div ref={ref} variants={container} initial="hidden" animate="show" className="space-y-6 max-w-5xl">
       <motion.div variants={item}>
         <h1 className="font-display text-2xl font-bold text-foreground">Achievements & Challenges</h1>
         <p className="text-muted-foreground text-sm mt-1">Make saving money fun 🎮</p>
@@ -165,4 +165,6 @@ export default function Gamification() {
       </motion.div>
     </motion.div>
   );
-}
+});
+
+export default Gamification;
