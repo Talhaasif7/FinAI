@@ -95,7 +95,7 @@ export default function Dashboard() {
   ];
 
   const goalBarData = goals.map(g => ({ name: g.name.split(" ").slice(0, 2).join(" "), saved: g.saved, target: g.target }));
-  const displayName = profile?.display_name || user?.email?.split("@")[0] || "there";
+  const displayName = profile?.display_name || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "there";
 
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-5 max-w-7xl">
