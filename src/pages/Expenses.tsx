@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Plus, Search, Filter } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { expenses as initialExpenses, categoryIcons, type Expense } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,7 +51,7 @@ export default function Expenses() {
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button className="gap-2"><Plus className="h-4 w-4" /> Add Expense</Button>
+            <Button className="gap-2 bg-primary text-primary-foreground hover:bg-teal-light"><Plus className="h-4 w-4" /> Add Expense</Button>
           </DialogTrigger>
           <DialogContent className="bg-card border-border">
             <DialogHeader>
@@ -100,17 +100,16 @@ export default function Expenses() {
                 <Label>Note (optional)</Label>
                 <Input placeholder="Add a note..." value={form.note} onChange={e => setForm({...form, note: e.target.value})} className="mt-1" />
               </div>
-              <Button onClick={handleAdd} className="w-full">Add Expense</Button>
+              <Button onClick={handleAdd} className="w-full bg-primary text-primary-foreground hover:bg-teal-light">Add Expense</Button>
             </div>
           </DialogContent>
         </Dialog>
       </motion.div>
 
-      {/* Summary + Search */}
       <motion.div variants={item} className="flex items-center gap-4">
-        <div className="glass-card px-5 py-3">
-          <span className="text-xs text-muted-foreground">This Month</span>
-          <p className="font-display text-xl font-bold text-foreground">${totalThisMonth.toFixed(2)}</p>
+        <div className="stat-card glow-teal min-w-[160px]">
+          <span className="text-[11px] text-muted-foreground uppercase tracking-wider">This Month</span>
+          <p className="font-display text-xl font-bold text-foreground mt-1">${totalThisMonth.toFixed(2)}</p>
         </div>
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -123,12 +122,11 @@ export default function Expenses() {
         </div>
       </motion.div>
 
-      {/* Expense List */}
       <motion.div variants={item} className="glass-card divide-y divide-border/30">
         {filtered.map((exp) => (
           <div key={exp.id} className="flex items-center justify-between px-5 py-3.5 hover:bg-muted/20 transition-colors">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted/50 text-base">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted/30 text-base">
                 {categoryIcons[exp.category] || "📦"}
               </div>
               <div>
