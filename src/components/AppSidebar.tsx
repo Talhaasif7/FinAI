@@ -30,19 +30,19 @@ export function AppSidebar({ onNavigate }: Props) {
   return (
     <aside className="h-screen w-64 border-r border-border bg-sidebar flex flex-col">
       {/* Logo */}
-      <div className="flex items-center justify-between px-6 py-5 border-b border-border">
-        <div className="flex items-center gap-3">
-          <img src={logoImg} alt="FinAI" className="h-9 w-9 rounded-xl" />
+      <div className="flex items-center justify-between px-5 py-5 border-b border-border">
+        <div className="flex items-center gap-2.5">
+          <img src={logoImg} alt="FinAI" className="h-8 w-8 rounded-xl" />
           <div>
-            <h1 className="font-display text-lg font-bold gradient-text-primary">FinAI</h1>
-            <p className="text-[10px] text-muted-foreground tracking-wider uppercase">Smart Finance</p>
+            <h1 className="font-display text-base font-bold gradient-text-primary leading-tight">FinAI</h1>
+            <p className="text-[9px] text-muted-foreground tracking-[0.2em] uppercase">Smart Finance</p>
           </div>
         </div>
         <ThemeToggle />
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+      <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
         {navItems.map((navItem) => {
           const isActive = location.pathname === navItem.to;
           return (
@@ -51,16 +51,19 @@ export function AppSidebar({ onNavigate }: Props) {
               to={navItem.to}
               onClick={onNavigate}
               className={cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium transition-all duration-200 group",
                 isActive
-                  ? "bg-primary/10 text-primary border border-primary/20 shadow-sm"
+                  ? "bg-primary/10 text-primary shadow-sm"
                   : "text-sidebar-foreground hover:text-foreground hover:bg-muted/40"
               )}
             >
-              <navItem.icon className={cn("h-[18px] w-[18px]", isActive && "drop-shadow-sm")} />
+              <navItem.icon className={cn(
+                "h-[17px] w-[17px] transition-colors",
+                isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
+              )} />
               {navItem.label}
               {isActive && (
-                <div className="ml-auto h-1.5 w-1.5 rounded-full bg-primary animate-pulse-glow" />
+                <div className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" />
               )}
             </NavLink>
           );
@@ -68,36 +71,36 @@ export function AppSidebar({ onNavigate }: Props) {
       </nav>
 
       {/* Streak card */}
-      <div className="mx-3 mb-3 neon-card p-4">
-        <div className="flex items-center gap-2 mb-2">
-          <Flame className="h-4 w-4 text-amber" />
-          <span className="text-xs font-semibold text-foreground">Track daily! 🔥</span>
+      <div className="mx-3 mb-3 neon-card p-3.5">
+        <div className="flex items-center gap-2 mb-1.5">
+          <Flame className="h-3.5 w-3.5 text-amber" />
+          <span className="text-[11px] font-semibold text-foreground">Daily streak 🔥</span>
         </div>
-        <p className="text-[11px] text-muted-foreground leading-relaxed">Add an expense to grow your streak.</p>
-        <div className="mt-2.5 h-1.5 rounded-full bg-muted overflow-hidden">
-          <div className="h-full w-[60%] rounded-full animate-pulse-glow" style={{ background: "var(--gradient-gold)" }} />
+        <p className="text-[10px] text-muted-foreground leading-relaxed">Track an expense to keep your streak alive.</p>
+        <div className="mt-2 h-1 rounded-full bg-muted overflow-hidden">
+          <div className="h-full w-[60%] rounded-full" style={{ background: "var(--gradient-gold)" }} />
         </div>
       </div>
 
       {/* Bottom */}
-      <div className="px-3 pb-4 space-y-1">
+      <div className="px-3 pb-3 space-y-0.5 border-t border-border pt-2">
         <NavLink
           to="/settings"
           onClick={onNavigate}
           className={cn(
-            "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-sidebar-foreground hover:text-foreground hover:bg-muted/40 transition-colors",
-            location.pathname === "/settings" && "bg-primary/10 text-primary border border-primary/20"
+            "flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] text-sidebar-foreground hover:text-foreground hover:bg-muted/40 transition-colors",
+            location.pathname === "/settings" && "bg-primary/10 text-primary"
           )}
         >
-          <Settings className="h-[18px] w-[18px]" />
+          <Settings className="h-[17px] w-[17px]" />
           Settings
         </NavLink>
         {user && (
           <button
             onClick={signOut}
-            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-sidebar-foreground hover:text-destructive hover:bg-destructive/10 transition-colors w-full"
+            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] text-sidebar-foreground hover:text-destructive hover:bg-destructive/10 transition-colors w-full"
           >
-            <LogOut className="h-[18px] w-[18px]" />
+            <LogOut className="h-[17px] w-[17px]" />
             Sign Out
           </button>
         )}

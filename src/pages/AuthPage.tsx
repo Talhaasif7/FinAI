@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Eye, EyeOff, Mail, Lock, User, ArrowRight } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Sparkles } from "lucide-react";
 import logoImg from "@/assets/logo.png";
 
 export default function AuthPage() {
@@ -69,98 +69,137 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
-        <div className="glass-card p-8">
-          <div className="flex items-center gap-3 mb-8 justify-center">
-            <img src={logoImg} alt="FinAI" className="h-10 w-10 rounded-lg" />
-            <div>
-              <h1 className="font-display text-xl font-bold gradient-text-primary">FinAI</h1>
-              <p className="text-[10px] text-muted-foreground tracking-wider uppercase">Smart Finance</p>
-            </div>
+    <div className="min-h-screen flex bg-background relative overflow-hidden">
+      {/* Ambient background effects */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-primary/[0.03] blur-3xl" />
+        <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-secondary/[0.03] blur-3xl" />
+      </div>
+
+      {/* Left branding panel - hidden on mobile */}
+      <div className="hidden lg:flex flex-col justify-center items-center flex-1 relative px-12">
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="max-w-md"
+        >
+          <div className="flex items-center gap-3 mb-8">
+            <img src={logoImg} alt="FinAI" className="h-12 w-12 rounded-2xl" />
+            <span className="font-display text-2xl font-bold gradient-text-primary">FinAI</span>
           </div>
-
-          <h2 className="font-display text-xl font-bold text-foreground text-center mb-1">
-            {forgotMode ? "Reset Password" : isLogin ? "Welcome back" : "Create account"}
+          <h2 className="font-display text-4xl font-bold text-foreground leading-tight mb-4">
+            Your money,<br />
+            <span className="gradient-text-hero">reimagined.</span>
           </h2>
-          <p className="text-sm text-muted-foreground text-center mb-6">
-            {forgotMode ? "Enter your email to receive a reset link" : isLogin ? "Sign in to your financial dashboard" : "Start tracking your finances today"}
+          <p className="text-muted-foreground leading-relaxed">
+            AI-powered financial intelligence that tracks spending, predicts cash flow, and helps you achieve your goals faster.
           </p>
-
-          {!forgotMode && (
-            <>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleGoogleSignIn}
-                disabled={loading}
-                className="w-full gap-3 mb-4 h-11"
-              >
-                <svg className="h-5 w-5" viewBox="0 0 24 24">
-                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
-                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
-                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-                </svg>
-                Continue with Google
-              </Button>
-
-              <div className="relative mb-4">
-                <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-border" /></div>
-                <div className="relative flex justify-center text-xs uppercase"><span className="bg-card px-2 text-muted-foreground">or</span></div>
-              </div>
-            </>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {!isLogin && !forgotMode && (
-              <div>
-                <Label>Full Name</Label>
-                <div className="relative mt-1">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} className="pl-10" required />
+          <div className="flex items-center gap-3 mt-8">
+            <div className="flex -space-x-2">
+              {["SK", "MT", "AR"].map((initials) => (
+                <div key={initials} className="h-8 w-8 rounded-full border-2 border-background bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-[10px] font-bold text-primary-foreground">
+                  {initials}
                 </div>
-              </div>
-            )}
-            <div>
-              <Label>Email</Label>
-              <div className="relative mt-1">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} className="pl-10" required />
-              </div>
+              ))}
             </div>
+            <p className="text-xs text-muted-foreground">Trusted by <span className="text-foreground font-medium">50K+</span> users</p>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Auth form */}
+      <div className="flex-1 flex items-center justify-center p-6 relative z-10">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="w-full max-w-[400px]">
+          <div className="glass-card p-7">
+            {/* Mobile logo */}
+            <div className="flex items-center gap-2.5 mb-6 justify-center lg:hidden">
+              <img src={logoImg} alt="FinAI" className="h-9 w-9 rounded-xl" />
+              <span className="font-display text-lg font-bold gradient-text-primary">FinAI</span>
+            </div>
+
+            <h2 className="font-display text-xl font-bold text-foreground text-center mb-1">
+              {forgotMode ? "Reset Password" : isLogin ? "Welcome back" : "Create account"}
+            </h2>
+            <p className="text-sm text-muted-foreground text-center mb-6">
+              {forgotMode ? "Enter your email to receive a reset link" : isLogin ? "Sign in to your financial dashboard" : "Start tracking your finances today"}
+            </p>
+
             {!forgotMode && (
+              <>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleGoogleSignIn}
+                  disabled={loading}
+                  className="w-full gap-3 mb-4 h-11 rounded-xl"
+                >
+                  <svg className="h-5 w-5" viewBox="0 0 24 24">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                  </svg>
+                  Continue with Google
+                </Button>
+
+                <div className="relative mb-4">
+                  <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-border" /></div>
+                  <div className="relative flex justify-center text-xs uppercase"><span className="bg-card px-2 text-muted-foreground">or</span></div>
+                </div>
+              </>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-3.5">
+              {!isLogin && !forgotMode && (
+                <div>
+                  <Label className="text-xs">Full Name</Label>
+                  <div className="relative mt-1">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} className="pl-10 h-10 rounded-xl" required />
+                  </div>
+                </div>
+              )}
               <div>
-                <Label>Password</Label>
+                <Label className="text-xs">Email</Label>
                 <div className="relative mt-1">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input type={showPw ? "text" : "password"} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="pl-10 pr-10" required minLength={6} />
-                  <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
-                    {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} className="pl-10 h-10 rounded-xl" required />
                 </div>
               </div>
-            )}
-            {isLogin && !forgotMode && (
-              <button type="button" onClick={() => setForgotMode(true)} className="text-xs text-primary hover:underline">Forgot password?</button>
-            )}
-            <Button type="submit" disabled={loading} className="w-full gap-2 bg-primary text-primary-foreground hover:bg-teal-light">
-              {loading ? "Loading..." : forgotMode ? "Send Reset Link" : isLogin ? "Sign In" : "Create Account"}
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </form>
+              {!forgotMode && (
+                <div>
+                  <Label className="text-xs">Password</Label>
+                  <div className="relative mt-1">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input type={showPw ? "text" : "password"} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="pl-10 pr-10 h-10 rounded-xl" required minLength={6} />
+                    <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                      {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
+                </div>
+              )}
+              {isLogin && !forgotMode && (
+                <button type="button" onClick={() => setForgotMode(true)} className="text-xs text-primary hover:underline">Forgot password?</button>
+              )}
+              <Button type="submit" disabled={loading} className="w-full gap-2 h-10 rounded-xl bg-primary text-primary-foreground hover:bg-neon-green-light">
+                {loading ? "Loading..." : forgotMode ? "Send Reset Link" : isLogin ? "Sign In" : "Create Account"}
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </form>
 
-          <p className="text-center text-sm text-muted-foreground mt-6">
-            {forgotMode ? (
-              <button onClick={() => setForgotMode(false)} className="text-primary hover:underline">Back to sign in</button>
-            ) : isLogin ? (
-              <>Don't have an account?{" "}<button onClick={() => setIsLogin(false)} className="text-primary hover:underline font-medium">Sign up</button></>
-            ) : (
-              <>Already have an account?{" "}<button onClick={() => setIsLogin(true)} className="text-primary hover:underline font-medium">Sign in</button></>
-            )}
-          </p>
-        </div>
-      </motion.div>
+            <p className="text-center text-sm text-muted-foreground mt-5">
+              {forgotMode ? (
+                <button onClick={() => setForgotMode(false)} className="text-primary hover:underline">Back to sign in</button>
+              ) : isLogin ? (
+                <>Don't have an account?{" "}<button onClick={() => setIsLogin(false)} className="text-primary hover:underline font-medium">Sign up</button></>
+              ) : (
+                <>Already have an account?{" "}<button onClick={() => setIsLogin(true)} className="text-primary hover:underline font-medium">Sign in</button></>
+              )}
+            </p>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 }
