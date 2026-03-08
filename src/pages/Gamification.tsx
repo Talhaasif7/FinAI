@@ -94,7 +94,7 @@ const Gamification = forwardRef<HTMLDivElement>(function Gamification(_props, re
   if (loading) return <div className="flex items-center justify-center h-64"><div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin" /></div>;
 
   return (
-    <motion.div variants={container} initial="hidden" animate="show" className="space-y-6 max-w-5xl">
+    <motion.div ref={ref} variants={container} initial="hidden" animate="show" className="space-y-6 max-w-5xl">
       <motion.div variants={item}>
         <h1 className="font-display text-2xl font-bold text-foreground">Achievements & Challenges</h1>
         <p className="text-muted-foreground text-sm mt-1">Make saving money fun 🎮</p>
