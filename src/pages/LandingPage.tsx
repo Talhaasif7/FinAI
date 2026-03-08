@@ -319,7 +319,7 @@ export default function LandingPage() {
           >
             <span className="text-foreground block text-echo" data-text="Your Money,">Your Money,</span>
             <span className="gradient-text-hero block text-echo" data-text="Reimagined.">
-              <CurvyHeading variant="green">Reimagined.</CurvyHeading>
+              <span className="curvy-underline">Reimagined.</span>
             </span>
           </motion.h1>
 
