@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { UpgradePrompt } from "@/components/UpgradePrompt";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } };
 const item = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } };
@@ -39,6 +40,21 @@ interface MemberSpending {
 }
 
 export default function FamilyBudget() {
+  const { subscription } = useAuth();
+
+  if (!subscription.loading && subscription.tier !== "team") {
+    return (
+      <UpgradePrompt
+        feature="Family Budget & Shared Goals"
+        description="Collaborate on household finances with shared budgets, member spending tracking, allowances, and multi-user access. Available exclusively on the Team plan."
+        requiredTier="team"
+      />
+    );
+  }
+  return <FamilyBudgetContent />;
+}
+
+function FamilyBudgetContent() {
   const { user } = useAuth();
   const { toast } = useToast();
 

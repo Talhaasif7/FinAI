@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { 
   LayoutDashboard, Target, Receipt, CreditCard, 
-  Bot, TrendingUp, Settings, Flame, LogOut, Wallet, Trophy, Activity, Users, Brain
+  Bot, TrendingUp, Settings, Flame, LogOut, Wallet, Trophy, Activity, Users, Brain, Crown
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -9,18 +9,18 @@ import { useAuth } from "@/hooks/useAuth";
 import logoImg from "@/assets/logo.png";
 
 const navItems = [
-  { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { to: "/health", icon: Activity, label: "Health Score" },
-  { to: "/goals", icon: Target, label: "Goals" },
-  { to: "/expenses", icon: Receipt, label: "Expenses" },
-  { to: "/cards", icon: CreditCard, label: "My Cards" },
-  { to: "/subscriptions", icon: Wallet, label: "Subscriptions" },
-  { to: "/budgets", icon: Wallet, label: "Budgets" },
-  { to: "/insights", icon: TrendingUp, label: "Insights" },
-  { to: "/assistant", icon: Bot, label: "AI Assistant" },
-  { to: "/gamification", icon: Trophy, label: "Achievements" },
-  { to: "/family", icon: Users, label: "Family Budget" },
-  { to: "/behavior", icon: Brain, label: "Behavior Analysis" },
+  { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard", tier: null },
+  { to: "/health", icon: Activity, label: "Health Score", tier: null },
+  { to: "/goals", icon: Target, label: "Goals", tier: null },
+  { to: "/expenses", icon: Receipt, label: "Expenses", tier: null },
+  { to: "/cards", icon: CreditCard, label: "My Cards", tier: null },
+  { to: "/subscriptions", icon: Wallet, label: "Subscriptions", tier: null },
+  { to: "/budgets", icon: Wallet, label: "Budgets", tier: null },
+  { to: "/insights", icon: TrendingUp, label: "Insights", tier: "pro" as const },
+  { to: "/assistant", icon: Bot, label: "AI Assistant", tier: "pro" as const },
+  { to: "/gamification", icon: Trophy, label: "Achievements", tier: null },
+  { to: "/family", icon: Users, label: "Family Budget", tier: "team" as const },
+  { to: "/behavior", icon: Brain, label: "Behavior Analysis", tier: "pro" as const },
 ];
 
 interface Props {
@@ -29,7 +29,8 @@ interface Props {
 
 export function AppSidebar({ onNavigate }: Props) {
   const location = useLocation();
-  const { user, signOut } = useAuth();
+  const { user, signOut, subscription } = useAuth();
+  const tierOrder = { free: 0, pro: 1, team: 2 } as const;
 
   return (
     <aside className="h-screen w-64 border-r border-border bg-sidebar flex flex-col">
@@ -45,6 +46,7 @@ export function AppSidebar({ onNavigate }: Props) {
       <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
         {navItems.map((navItem) => {
           const isActive = location.pathname === navItem.to;
+          const isLocked = navItem.tier && tierOrder[subscription.tier] < tierOrder[navItem.tier];
           return (
             <NavLink
               key={navItem.to}
@@ -54,7 +56,8 @@ export function AppSidebar({ onNavigate }: Props) {
                 "flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium transition-all duration-200 group",
                 isActive
                   ? "bg-primary/10 text-primary shadow-sm"
-                  : "text-sidebar-foreground hover:text-foreground hover:bg-muted/40"
+                  : "text-sidebar-foreground hover:text-foreground hover:bg-muted/40",
+                isLocked && "opacity-60"
               )}
             >
               <navItem.icon className={cn(
@@ -62,7 +65,10 @@ export function AppSidebar({ onNavigate }: Props) {
                 isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
               )} />
               {navItem.label}
-              {isActive && (
+              {isLocked && (
+                <Crown className="ml-auto h-3 w-3 text-accent" />
+              )}
+              {isActive && !isLocked && (
                 <div className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" />
               )}
             </NavLink>

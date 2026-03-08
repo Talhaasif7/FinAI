@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
+import { UpgradePrompt } from "@/components/UpgradePrompt";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } };
 const item = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } };
@@ -50,14 +51,16 @@ const trendConfig = {
 };
 
 export default function BehavioralAnalysis() {
-  const { user } = useAuth();
+  const { user, subscription } = useAuth();
   const { toast } = useToast();
   const [data, setData] = useState<BehavioralData | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
+  const isLocked = !subscription.loading && subscription.tier === "free";
+
   const fetchAnalysis = async () => {
-    if (!user) return;
+    if (!user || isLocked) return;
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
@@ -91,6 +94,16 @@ export default function BehavioralAnalysis() {
     setRefreshing(true);
     fetchAnalysis();
   };
+
+  if (isLocked) {
+    return (
+      <UpgradePrompt
+        feature="Advanced Behavioral Analysis"
+        description="AI-powered insights into your spending personality, time-of-day patterns, impulse buying habits, and personalized nudges to optimize your finances."
+        requiredTier="pro"
+      />
+    );
+  }
 
   if (loading) {
     return (

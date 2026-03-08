@@ -92,6 +92,15 @@ export default function Expenses() {
 
   const handleAdd = async () => {
     if (!form.amount || !form.merchant || !user) return;
+    // Free plan: max 50 expenses per month
+    if (subscription.tier === "free") {
+      const thisMonth = new Date().toISOString().slice(0, 7);
+      const monthlyCount = expenses.filter(e => e.date.startsWith(thisMonth)).length;
+      if (monthlyCount >= 50) {
+        toast({ title: "Monthly limit reached", description: "Free plan allows 50 expenses/month. Upgrade to Pro for unlimited!", variant: "destructive" });
+        return;
+      }
+    }
     const { error } = await supabase.from("expenses").insert({
       user_id: user.id,
       amount: parseFloat(form.amount),

@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import ReactMarkdown from "react-markdown";
 import { useToast } from "@/hooks/use-toast";
+import { UpgradePrompt } from "@/components/UpgradePrompt";
 
 interface Message {
   id: string;
@@ -33,6 +34,24 @@ const suggestions = [
 ];
 
 export default function Assistant() {
+  const { user, subscription } = useAuth();
+  const { toast } = useToast();
+
+  // Gate: Pro/Team only
+  if (!subscription.loading && subscription.tier === "free") {
+    return (
+      <UpgradePrompt
+        feature="AI Financial Coach"
+        description="Get personalized financial advice powered by AI. The coach analyzes your spending, goals, and subscriptions to give you actionable recommendations."
+        requiredTier="pro"
+      />
+    );
+  }
+
+  return <AssistantContent />;
+}
+
+function AssistantContent() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [messages, setMessages] = useState<Message[]>([

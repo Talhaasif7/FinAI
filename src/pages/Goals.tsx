@@ -32,7 +32,7 @@ interface Goal {
 }
 
 export default function Goals() {
-  const { user } = useAuth();
+  const { user, subscription } = useAuth();
   const { toast } = useToast();
   const [goals, setGoals] = useState<Goal[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,6 +61,11 @@ export default function Goals() {
 
   const handleAdd = async () => {
     if (!form.name || !form.target || !form.deadline || !user) return;
+    // Free plan: max 5 goals
+    if (subscription.tier === "free" && goals.length >= 5) {
+      toast({ title: "Goal limit reached", description: "Free plan allows up to 5 goals. Upgrade to Pro for unlimited goals!", variant: "destructive" });
+      return;
+    }
     const { error } = await supabase.from("goals").insert({
       user_id: user.id, name: form.name, target: parseFloat(form.target), saved: 0,
       deadline: form.deadline, category: form.category, priority: form.priority,
@@ -125,7 +130,10 @@ export default function Goals() {
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button className="gap-2 bg-primary text-primary-foreground hover:bg-teal-light"><Plus className="h-4 w-4" /> New Goal</Button>
+            <Button className="gap-2 bg-primary text-primary-foreground hover:bg-teal-light">
+              <Plus className="h-4 w-4" /> New Goal
+              {subscription.tier === "free" && <span className="text-[10px] opacity-70">({goals.length}/5)</span>}
+            </Button>
           </DialogTrigger>
           <DialogContent className="bg-card border-border">
             <DialogHeader><DialogTitle className="font-display">Create New Goal</DialogTitle></DialogHeader>
