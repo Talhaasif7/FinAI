@@ -251,16 +251,33 @@ export default function LandingPage() {
 
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <Link to="/auth" className="hidden sm:block">
-              <Button variant="ghost" size="sm" className="text-sm text-muted-foreground hover:text-foreground">
-                Sign In
-              </Button>
-            </Link>
-            <Link to="/auth">
-              <Button size="sm" className="gap-1.5 bg-primary text-primary-foreground hover:bg-neon-green-light rounded-full px-6 text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
-                Get Started <ArrowRight className="h-3.5 w-3.5" />
-              </Button>
-            </Link>
+            {user ? (
+              <Link to="/dashboard" className="flex items-center gap-2">
+                <div className="h-8 w-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-xs font-bold text-primary overflow-hidden">
+                  {user.user_metadata?.avatar_url ? (
+                    <img src={user.user_metadata.avatar_url} alt="Avatar" className="h-full w-full object-cover" />
+                  ) : (
+                    (user.email?.charAt(0) ?? "U").toUpperCase()
+                  )}
+                </div>
+                <Button size="sm" className="gap-1.5 bg-primary text-primary-foreground hover:bg-neon-green-light rounded-full px-6 text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
+                  Dashboard <ArrowRight className="h-3.5 w-3.5" />
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/auth" className="hidden sm:block">
+                  <Button variant="ghost" size="sm" className="text-sm text-muted-foreground hover:text-foreground">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/auth">
+                  <Button size="sm" className="gap-1.5 bg-primary text-primary-foreground hover:bg-neon-green-light rounded-full px-6 text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
+                    Get Started <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
+                </Link>
+              </>
+            )}
 
             <button
               onClick={() => setMobileMenu(!mobileMenu)}
