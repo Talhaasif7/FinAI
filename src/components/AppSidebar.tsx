@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { 
   LayoutDashboard, Target, Receipt, CreditCard, 
-  Bot, TrendingUp, Settings, Flame, LogOut, Wallet, Trophy, Activity, Users
+  Bot, TrendingUp, Settings, Flame, LogOut, Wallet, Trophy, Activity, Users, Brain
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -20,6 +20,7 @@ const navItems = [
   { to: "/assistant", icon: Bot, label: "AI Assistant" },
   { to: "/gamification", icon: Trophy, label: "Achievements" },
   { to: "/family", icon: Users, label: "Family Budget" },
+  { to: "/behavior", icon: Brain, label: "Behavior Analysis" },
 ];
 
 interface Props {
