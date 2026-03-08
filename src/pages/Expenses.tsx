@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Plus, Search, Trash2, Camera, Loader2 } from "lucide-react";
+import { Plus, Search, Trash2, Camera, Loader2, Download, FileText, Lock } from "lucide-react";
 import { categoryIcons } from "@/lib/mock-data";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -9,7 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
+import { exportExpensesToCSV, exportExpensesToPDF } from "@/lib/export-utils";
 
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } };
 const item = { hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0 } };
@@ -165,6 +167,31 @@ export default function Expenses() {
           <p className="text-muted-foreground text-sm mt-1">Track every dollar you spend</p>
         </div>
         <div className="flex gap-2">
+          {/* Export Dropdown — Pro/Team only */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="gap-2 border-primary/30 text-primary hover:bg-primary/10">
+                <Download className="h-4 w-4" /> Export
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-card border-border">
+              {subscription.tier === "free" ? (
+                <DropdownMenuItem className="gap-2 text-muted-foreground cursor-not-allowed" disabled>
+                  <Lock className="h-4 w-4" /> Upgrade to Pro to export
+                </DropdownMenuItem>
+              ) : (
+                <>
+                  <DropdownMenuItem onClick={() => { exportExpensesToCSV(filtered); toast({ title: "CSV downloaded!" }); }} className="gap-2 cursor-pointer">
+                    <Download className="h-4 w-4" /> Download CSV
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => exportExpensesToPDF(filtered)} className="gap-2 cursor-pointer">
+                    <FileText className="h-4 w-4" /> Download PDF
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           {/* Scan Receipt */}
           <Dialog open={scanOpen} onOpenChange={setScanOpen}>
             <DialogTrigger asChild>
