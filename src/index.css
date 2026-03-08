@@ -336,6 +336,97 @@
     right: -100px;
     pointer-events: none;
   }
+
+  /* ── Curvy underline animation ── */
+  .curvy-underline {
+    position: relative;
+    display: inline-block;
+  }
+
+  .curvy-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 8px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 8'%3E%3Cpath d='M0 4 Q15 0 30 4 T60 4 T90 4 T120 4' stroke='%2322c55e' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x;
+    background-size: 60px 8px;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: curvy-draw 1s ease-out forwards;
+    animation-delay: 0.5s;
+  }
+
+  .curvy-underline-purple::after {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 8'%3E%3Cpath d='M0 4 Q15 0 30 4 T60 4 T90 4 T120 4' stroke='%239333ea' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x;
+    background-size: 60px 8px;
+  }
+
+  .curvy-underline-gold::after {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 8'%3E%3Cpath d='M0 4 Q15 0 30 4 T60 4 T90 4 T120 4' stroke='%23f59e0b' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x;
+    background-size: 60px 8px;
+  }
+
+  /* ── Doubled / echo text effect ── */
+  .text-echo {
+    position: relative;
+  }
+
+  .text-echo::before {
+    content: attr(data-text);
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background: var(--gradient-hero);
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* ── Revolut-style colorful cards ── */
+  .revolut-card {
+    @apply rounded-3xl relative overflow-hidden;
+    transition: transform 0.5s cubic-bezier(0.25, 0.4, 0.25, 1), box-shadow 0.5s ease;
+  }
+
+  .revolut-card:hover {
+    transform: translateY(-8px) scale(1.02);
+  }
+
+  .revolut-card-green {
+    background: linear-gradient(145deg, hsl(100, 70%, 45%), hsl(140, 75%, 35%));
+  }
+
+  .revolut-card-teal {
+    background: linear-gradient(145deg, hsl(188, 80%, 30%), hsl(200, 75%, 22%));
+  }
+
+  .revolut-card-purple {
+    background: linear-gradient(145deg, hsl(280, 50%, 35%), hsl(300, 40%, 28%));
+  }
+
+  .revolut-card-amber {
+    background: linear-gradient(145deg, hsl(38, 90%, 50%), hsl(28, 85%, 45%));
+  }
+
+  .revolut-card-dark {
+    background: linear-gradient(145deg, hsl(225, 20%, 12%), hsl(225, 20%, 8%));
+    border: 1px solid hsla(225, 14%, 20%, 0.5);
+  }
+
+  .revolut-card-pink {
+    background: linear-gradient(145deg, hsl(320, 50%, 35%), hsl(340, 45%, 28%));
+  }
+}
+
+/* Curvy underline animation keyframes */
+@keyframes curvy-draw {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 /* Scrollbar */

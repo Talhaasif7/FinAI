@@ -5,8 +5,10 @@ import { Button } from "@/components/ui/button";
 export function ThemeToggle() {
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== "undefined") {
-      return document.documentElement.classList.contains("dark") ||
-        (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      const saved = localStorage.getItem("theme");
+      if (saved === "light") return false;
+      // Default to dark
+      return true;
     }
     return true;
   });
@@ -21,16 +23,13 @@ export function ThemeToggle() {
     }
   }, [isDark]);
 
-  // Init on mount
   useEffect(() => {
     const saved = localStorage.getItem("theme");
-    if (saved === "dark") {
-      document.documentElement.classList.add("dark");
-      setIsDark(true);
-    } else if (saved === "light") {
+    if (saved === "light") {
       document.documentElement.classList.remove("dark");
       setIsDark(false);
-    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    } else {
+      // Default dark
       document.documentElement.classList.add("dark");
       setIsDark(true);
     }
