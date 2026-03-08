@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight, Target, Brain, TrendingUp, CreditCard,
   Shield, Zap, BarChart3, Star, Receipt,
@@ -14,6 +14,9 @@ import {
 import { Scene3D, Scene3DFeatures } from "@/components/Scene3D";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import logoImg from "@/assets/logo.png";
 
 /* ── Animations ─────────────────────────────────────────── */
@@ -64,9 +67,9 @@ const painPoints = [
 ];
 
 const pricingPlans = [
-  { name: "Free", price: "$0", period: "forever", features: ["5 goals", "50 expenses/mo", "Basic insights", "Receipt scanner"], cta: "Start Free", popular: false },
-  { name: "Pro", price: "$9", period: "/month", features: ["Unlimited goals", "Unlimited expenses", "AI Coach access", "Advanced analytics", "Weekly AI reports", "Priority support"], cta: "Start Pro Trial", popular: true },
-  { name: "Team", price: "$19", period: "/month", features: ["Everything in Pro", "Shared family goals", "Multi-user access", "Export reports", "API access", "Custom categories"], cta: "Contact Sales", popular: false },
+  { name: "Free", price: "$0", period: "forever", features: ["5 goals", "50 expenses/mo", "Basic insights", "Receipt scanner"], cta: "Start Free", popular: false, priceId: null },
+  { name: "Pro", price: "$7", period: "/month", features: ["Unlimited goals", "Unlimited expenses", "AI Coach access", "Advanced analytics", "Weekly AI reports", "Priority support"], cta: "Start Pro Trial", popular: true, priceId: "price_1T8eCr2N83SQqQkDobIkteJH" },
+  { name: "Team", price: "$11", period: "/month", features: ["Everything in Pro", "Shared family goals", "Multi-user access", "Export reports", "API access", "Custom categories"], cta: "Get Team", popular: false, priceId: "price_1T8eEZ2N83SQqQkDxMu5ul9U" },
 ];
 
 const faqs = [
@@ -183,6 +186,27 @@ export default function LandingPage() {
   const heroScale = useTransform(scrollYProgress, [0, 0.6], [1, 0.92]);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleCheckout = async (priceId: string | null) => {
+    if (!priceId) { navigate("/auth"); return; }
+    if (!user) { navigate("/auth"); return; }
+    setCheckoutLoading(priceId);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: { priceId },
+      });
+      if (error) throw error;
+      if (data?.url) window.open(data.url, "_blank");
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message || "Failed to start checkout", variant: "destructive" });
+    } finally {
+      setCheckoutLoading(null);
+    }
+  };
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 50);
@@ -759,17 +783,17 @@ export default function LandingPage() {
                     ))}
                   </ul>
 
-                  <Link to="/auth">
-                    <Button
-                      className={`w-full rounded-2xl h-11 sm:h-13 text-xs sm:text-sm font-semibold transition-all duration-300 ${
-                        plan.popular
-                          ? "bg-white text-black hover:bg-white/90 shadow-lg hover:shadow-xl"
-                          : "bg-muted/30 text-foreground hover:bg-muted/50 border border-border/30"
-                      }`}
-                    >
-                      {plan.cta}
-                    </Button>
-                  </Link>
+                  <Button
+                    onClick={() => handleCheckout(plan.priceId)}
+                    disabled={checkoutLoading === plan.priceId}
+                    className={`w-full rounded-2xl h-11 sm:h-13 text-xs sm:text-sm font-semibold transition-all duration-300 ${
+                      plan.popular
+                        ? "bg-white text-black hover:bg-white/90 shadow-lg hover:shadow-xl"
+                        : "bg-muted/30 text-foreground hover:bg-muted/50 border border-border/30"
+                    }`}
+                  >
+                    {checkoutLoading === plan.priceId ? "Loading..." : plan.cta}
+                  </Button>
                 </div>
               </motion.div>
             ))}
