@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight, Target, Brain, TrendingUp, CreditCard,
   Shield, Zap, BarChart3, Star, Receipt,
@@ -14,6 +14,9 @@ import {
 import { Scene3D, Scene3DFeatures } from "@/components/Scene3D";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import logoImg from "@/assets/logo.png";
 
 /* ── Animations ─────────────────────────────────────────── */
